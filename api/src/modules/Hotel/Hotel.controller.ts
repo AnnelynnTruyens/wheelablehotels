@@ -3,6 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import NotFoundError from "../../middleware/error/NotFoundError";
 
 import Hotel from "./Hotel.model";
+import { AuthRequest } from "../../middleware/auth/authMiddleware";
+import AuthError from "../../middleware/error/AuthError";
+import { use } from "passport";
 
 const getHotels = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -44,15 +47,21 @@ const createHotel = async (req: Request, res: Response, next: NextFunction) => {
 
 const updateHotel = async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const { user } = req as AuthRequest;
 		const { id } = req.params;
-		const hotel = await Hotel.findOneAndUpdate({ _id: id }, req.body, {
-			new: true,
-			runValidators: true,
-		});
-		if (!hotel) {
-			throw new NotFoundError("Hotel not found");
+
+		if (user.role === "Admin") {
+			const hotel = await Hotel.findOneAndUpdate({ _id: id }, req.body, {
+				new: true,
+				runValidators: true,
+			});
+			if (!hotel) {
+				throw new NotFoundError("Hotel not found");
+			}
+			res.json(hotel);
+		} else {
+			throw new AuthError();
 		}
-		res.json(hotel);
 	} catch (err) {
 		next(err);
 	}
@@ -60,14 +69,19 @@ const updateHotel = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteHotel = async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const { user } = req as AuthRequest;
 		const { id } = req.params;
-		const hotel = await Hotel.findOneAndDelete({
-			_id: id,
-		});
-		if (!hotel) {
-			throw new NotFoundError("Hotel not found");
+		if (user.role === "Admin") {
+			const hotel = await Hotel.findOneAndDelete({
+				_id: id,
+			});
+			if (!hotel) {
+				throw new NotFoundError("Hotel not found");
+			}
+			res.json({});
+		} else {
+			throw new AuthError();
 		}
-		res.json({});
 	} catch (err) {
 		next(err);
 	}

@@ -4,6 +4,7 @@ import { AuthRequest } from "../../middleware/auth/authMiddleware";
 import NotFoundError from "../../middleware/error/NotFoundError";
 
 import User from "./User.model";
+import AuthError from "../../middleware/error/AuthError";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -75,15 +76,41 @@ const editCurrentUser = async (
 
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const { user } = req as AuthRequest;
 		const { id } = req.params;
-		const user = await User.findOneAndUpdate({ _id: id }, req.body, {
-			new: true,
-			runValidators: true,
+
+		if (user.role === "Admin") {
+			const user = await User.findOneAndUpdate({ _id: id }, req.body, {
+				new: true,
+				runValidators: true,
+			});
+			if (!user) {
+				throw new NotFoundError("User not found");
+			}
+			res.json(user);
+		} else {
+			throw new AuthError();
+		}
+	} catch (err) {
+		next(err);
+	}
+};
+
+const deleteCurrentUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const { user } = req as AuthRequest;
+
+		const deleteUser = await User.findOneAndDelete({
+			_id: user._id,
 		});
-		if (!user) {
+		if (!deleteUser) {
 			throw new NotFoundError("User not found");
 		}
-		res.json(user);
+		res.json({});
 	} catch (err) {
 		next(err);
 	}
@@ -91,14 +118,20 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const { user } = req as AuthRequest;
 		const { id } = req.params;
-		const user = await User.findOneAndDelete({
-			_id: id,
-		});
-		if (!user) {
-			throw new NotFoundError("User not found");
+
+		if (user.role === "Admin") {
+			const user = await User.findOneAndDelete({
+				_id: id,
+			});
+			if (!user) {
+				throw new NotFoundError("User not found");
+			}
+			res.json({});
+		} else {
+			throw new AuthError();
 		}
-		res.json({});
 	} catch (err) {
 		next(err);
 	}
@@ -112,5 +145,6 @@ export {
 	getCurrentUser,
 	editCurrentUser,
 	updateUser,
+	deleteCurrentUser,
 	deleteUser,
 };

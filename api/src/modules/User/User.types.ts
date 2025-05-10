@@ -6,6 +6,7 @@ export type UserRegister = Document & {
 	password: string;
 	firstname: string;
 	lastname: string;
+	role: string;
 };
 
 export type UserMethods = {
@@ -20,4 +21,5 @@ export type User = Document &
 		password: string;
 		firstname: string;
 		lastname: string;
+		role: string;
 	};

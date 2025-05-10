@@ -53,6 +53,6 @@ hotelSchema.pre("save", function (next) {
 	next();
 });
 
-const hotelModel = mongoose.model<Hotel>("Hotel", hotelSchema);
+const HotelModel = mongoose.model<Hotel>("Hotel", hotelSchema);
 
-export default hotelModel;
+export default HotelModel;
