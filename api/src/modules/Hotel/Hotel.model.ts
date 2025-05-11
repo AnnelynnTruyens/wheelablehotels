@@ -49,6 +49,12 @@ const hotelSchema = new mongoose.Schema<Hotel>(
 				ref: "Amenity",
 			},
 		],
+		accessibilityFeatures: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "AccessibilityFeature",
+			},
+		],
 	},
 	{
 		timestamps: true,

@@ -9,4 +9,5 @@ export type Room = Document & {
 	userId: ObjectId;
 	hotelId: ObjectId;
 	hotel?: Hotel;
+	accessibilityFeatures?: ObjectId[];
 };

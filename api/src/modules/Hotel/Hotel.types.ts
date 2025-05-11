@@ -12,4 +12,5 @@ export type Hotel = Document & {
 	userId: ObjectId;
 	status: string;
 	amenities?: ObjectId[];
+	accessibilityFeatures?: ObjectId[];
 };

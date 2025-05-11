@@ -24,6 +24,12 @@ const roomSchema = new mongoose.Schema<Room>(
 			type: mongoose.Schema.Types.ObjectId,
 			required: true,
 		},
+		accessibilityFeatures: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "AccessibilityFeature",
+			},
+		],
 	},
 	{
 		timestamps: true,

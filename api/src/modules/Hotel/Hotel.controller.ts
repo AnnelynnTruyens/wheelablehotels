@@ -8,7 +8,9 @@ import AuthError from "../../middleware/error/AuthError";
 
 const getHotels = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const hotels = await Hotel.find({}).populate("amenities");
+		const hotels = await Hotel.find({})
+			.populate("amenities")
+			.populate("accessibilityFeatures");
 		res.json(hotels);
 	} catch (err) {
 		next(err);
@@ -24,7 +26,9 @@ const getHotelById = async (
 		const { id } = req.params;
 		const hotel = await Hotel.findOne({
 			_id: id,
-		}).populate("amenities");
+		})
+			.populate("amenities")
+			.populate("accessibilityFeatures");
 		if (!hotel) {
 			throw new NotFoundError("Hotel not found");
 		}
@@ -113,6 +117,33 @@ const addAmenitiesToHotel = async (
 	}
 };
 
+const addAccessibilityFeaturesToHotel = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const { id } = req.params;
+		const { accessibilityFeatures } = req.body; // Array of accessibility feature IDs
+
+		const hotel = await Hotel.findById(id);
+		if (!hotel) {
+			throw new NotFoundError("Hotel not found");
+		}
+		if (!hotel.accessibilityFeatures) {
+			throw new NotFoundError("Accessibility Features not found");
+		}
+
+		// Add accessibility features to the hotel
+		hotel.accessibilityFeatures.push(...accessibilityFeatures);
+		await hotel.save();
+
+		res.status(200).json(hotel);
+	} catch (err) {
+		next(err);
+	}
+};
+
 export {
 	getHotels,
 	getHotelById,
@@ -120,4 +151,5 @@ export {
 	updateHotel,
 	deleteHotel,
 	addAmenitiesToHotel,
+	addAccessibilityFeaturesToHotel,
 };
