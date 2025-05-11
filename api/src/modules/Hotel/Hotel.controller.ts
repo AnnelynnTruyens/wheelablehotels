@@ -5,11 +5,10 @@ import NotFoundError from "../../middleware/error/NotFoundError";
 import Hotel from "./Hotel.model";
 import { AuthRequest } from "../../middleware/auth/authMiddleware";
 import AuthError from "../../middleware/error/AuthError";
-import { use } from "passport";
 
 const getHotels = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const hotels = await Hotel.find({});
+		const hotels = await Hotel.find({}).populate("amenities");
 		res.json(hotels);
 	} catch (err) {
 		next(err);
@@ -25,7 +24,7 @@ const getHotelById = async (
 		const { id } = req.params;
 		const hotel = await Hotel.findOne({
 			_id: id,
-		});
+		}).populate("amenities");
 		if (!hotel) {
 			throw new NotFoundError("Hotel not found");
 		}
@@ -87,4 +86,38 @@ const deleteHotel = async (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
-export { getHotels, getHotelById, createHotel, updateHotel, deleteHotel };
+const addAmenitiesToHotel = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const { id } = req.params;
+		const { amenities } = req.body; // Array of amenity IDs
+
+		const hotel = await Hotel.findById(id);
+		if (!hotel) {
+			throw new NotFoundError("Hotel not found");
+		}
+		if (!hotel.amenities) {
+			throw new NotFoundError("Amenities not found");
+		}
+
+		// Add amenities to the hotel
+		hotel.amenities.push(...amenities);
+		await hotel.save();
+
+		res.status(200).json(hotel);
+	} catch (err) {
+		next(err);
+	}
+};
+
+export {
+	getHotels,
+	getHotelById,
+	createHotel,
+	updateHotel,
+	deleteHotel,
+	addAmenitiesToHotel,
+};

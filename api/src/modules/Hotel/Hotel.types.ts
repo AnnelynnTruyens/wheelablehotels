@@ -11,4 +11,5 @@ export type Hotel = Document & {
 	rating?: Number;
 	userId: ObjectId;
 	status: string;
+	amenities?: ObjectId[];
 };

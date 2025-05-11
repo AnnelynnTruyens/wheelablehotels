@@ -43,6 +43,12 @@ const hotelSchema = new mongoose.Schema<Hotel>(
 			type: String,
 			required: true,
 		},
+		amenities: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Amenity",
+			},
+		],
 	},
 	{
 		timestamps: true,

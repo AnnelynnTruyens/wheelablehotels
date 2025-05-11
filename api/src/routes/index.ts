@@ -5,13 +5,25 @@ import { authJwt } from "../middleware/auth/authMiddleware";
 
 import userPublicRoutes from "../modules/User/User.public.routes";
 import userPrivateRoutes from "../modules/User/User.private.routes";
+import hotelPublicRoutes from "../modules/Hotel/Hotel.public.routes";
+import hotelPrivateRoutes from "../modules/Hotel/Hotel.private.routes";
+import roomPublicRoutes from "../modules/Room/Room.public.routes";
+import roomPrivateRoutes from "../modules/Room/Room.private.routes";
+import amenityPublicRoutes from "../modules/Amenity/Amenity.public.routes";
+import amenityPrivateRoutes from "../modules/Amenity/Amenity.private.routes";
 
 const registerRoutes = (app: Express) => {
 	const publicRoutes = Router();
 	publicRoutes.use("/", userPublicRoutes);
+	publicRoutes.use("/", hotelPublicRoutes);
+	publicRoutes.use("/", roomPublicRoutes);
+	publicRoutes.use("/", amenityPublicRoutes);
 
 	const authRoutes = Router();
 	authRoutes.use("/", userPrivateRoutes);
+	authRoutes.use("/", hotelPrivateRoutes);
+	authRoutes.use("/", roomPrivateRoutes);
+	authRoutes.use("/", amenityPrivateRoutes);
 
 	// Register public routes
 	app.use(publicRoutes);
