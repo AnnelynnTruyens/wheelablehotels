@@ -40,7 +40,8 @@ const getHotelById = async (
 
 const createHotel = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const hotel = new Hotel({ ...req.body });
+		const { user } = req as AuthRequest;
+		const hotel = new Hotel({ ...req.body, userId: user._id });
 		const result = await hotel.save();
 		res.status(200).json(result);
 	} catch (err) {
@@ -63,7 +64,18 @@ const updateHotel = async (req: Request, res: Response, next: NextFunction) => {
 			}
 			res.json(hotel);
 		} else {
-			throw new AuthError();
+			const hotel = await Hotel.findOneAndUpdate(
+				{ _id: id, userId: user._id },
+				req.body,
+				{
+					new: true,
+					runValidators: true,
+				}
+			);
+			if (!hotel) {
+				throw new NotFoundError("Hotel not found");
+			}
+			res.json(hotel);
 		}
 	} catch (err) {
 		next(err);
