@@ -13,7 +13,6 @@ const router = express.Router();
 
 router.get("/reviews/all", getReviews);
 router.get("/reviews/user", getReviewsByUser);
-router.get("reviews/hotel", getReviewsByHotel);
 router.get("/reviews/:id", getReviewById);
 router.post("/reviews", createReview);
 router.patch("/reviews/:id", updateReview);

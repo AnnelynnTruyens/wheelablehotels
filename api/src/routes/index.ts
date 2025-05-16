@@ -16,6 +16,7 @@ import accessibilityFeaturePrivateRoutes from "../modules/AccessibilityFeature/A
 import reviewRoutes from "../modules/Review/Review.routes";
 import messagePublicRoutes from "../modules/Message/Message.public.routes";
 import messagePrivateRoutes from "../modules/Message/Message.private.routes";
+import favouriteRoutes from "../modules/Favourite/Favourite.routes";
 
 const registerRoutes = (app: Express) => {
 	const publicRoutes = Router();
@@ -34,6 +35,7 @@ const registerRoutes = (app: Express) => {
 	authRoutes.use("/", accessibilityFeaturePrivateRoutes);
 	authRoutes.use("/", reviewRoutes);
 	authRoutes.use("/", messagePrivateRoutes);
+	authRoutes.use("/", favouriteRoutes);
 
 	// Register public routes
 	app.use(publicRoutes);
