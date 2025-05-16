@@ -13,7 +13,8 @@ import amenityPublicRoutes from "../modules/Amenity/Amenity.public.routes";
 import amenityPrivateRoutes from "../modules/Amenity/Amenity.private.routes";
 import accessibilityFeaturePublicRoutes from "../modules/AccessibilityFeature/AccessibilityFeature.public.routes";
 import accessibilityFeaturePrivateRoutes from "../modules/AccessibilityFeature/AccessibilityFeature.private.routes";
-import reviewRoutes from "../modules/Review/Review.routes";
+import reviewPublicRoutes from "../modules/Review/Review.public.routes";
+import reviewPrivateRoutes from "../modules/Review/Review.private.routes";
 import messagePublicRoutes from "../modules/Message/Message.public.routes";
 import messagePrivateRoutes from "../modules/Message/Message.private.routes";
 import favouriteRoutes from "../modules/Favourite/Favourite.routes";
@@ -25,6 +26,7 @@ const registerRoutes = (app: Express) => {
 	publicRoutes.use("/", roomPublicRoutes);
 	publicRoutes.use("/", amenityPublicRoutes);
 	publicRoutes.use("/", accessibilityFeaturePublicRoutes);
+	publicRoutes.use("/", reviewPublicRoutes);
 	publicRoutes.use("/", messagePublicRoutes);
 
 	const authRoutes = Router();
@@ -33,7 +35,7 @@ const registerRoutes = (app: Express) => {
 	authRoutes.use("/", roomPrivateRoutes);
 	authRoutes.use("/", amenityPrivateRoutes);
 	authRoutes.use("/", accessibilityFeaturePrivateRoutes);
-	authRoutes.use("/", reviewRoutes);
+	authRoutes.use("/", reviewPrivateRoutes);
 	authRoutes.use("/", messagePrivateRoutes);
 	authRoutes.use("/", favouriteRoutes);
 

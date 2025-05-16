@@ -41,6 +41,6 @@ reviewSchema.pre("save", function (next) {
 	next();
 });
 
-const reviewModel = mongoose.model<Review>("Message", reviewSchema);
+const reviewModel = mongoose.model<Review>("Review", reviewSchema);
 
 export default reviewModel;
