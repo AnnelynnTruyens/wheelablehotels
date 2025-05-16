@@ -83,7 +83,28 @@ const updateRoom = async (req: Request, res: Response, next: NextFunction) => {
 			}
 			res.json(room);
 		} else {
-			throw new AuthError();
+			if (req.body.hotelId) {
+				const hotel = await Hotel.findOne({
+					_id: req.body.hotelId,
+					userId: user._id,
+				});
+
+				if (!hotel) {
+					throw new NotFoundError("Hotel not found");
+				}
+			}
+
+			const room = await Room.findOneAndUpdate(
+				{
+					_id: id,
+				},
+				req.body,
+				{ new: true, runValidators: true }
+			);
+			if (!room) {
+				throw new NotFoundError("Room not found");
+			}
+			res.json(room);
 		}
 	} catch (e) {
 		next(e);
@@ -104,7 +125,14 @@ const deleteRoom = async (req: Request, res: Response, next: NextFunction) => {
 			}
 			res.json({});
 		} else {
-			throw new AuthError();
+			const room = await Room.findOneAndDelete({
+				_id: id,
+				userId: user._id,
+			});
+			if (!room) {
+				throw new NotFoundError("Room not found");
+			}
+			res.json({});
 		}
 	} catch (e) {
 		next(e);
@@ -122,7 +150,7 @@ const addAccessibilityFeaturesToRoom = async (
 
 		const room = await Room.findById(id);
 		if (!room) {
-			throw new NotFoundError("Hotel not found");
+			throw new NotFoundError("Room not found");
 		}
 		if (!room.accessibilityFeatures) {
 			throw new NotFoundError("AccessibilityFeatures not found");

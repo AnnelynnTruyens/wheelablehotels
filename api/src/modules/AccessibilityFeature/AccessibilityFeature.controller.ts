@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import NotFoundError from "../../middleware/error/NotFoundError";
 import AccessibilityFeature from "./AccessibilityFeature.model";
+import { AuthRequest } from "../../middleware/auth/authMiddleware";
+import AuthError from "../../middleware/error/AuthError";
 
 const getAccessibilityFeatures = async (
 	req: Request,
@@ -40,9 +42,15 @@ const createAccessibilityFeature = async (
 	next: NextFunction
 ) => {
 	try {
-		const accessibilityFeature = new AccessibilityFeature({ ...req.body });
-		const result = await accessibilityFeature.save();
-		res.status(200).json(result);
+		const { user } = req as AuthRequest;
+
+		if (user.role === "Admin") {
+			const accessibilityFeature = new AccessibilityFeature({ ...req.body });
+			const result = await accessibilityFeature.save();
+			res.status(200).json(result);
+		} else {
+			throw new AuthError();
+		}
 	} catch (err) {
 		next(err);
 	}
@@ -54,19 +62,25 @@ const updateAccessibilityFeature = async (
 	next: NextFunction
 ) => {
 	try {
+		const { user } = req as AuthRequest;
 		const { id } = req.params;
-		const accessibilityFeature = await AccessibilityFeature.findOneAndUpdate(
-			{ _id: id },
-			req.body,
-			{
-				new: true,
-				runValidators: true,
+
+		if (user.role === "Admin") {
+			const accessibilityFeature = await AccessibilityFeature.findOneAndUpdate(
+				{ _id: id },
+				req.body,
+				{
+					new: true,
+					runValidators: true,
+				}
+			);
+			if (!accessibilityFeature) {
+				throw new NotFoundError("Accessibility feature not found");
 			}
-		);
-		if (!accessibilityFeature) {
-			throw new NotFoundError("Accessibility feature not found");
+			res.json(accessibilityFeature);
+		} else {
+			throw new AuthError();
 		}
-		res.json(accessibilityFeature);
 	} catch (err) {
 		next(err);
 	}
@@ -78,14 +92,20 @@ const deleteAccessibilityFeature = async (
 	next: NextFunction
 ) => {
 	try {
+		const { user } = req as AuthRequest;
 		const { id } = req.params;
-		const accessibilityFeature = await AccessibilityFeature.findOneAndDelete({
-			_id: id,
-		});
-		if (!accessibilityFeature) {
-			throw new NotFoundError("Accessibility feature not found");
+
+		if (user.role === "Admin") {
+			const accessibilityFeature = await AccessibilityFeature.findOneAndDelete({
+				_id: id,
+			});
+			if (!accessibilityFeature) {
+				throw new NotFoundError("Accessibility feature not found");
+			}
+			res.json({});
+		} else {
+			throw new AuthError();
 		}
-		res.json({});
 	} catch (err) {
 		next(err);
 	}
