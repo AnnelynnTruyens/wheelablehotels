@@ -18,6 +18,8 @@ import reviewPrivateRoutes from "../modules/Review/Review.private.routes";
 import messagePublicRoutes from "../modules/Message/Message.public.routes";
 import messagePrivateRoutes from "../modules/Message/Message.private.routes";
 import favouriteRoutes from "../modules/Favourite/Favourite.routes";
+import imagePublicRoutes from "../modules/Image/Image.public.routes";
+import imagePrivateRoutes from "../modules/Image/Image.private.routes";
 
 const registerRoutes = (app: Express) => {
 	const publicRoutes = Router();
@@ -28,6 +30,7 @@ const registerRoutes = (app: Express) => {
 	publicRoutes.use("/", accessibilityFeaturePublicRoutes);
 	publicRoutes.use("/", reviewPublicRoutes);
 	publicRoutes.use("/", messagePublicRoutes);
+	publicRoutes.use("/", imagePublicRoutes);
 
 	const authRoutes = Router();
 	authRoutes.use("/", userPrivateRoutes);
@@ -38,6 +41,7 @@ const registerRoutes = (app: Express) => {
 	authRoutes.use("/", reviewPrivateRoutes);
 	authRoutes.use("/", messagePrivateRoutes);
 	authRoutes.use("/", favouriteRoutes);
+	authRoutes.use("/", imagePrivateRoutes);
 
 	// Register public routes
 	app.use(publicRoutes);

@@ -5,7 +5,6 @@ import NotFoundError from "../../middleware/error/NotFoundError";
 
 import Room from "./Room.model";
 import Hotel from "../Hotel/Hotel.model";
-import AuthError from "../../middleware/error/AuthError";
 
 const getRooms = async (req: Request, res: Response, next: NextFunction) => {
 	try {
