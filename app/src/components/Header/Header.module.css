@@ -1,0 +1,177 @@
+.skip {
+	background: var(--white);
+	border: 5px solid var(--primary);
+	border-radius: 5rem;
+	color: var(--primary);
+	font-weight: 700;
+	padding: 0.4rem 1.5rem;
+	position: absolute;
+	transform: translateY(-100%);
+}
+
+.skip:focus {
+	transform: translateY(0%);
+}
+
+/* Home page */
+.header_home {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 1rem 2rem;
+}
+
+.logo_home {
+	height: 3rem;
+	transition: 0.3s;
+}
+
+.logo_home:hover {
+	transform: scale(1.1);
+	transition: 0.3s;
+}
+
+.nav_list_home {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 2rem;
+
+	font-family: "Nunito", sans-serif;
+	font-style: italic;
+	font-size: 1.3em;
+}
+
+.nav_listitem_home {
+	list-style: none;
+}
+
+.nav_btn_home {
+	border-radius: 5rem;
+	border: none;
+	padding: 0.4rem 1.5rem;
+	font-size: 1em;
+	font-weight: 400;
+	font-family: "Nunito", sans-serif;
+	font-style: italic;
+	text-decoration: none;
+	background-color: var(--secondary);
+	color: var(--black);
+	cursor: pointer;
+	box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.25);
+	transition: 0.3s;
+}
+.nav_btn_home:hover {
+	background-color: var(--secondary-dark);
+	color: var(--black);
+	transition: 0.3s;
+}
+
+.nav_icon_home {
+	fill: none;
+	stroke: var(--black);
+	transition: 0.3s;
+}
+
+.nav_icon_home:hover {
+	fill: var(--black);
+	stroke: var(--black);
+	transition: 0.3s;
+}
+
+.icon_user_home {
+	border: 3px solid var(--black);
+	border-radius: 50px;
+	transition: 0.3s;
+}
+
+.icon_user_home:hover {
+	background-color: var(--black);
+	border: 3px solid var(--black);
+	stroke: var(--white);
+	transition: 0.3s;
+}
+
+/* Other pages */
+.header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 1rem 2rem;
+
+	box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.25);
+}
+
+.logo {
+	height: 3rem;
+	transition: 0.3s;
+}
+
+.logo:hover {
+	transform: scale(1.1);
+	transition: 0.3s;
+}
+
+.nav_list {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 2rem;
+
+	font-family: "Nunito", sans-serif;
+	font-style: italic;
+	font-size: 1.3em;
+}
+
+.nav_listitem {
+	list-style: none;
+}
+
+.nav_btn {
+	border-radius: 5rem;
+	border: none;
+	padding: 0.4rem 1.5rem;
+	font-size: 1em;
+	font-weight: 400;
+	font-family: "Nunito", sans-serif;
+	font-style: italic;
+	text-decoration: none;
+	background-color: var(--primary-dark);
+	color: var(--white);
+	cursor: pointer;
+	transition: 0.3s;
+}
+.nav_btn:hover {
+	background-color: var(--primary);
+	color: var(--white);
+	transition: 0.3s;
+}
+
+.nav_icon {
+	fill: none;
+	stroke: var(--primary-dark);
+	transition: 0.3s;
+}
+
+.nav_icon:hover {
+	fill: var(--primary);
+	stroke: var(--primary);
+	transition: 0.3s;
+}
+
+.icon_user {
+	border: 3px solid var(--primary-dark);
+	border-radius: 50px;
+	transition: 0.3s;
+}
+
+.icon_user:hover {
+	background-color: var(--primary);
+	border: 3px solid var(--primary);
+	stroke: var(--white);
+	transition: 0.3s;
+}
