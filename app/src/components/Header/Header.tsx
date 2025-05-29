@@ -37,7 +37,7 @@ const Header = () => {
 							<li className={styles.nav_listitem_home}>
 								<NavLink
 									to={ROUTES.addHotel}
-									className={`${styles.nav_link_home} ${styles.nav_btn_home}`}
+									className={`${styles.nav_btn_home}`}
 								>
 									Add a hotel
 								</NavLink>
