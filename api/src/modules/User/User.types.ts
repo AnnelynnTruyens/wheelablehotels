@@ -4,8 +4,7 @@ export type UserRegister = Document & {
 	_id?: string;
 	email: string;
 	password: string;
-	firstname: string;
-	lastname: string;
+	username: string;
 	role: string;
 };
 
@@ -19,7 +18,6 @@ export type User = Document &
 		_id?: string;
 		email: string;
 		password: string;
-		firstname: string;
-		lastname: string;
+		username: string;
 		role: string;
 	};
