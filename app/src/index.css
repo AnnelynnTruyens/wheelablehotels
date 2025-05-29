@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 
 :root {
-	font-family: "Carlito", sans-serif;
+	font-family: "Nunito", sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 
@@ -18,6 +18,9 @@
 	--white: #fffdfc;
 	--black: #001116;
 	--gray: #f2f1f0;
+
+	--shadow-black: 4px 4px 10px 0px rgba(0, 0, 0, 0.25);
+	--shadow-primary: 4px 4px 10px 0px rgba(0, 94, 121, 0.25);
 
 	color-scheme: light dark;
 	color: var(--black);
@@ -38,25 +41,24 @@ a:hover {
 
 body {
 	margin: 0;
-	overflow: hidden;
 }
 
 h1 {
-	font-family: "Nunito", sans-serif;
+	font-style: italic;
 	font-size: 3.2em;
 	line-height: 1.1;
 	color: var(--primary-dark);
 }
 
 h2 {
-	font-family: "Nunito", sans-serif;
+	font-style: italic;
 	font-size: 2.5em;
 	line-height: 1.1;
 	color: var(--primary-dark);
 }
 
 h3 {
-	font-family: "Nunito", sans-serif;
+	font-style: italic;
 	font-size: 1.5em;
 	line-height: 1.1;
 	color: var(--primary-dark);
@@ -68,7 +70,6 @@ button {
 	padding: 0.4rem 1.5rem;
 	font-size: 1em;
 	font-weight: 400;
-	font-family: "Nunito", sans-serif;
 	font-style: italic;
 	background-color: var(--primary-dark);
 	color: var(--white);
