@@ -6,7 +6,12 @@ import HotelHighlight from "../../components/Cards/Hotels/HotelHighlight";
 import UserHighlight from "../../components/Cards/Users/UserHighlight";
 import SearchForm from "../../components/Forms/SearchForm";
 
-const Home = () => {
+// Type home component
+interface HomeProps {
+	onLogin: (token: string) => void;
+}
+
+const Home: React.FC<HomeProps> = ({ onLogin }) => {
 	return (
 		<main id="main" className={styles.main}>
 			<div className={styles.hero}>
@@ -58,7 +63,7 @@ const Home = () => {
 						Join us in creating a more accessible travel experience, one hotel
 						at a time.
 					</p>
-					<RegisterForm />
+					<RegisterForm onLogin={onLogin} />
 				</section>
 				<section className={`${styles.section} ${styles.hotels}`}>
 					<h1 className={styles.section_title}>Community favourites</h1>
