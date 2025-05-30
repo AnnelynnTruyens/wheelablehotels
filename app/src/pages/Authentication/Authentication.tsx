@@ -4,8 +4,6 @@ import ROUTES from "../../consts/Routes";
 import Home from "../Home/Home";
 import Hotels from "../Hotels/Hotels";
 import HotelDetail from "../Hotels/HotelDetail";
-import Login from "../User/Login/Login";
-import Register from "../User/Register/Register";
 import Profile from "../User/Profile.tsx/Profile";
 import Favourites from "../User/Favourites/Favourites";
 import UserDashboard from "../User/UserDashboard/UserDashboard";
@@ -24,8 +22,6 @@ const Authentication = () => {
 			<Route path={ROUTES.home} element={<Home />} />
 			<Route path={ROUTES.hotelOverview} element={<Hotels />} />
 			<Route path={ROUTES.hotelDetail.path} element={<HotelDetail />} />
-			<Route path={ROUTES.login} element={<Login />} />
-			<Route path={ROUTES.register} element={<Register />} />
 
 			<Route path={ROUTES.userDashboard} element={<UserDashboard />} />
 			<Route path={ROUTES.favourites} element={<Favourites />} />

@@ -2,9 +2,9 @@ import { Document } from "mongoose";
 
 export type UserRegister = Document & {
 	_id?: string;
+	username: string;
 	email: string;
 	password: string;
-	username: string;
 	role: string;
 };
 
@@ -16,8 +16,8 @@ export type UserMethods = {
 export type User = Document &
 	UserMethods & {
 		_id?: string;
+		username: string;
 		email: string;
 		password: string;
-		username: string;
 		role: string;
 	};

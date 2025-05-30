@@ -1,28 +1,37 @@
 import styles from "../Forms.module.css";
 
-const FormInput = ({
-	label,
-	type,
-	inputId,
-	placeholder,
-	value,
-}: {
+interface FormInputProps {
 	label: string;
 	type: string;
-	inputId: string;
-	placeholder?: string | undefined;
-	value?: string | number | undefined;
+	id: string;
+	name: string;
+	value: string;
+	placeholder?: string;
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const FormInput: React.FC<FormInputProps> = ({
+	label,
+	type,
+	id,
+	name,
+	value,
+	placeholder,
+	onChange,
 }) => {
 	return (
 		<div className={styles.form_input}>
-			<label className={styles.label} htmlFor={inputId}>
+			<label className={styles.label} htmlFor={id}>
 				{label}
 			</label>
 			<input
 				className={styles.input}
 				type={type}
+				id={id}
+				name={name}
 				value={value}
 				placeholder={placeholder}
+				onChange={onChange}
 			/>
 		</div>
 	);

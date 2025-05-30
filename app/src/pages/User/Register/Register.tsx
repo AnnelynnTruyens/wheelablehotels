@@ -2,10 +2,15 @@ import styles from "./Register.module.css";
 
 import RegisterForm from "../../../components/Forms/RegisterForm";
 
-const Register = () => {
+// Type register component
+interface RegisterProps {
+	onLogin: (token: string) => void;
+}
+
+const Register: React.FC<RegisterProps> = ({ onLogin }) => {
 	return (
 		<main id="main" className={styles.main}>
-			<RegisterForm />
+			<RegisterForm onLogin={onLogin} />
 		</main>
 	);
 };
