@@ -1,11 +1,5 @@
-import {
-	createContext,
-	ReactNode,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
-import { Route, Routes, useNavigate } from "react-router";
+import { ReactNode, useEffect, useState } from "react";
+import { Route, Routes } from "react-router";
 import useStores from "../hooks/useStores";
 import { API } from "../services/ApiService";
 import { AxiosError, AxiosResponse } from "axios";
@@ -23,36 +17,18 @@ import Contact from "../pages/General/Contact/Contact";
 import Accessibility from "../pages/General/Accessibility/Accessibility";
 import Privacy from "../pages/General/Privacy/Privacy";
 import Footer from "../components/Footer/Footer";
+import { useAuth } from "../contexts/AuthContext"; // Import useAuth
 
 // Define key for saving token in localStorage
 const key = "AUTH_TOKEN";
-
-// Type the context and container
-interface AuthContextType {
-	token: string | null;
-	logout: () => void;
-}
 
 interface AuthContainerProps {
 	children: ReactNode;
 }
 
-// Create context for authentication
-const AuthContext = createContext<AuthContextType>({
-	token: null,
-	logout: () => {},
-} as AuthContextType);
-
-// Function to get token from localStorage
-const getTokenFromStorage = (): string | null => {
-	return localStorage.getItem(key);
-};
-
 const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
-	const navigate = useNavigate();
-	// Get user when loading page
-	const [token, setToken] = useState<string | null>(getTokenFromStorage());
-	const [isLoading, setIsLoading] = useState<Boolean>(false);
+	const { token, onLogin, logout } = useAuth(); // Access onLogin and logout from context
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<Error | undefined>();
 
 	// Import UiStore to save current user
@@ -82,7 +58,7 @@ const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
 				(response: AxiosResponse) => response,
 				(error: AxiosError) => {
 					if (error.response?.status === 401) {
-						handleLogout();
+						logout();
 					}
 					return Promise.reject(error);
 				}
@@ -97,35 +73,21 @@ const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
 					setError(error);
 					setIsLoading(false);
 				});
-			console.log(UiStore.currentUser);
 		}
-	}, [token, UiStore]);
-
-	// Logout function
-	const handleLogout = () => {
-		setToken(null);
-		UiStore.setCurrentUser(undefined);
-		navigate(ROUTES.home);
-	};
-
-	// Login function
-	const handleLogin = (token: string) => {
-		setToken(token);
-		setIsLoading(true);
-	};
+	}, [token, UiStore, logout]);
 
 	if (isLoading) return <Loading />;
 	else if (error) return <Error message={error.message} />;
 	else
 		return (
-			<AuthContext.Provider value={{ token, logout: handleLogout }}>
+			<>
 				{token ? (
 					children
 				) : (
 					<>
 						<Header />
 						<Routes>
-							<Route path={ROUTES.home} element={<Home />} />
+							<Route path={ROUTES.home} element={<Home onLogin={onLogin} />} />
 							<Route path={ROUTES.hotelOverview} element={<Hotels />} />
 							<Route path={ROUTES.hotelDetail.path} element={<HotelDetail />} />
 							<Route path={ROUTES.contact} element={<Contact />} />
@@ -134,30 +96,28 @@ const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
 
 							<Route
 								path={ROUTES.login}
-								element={<Login onLogin={handleLogin} />}
+								element={<Login onLogin={onLogin} />}
 							/>
 							<Route
 								path={ROUTES.register}
-								element={<Register onLogin={handleLogin} />}
+								element={<Register onLogin={onLogin} />}
 							/>
 
 							<Route
 								path={ROUTES.addHotel}
-								element={<Login onLogin={handleLogin} />}
+								element={<Login onLogin={onLogin} />}
 							/>
 
 							<Route
 								path={ROUTES.notFound}
-								element={<Login onLogin={handleLogin} />}
+								element={<Login onLogin={onLogin} />}
 							/>
 						</Routes>
 						<Footer />
 					</>
 				)}
-			</AuthContext.Provider>
+			</>
 		);
 };
-
-export const useAuthContext = () => useContext(AuthContext);
 
 export default AuthContainer;

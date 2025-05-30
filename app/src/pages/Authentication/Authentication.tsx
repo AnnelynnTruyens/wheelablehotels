@@ -15,11 +15,13 @@ import Contact from "../General/Contact/Contact";
 import Accessibility from "../General/Accessibility/Accessibility";
 import Privacy from "../General/Privacy/Privacy";
 import NotFound from "../General/NotFound/NotFound";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Authentication = () => {
+	const { onLogin } = useAuth(); // Access onLogin from context
 	return (
 		<Routes>
-			<Route path={ROUTES.home} element={<Home />} />
+			<Route path={ROUTES.home} element={<Home onLogin={onLogin} />} />
 			<Route path={ROUTES.hotelOverview} element={<Hotels />} />
 			<Route path={ROUTES.hotelDetail.path} element={<HotelDetail />} />
 
