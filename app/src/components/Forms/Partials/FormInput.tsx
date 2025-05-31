@@ -7,7 +7,9 @@ interface FormInputProps {
 	name: string;
 	value: string;
 	placeholder?: string;
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	required?: boolean;
+	autocomplete?: string;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -18,6 +20,8 @@ const FormInput: React.FC<FormInputProps> = ({
 	value,
 	placeholder,
 	onChange,
+	required = false,
+	autocomplete,
 }) => {
 	return (
 		<div className={styles.form_input}>
@@ -32,6 +36,8 @@ const FormInput: React.FC<FormInputProps> = ({
 				value={value}
 				placeholder={placeholder}
 				onChange={onChange}
+				required={required}
+				autoComplete={autocomplete}
 			/>
 		</div>
 	);

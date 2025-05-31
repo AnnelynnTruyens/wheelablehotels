@@ -14,6 +14,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ onLogin }) => {
 	return (
 		<main id="main" className={styles.main}>
+			<title>Wheelable Hotels</title>
 			<div className={styles.hero}>
 				<SearchForm />
 			</div>
@@ -45,7 +46,7 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 						</p>
 					</div>
 					<img
-						src="./src/assets/DSC_0045.jpg"
+						src="/assets/DSC_0045.jpg"
 						alt="Girl in wheelchair in front of beach"
 						className={styles.intro_img}
 					/>

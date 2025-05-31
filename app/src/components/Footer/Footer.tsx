@@ -7,7 +7,7 @@ const Footer = () => {
 		<footer className={styles.footer}>
 			<Link to={ROUTES.home}>
 				<img
-					src="./src/assets/Logo_WheelableHotels_white.png"
+					src="/logo/Logo_WheelableHotels_white.png"
 					alt="Logo Wheelable Hotels"
 					className={styles.logo}
 				/>

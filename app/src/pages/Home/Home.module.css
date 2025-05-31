@@ -3,7 +3,7 @@
 }
 
 .hero {
-	background-image: url(./src/assets/Hero.jpg);
+	background-image: url(/assets/Hero.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0% 75%;

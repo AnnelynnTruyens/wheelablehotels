@@ -68,6 +68,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 					placeholder="JohnDoe"
 					value={email}
 					onChange={handleChange}
+					required={true}
+					autocomplete="email"
 				/>
 				<div className={styles.password}>
 					<FormInput
@@ -77,6 +79,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 						name="password"
 						value={password}
 						onChange={handleChange}
+						required={true}
+						autocomplete="current-password"
 					/>
 					<label htmlFor="showPassword" className={styles.checkbox}>
 						<input

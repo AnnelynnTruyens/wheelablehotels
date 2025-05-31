@@ -14,7 +14,7 @@ const Header = () => {
 				<header className={styles.header_home}>
 					<Link to={ROUTES.home}>
 						<img
-							src="./src/assets/Logo_WheelableHotels_black.png"
+							src="/logo/Logo_WheelableHotels_black.png"
 							alt="logo Wheelable Hotels"
 							className={styles.logo_home}
 						/>
@@ -43,6 +43,7 @@ const Header = () => {
 								<NavLink
 									to={ROUTES.favourites}
 									className={styles.nav_link_home}
+									aria-label="favourites"
 								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +66,7 @@ const Header = () => {
 								<NavLink
 									to={ROUTES.userDashboard}
 									className={styles.nav_link_home}
+									aria-label="profile"
 								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +91,7 @@ const Header = () => {
 				<header className={styles.header}>
 					<Link to={ROUTES.home}>
 						<img
-							src="./src/assets/Logo_WheelableHotels_blue.png"
+							src="/logo/Logo_WheelableHotels_blue.png"
 							alt="logo Wheelable Hotels"
 							className={styles.logo}
 						/>
@@ -112,7 +114,11 @@ const Header = () => {
 								</NavLink>
 							</li>
 							<li className={styles.nav_listitem}>
-								<NavLink to={ROUTES.favourites} className={styles.nav_link}>
+								<NavLink
+									to={ROUTES.favourites}
+									className={styles.nav_link}
+									aria-label="favourites"
+								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										width="40"
@@ -131,7 +137,11 @@ const Header = () => {
 								</NavLink>
 							</li>
 							<li className={styles.nav_listitem}>
-								<NavLink to={ROUTES.userDashboard} className={styles.nav_link}>
+								<NavLink
+									to={ROUTES.userDashboard}
+									className={styles.nav_link}
+									aria-label="profile"
+								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										width="32"

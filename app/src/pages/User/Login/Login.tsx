@@ -9,6 +9,7 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
 	return (
 		<main id="main" className={styles.main}>
+			<title>Login | Wheelable Hotels</title>
 			<LoginForm onLogin={onLogin} />
 		</main>
 	);

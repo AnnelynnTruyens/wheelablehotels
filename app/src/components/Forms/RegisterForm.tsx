@@ -72,6 +72,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 						value={username}
 						placeholder="JohnDoe"
 						onChange={handleChange}
+						required={true}
+						autocomplete="username"
 					/>
 					<FormInput
 						label="Email"
@@ -81,6 +83,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 						value={email}
 						placeholder="john.doe@example.com"
 						onChange={handleChange}
+						required={true}
+						autocomplete="email"
 					/>
 					<FormInput
 						label="Password"
@@ -89,6 +93,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 						name="password"
 						value={password}
 						onChange={handleChange}
+						required={true}
+						autocomplete="new-password"
 					/>
 					<div className={styles.buttons}>
 						<button type="submit">Register</button>
