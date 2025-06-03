@@ -26,7 +26,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 
 	const { username, email, password, role } = formData;
 
-	// Function to handle in register form
+	// Function to handle change in register form
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
@@ -61,8 +61,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 	else if (error) return <Error message={error.message} />;
 	else
 		return (
-			<div className={styles.container}>
-				<p className={styles.title}>Join our community!</p>
+			<div className={styles.container_center}>
+				<p className={styles.title_small}>Join our community!</p>
 				<form onSubmit={handleSubmit} className={styles.form}>
 					<FormInput
 						label="Username"

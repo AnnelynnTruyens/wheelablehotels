@@ -21,7 +21,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
 	const { email, password } = formData;
 
-	// Function to handle in register form
+	// Function to handle change in login form
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
@@ -57,12 +57,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 	if (isLoading) return <Loading />;
 
 	return (
-		<div className={styles.container}>
-			<p className={styles.title}>Log in here!</p>
+		<div className={styles.container_center}>
+			<p className={styles.title_small}>Log in here!</p>
 			<form method="post" className={styles.form} onSubmit={handleLogin}>
 				<FormInput
-					label="email"
-					type="text"
+					label="Email"
+					type="email"
 					id="email"
 					name="email"
 					placeholder="JohnDoe"

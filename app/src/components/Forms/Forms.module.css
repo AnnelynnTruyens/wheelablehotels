@@ -1,4 +1,4 @@
-.container {
+.container_center {
 	margin: 2rem auto;
 	width: fit-content;
 	display: flex;
@@ -12,8 +12,33 @@
 	box-shadow: var(--glow-black);
 }
 
+.container_full {
+	margin: 2rem;
+	display: flex;
+	padding: 3rem;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: start;
+
+	border-radius: 25px;
+	background: var(--secondary-verylight, #fff8f3);
+	box-shadow: var(--glow-black);
+}
+
 .title {
-	margin: 0 2rem;
+	margin: 2rem 0 1rem;
+	font-size: 2.5em;
+	color: var(--primary-dark);
+}
+
+.title_small {
+	margin: 0;
+	font-size: 1.5em;
+	color: var(--primary-dark);
+}
+
+.subtitle {
+	margin: 2rem 0 0;
 	font-size: 1.5em;
 	color: var(--primary-dark);
 }
@@ -37,8 +62,21 @@
 
 .input {
 	margin: 0;
-	width: max-content;
+	width: -webkit-fill-available;
 	min-width: 20rem;
+	padding: 1rem 1.5rem;
+
+	border-radius: var(--border-radius);
+	border: 1px solid var(--Primary, #017ca0);
+	background: var(--White, #fffdfc);
+	box-shadow: 0px 4px 10px 0px rgba(0, 94, 121, 0.25) inset;
+}
+
+.input_textarea {
+	margin: 0;
+	width: -webkit-fill-available;
+	min-width: 20rem;
+	min-height: 5rem;
 	padding: 1rem 1.5rem;
 
 	border-radius: var(--border-radius);
@@ -55,8 +93,20 @@
 	margin-bottom: 0;
 }
 
-.checkbox {
+.password .checkbox {
 	transform: translateX(25px);
+}
+
+.fieldset {
+	border: none;
+	width: 50%;
+}
+
+.checkboxes {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	column-gap: 5rem;
 }
 
 .buttons {
@@ -65,4 +115,13 @@
 	justify-content: space-between;
 	align-items: center;
 	margin-top: 2rem;
+}
+
+.room_container {
+	background-color: var(--primary);
+	color: var(--white);
+
+	padding: 1rem;
+	margin: 1rem 0;
+	border-radius: var(--border-radius);
 }

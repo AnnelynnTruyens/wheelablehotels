@@ -3,7 +3,6 @@ import styles from "./Home.module.css";
 import ROUTES from "../../consts/Routes";
 import RegisterForm from "../../components/Forms/RegisterForm";
 import HotelHighlight from "../../components/Cards/Hotels/HotelHighlight";
-import UserHighlight from "../../components/Cards/Users/UserHighlight";
 import SearchForm from "../../components/Forms/SearchForm";
 
 // Type home component
@@ -69,10 +68,6 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 				<section className={`${styles.section} ${styles.hotels}`}>
 					<h1 className={styles.section_title}>Community favourites</h1>
 					<HotelHighlight />
-				</section>
-				<section className={`${styles.section} ${styles.members}`}>
-					<h1 className={styles.section_title}>Members of the month</h1>
-					<UserHighlight />
 				</section>
 			</div>
 		</main>

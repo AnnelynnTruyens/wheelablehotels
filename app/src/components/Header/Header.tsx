@@ -30,11 +30,6 @@ const Header = () => {
 								</NavLink>
 							</li>
 							<li className={styles.nav_listitem_home}>
-								<NavLink to={ROUTES.contact} className={styles.nav_link_home}>
-									Contact
-								</NavLink>
-							</li>
-							<li className={styles.nav_listitem_home}>
 								<NavLink to={ROUTES.addHotel} className={styles.nav_btn_home}>
 									Add a hotel
 								</NavLink>
@@ -101,11 +96,6 @@ const Header = () => {
 							<li className={styles.nav_listitem}>
 								<NavLink to={ROUTES.hotelOverview} className={styles.nav_link}>
 									Search hotels
-								</NavLink>
-							</li>
-							<li className={styles.nav_listitem}>
-								<NavLink to={ROUTES.contact} className={styles.nav_link}>
-									Contact
 								</NavLink>
 							</li>
 							<li className={styles.nav_listitem}>

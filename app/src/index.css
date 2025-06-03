@@ -68,12 +68,12 @@ button {
 	padding: 0.5rem 1.5rem;
 	font-size: 1em;
 	font-weight: 400;
-	background-color: var(--primary-dark);
+	background-color: var(--primary);
 	color: var(--white);
 	cursor: pointer;
 }
 button:hover {
-	background-color: var(--primary);
+	background-color: var(--primary-dark);
 }
 button:focus,
 button:focus-visible {
