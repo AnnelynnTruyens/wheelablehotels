@@ -1,0 +1,70 @@
+.container {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.step,
+.step_active,
+.step_past {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.icon_border {
+	border: 2px solid var(--primary);
+	border-radius: 50%;
+	padding: 1rem;
+	width: 3rem;
+	height: 3rem;
+}
+
+.icon {
+	stroke: var(--primary);
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.step_text {
+	color: var(--primary);
+	margin-top: 0.5rem;
+}
+
+.step_active .icon_border {
+	border: 4px solid var(--primary);
+	box-shadow: var(--glow-blue);
+}
+
+.step_active .icon {
+	stroke-width: 4;
+}
+
+.step_active .step_text {
+	font-weight: 700;
+}
+
+.step_past .icon_border {
+	background-color: var(--primary);
+}
+
+.step_past .icon {
+	stroke: var(--white);
+}
+
+.line {
+	flex: 1; /* Stretch to fill the space between steps */
+	height: 2px;
+	background-color: var(--primary);
+	transform: translateY(-1.5rem);
+}
+
+.line_bold {
+	flex: 1; /* Stretch to fill the space between steps */
+	height: 4px;
+	background-color: var(--primary);
+	transform: translateY(-1.5rem);
+}

@@ -21,7 +21,7 @@ const AddStart: React.FC<AddStartProps> = ({ goToNext }) => {
 
 	return (
 		<div className={styles.container_full}>
-			<Progress />
+			<Progress step={1} />
 			<h1 className={styles.title}>Add hotel</h1>
 			<form method="post" className={styles.form} onSubmit={goToNext}>
 				<FormInput

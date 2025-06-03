@@ -34,7 +34,7 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 
 	return (
 		<div className={styles.container_full}>
-			<Progress />
+			<Progress step={2} />
 			<h1 className={styles.title}>Add hotel info</h1>
 
 			<form method="post" className={styles.form} onSubmit={goToNext}>

@@ -10,7 +10,7 @@ interface AddRoomsProps {
 const AddRooms: React.FC<AddRoomsProps> = ({ goToNext, goToPrevious }) => {
 	return (
 		<div className={styles.container_full}>
-			<Progress />
+			<Progress step={3} />
 			<h1 className={styles.title}>Add rooms</h1>
 			<p>Please only add accessible rooms.</p>
 

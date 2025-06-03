@@ -52,7 +52,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 
 	return (
 		<div className={styles.container_full}>
-			<Progress />
+			<Progress step={5} />
 			<h1 className={styles.title}>Overview</h1>
 			<p>Check all added info here and edit if needed.</p>
 

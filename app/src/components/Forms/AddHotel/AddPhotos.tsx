@@ -26,7 +26,7 @@ const AddPhotos: React.FC<AddPhotosProps> = ({ goToNext, goToPrevious }) => {
 
 	return (
 		<div className={styles.container_full}>
-			<Progress />
+			<Progress step={4} />
 			<h1 className={styles.title}>Add photos</h1>
 			<form method="post" className={styles.form} onSubmit={goToNext}>
 				<FormFileInput
