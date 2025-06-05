@@ -30,6 +30,10 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
 
+	// State to manage the list of rooms
+	const [roomIds, setRoomIds] = useState<number[]>([0]); // Start with one room
+	const [roomDataList, setRoomDataList] = useState<any[]>([]); // State to store room data
+
 	const [formData, setFormData] = useState({
 		name: "",
 		location: "",
@@ -60,6 +64,28 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 				setIsLoading(false);
 			});
 	}, [hotelId]);
+
+	// Function to add another room
+	const addRoom = () => {
+		setRoomIds((prevRoomIds) => [...prevRoomIds, prevRoomIds.length]); // Add a new room ID
+	};
+
+	// Function to remove a specific room
+	const removeRoom = (roomId: number) => {
+		setRoomIds((prevRoomIds) => prevRoomIds.filter((id) => id !== roomId)); // Remove the room ID
+		setRoomDataList((prevDataList) =>
+			prevDataList.filter((_, index) => index !== roomId)
+		); // Remove the room data
+	};
+
+	// Function to handle room data change
+	const handleRoomDataChange = (roomId: number, data: any) => {
+		setRoomDataList((prevDataList) => {
+			const newDataList = [...prevDataList];
+			newDataList[roomId] = data;
+			return newDataList;
+		});
+	};
 
 	const [hotelFiles, setHotelFiles] = useState<FileList | null>(null);
 	const [roomFiles, setRoomFiles] = useState<FileList | null>(null);
@@ -94,6 +120,8 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 			formData.contactPhone,
 			formData.accessibilityInfo
 		);
+		// Collect data from all AddRoom components
+		console.log("Submitting rooms:", roomDataList);
 	};
 
 	if (isLoading)
@@ -206,8 +234,26 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					<h2 className={styles.subtitle}>Rooms</h2>
 					<p>Please only add accessible rooms.</p>
 
-					<AddRoom />
-					<button>Add another room</button>
+					{/* Render multiple AddRoom components */}
+					{roomIds.map((roomId) => (
+						<div key={roomId} className={styles.roomContainer}>
+							<AddRoom
+								onDataChange={(data) => handleRoomDataChange(roomId, data)}
+							/>
+							<button
+								type="button"
+								className={styles.deleteButton}
+								onClick={() => removeRoom(roomId)}
+							>
+								Delete
+							</button>
+						</div>
+					))}
+
+					{/* Button to add another room */}
+					<button type="button" onClick={addRoom}>
+						Add another room
+					</button>
 
 					<h2 className={styles.subtitle}>Photos</h2>
 					<FormFileInput

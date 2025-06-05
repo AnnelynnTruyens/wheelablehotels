@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../Forms.module.css";
 import FormInput from "../../Partials/FormInput";
 import FormTextarea from "../../Partials/FormTextarea";
 import FormCheckbox from "../../Partials/FormCheckbox";
 
-const AddRoom = () => {
+interface AddRoomProps {
+	onDataChange?: (data: any) => void; // Define the onDataChange prop
+}
+
+const AddRoom: React.FC<AddRoomProps> = ({ onDataChange }) => {
 	const [formData, setFormData] = useState({
 		name: "",
 		description: "",
@@ -20,6 +24,13 @@ const AddRoom = () => {
 	) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
+
+	// Notify the parent component of the data change whenever formData changes
+	useEffect(() => {
+		if (onDataChange) {
+			onDataChange(formData);
+		}
+	}, [formData]);
 
 	return (
 		<div className={styles.room_container}>
