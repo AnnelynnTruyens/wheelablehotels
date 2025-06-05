@@ -13,23 +13,23 @@ const hotelSchema = new mongoose.Schema<Hotel>(
 		},
 		location: {
 			type: String,
-			required: true,
+			required: false,
 		},
 		contactEmail: {
 			type: String,
-			required: true,
+			required: false,
 		},
 		contactPhone: {
 			type: String,
-			required: true,
+			required: false,
 		},
 		accessibilityInfo: {
 			type: String,
-			required: true,
+			required: false,
 		},
 		rating: {
 			type: Number,
-			required: true,
+			required: false,
 		},
 		userId: {
 			type: mongoose.Schema.Types.ObjectId,

@@ -6,7 +6,12 @@ import FormTextarea from "../Partials/FormTextarea";
 import FormCheckbox from "../Partials/FormCheckbox";
 
 interface AddHotelInfoProps {
-	goToNext: () => void; // Callback to handle going to next step
+	goToNext: (
+		location: string,
+		contactEmail: string,
+		contactPhone: string,
+		accessibilityInfo: string
+	) => void; // Callback to handle going to next step
 	goToPrevious: () => void; // Callback to handle going to previous step
 }
 
@@ -32,12 +37,22 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		goToNext(
+			formData.location,
+			formData.contactEmail,
+			formData.contactPhone,
+			formData.accessibilityInfo
+		);
+	};
+
 	return (
 		<div className={styles.container_full}>
 			<Progress step={2} />
 			<h1 className={styles.title}>Add hotel info</h1>
 
-			<form method="post" className={styles.form} onSubmit={goToNext}>
+			<form method="post" className={styles.form} onSubmit={handleSubmit}>
 				<FormInput
 					label="Address hotel"
 					type="text"

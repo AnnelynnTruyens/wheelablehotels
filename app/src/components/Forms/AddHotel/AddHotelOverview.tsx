@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../Forms.module.css";
 import Progress from "./Partials/Progress";
 import FormInput from "../Partials/FormInput";
@@ -6,16 +6,30 @@ import FormTextarea from "../Partials/FormTextarea";
 import FormCheckbox from "../Partials/FormCheckbox";
 import AddRoom from "./Partials/AddRoom";
 import FormFileInput from "../Partials/FormFileInput";
+import { getHotelById } from "../../../services/HotelService";
+import Loading from "../../Loading/Loading";
+import Error from "../../Error/Error";
 
 interface AddHotelOverviewProps {
+	hotelId: string;
 	goToPrevious: () => void; // Callback to handle goint to previous step
-	handleSubmit: () => void; // Callback to handle submitting the form
+	handleAddHotel: (
+		name: string,
+		location: string,
+		contactEmail: string,
+		contactPhone: string,
+		accessibilityInfo: string
+	) => void; // Callback to handle submitting the form
 }
 
 const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
+	hotelId,
 	goToPrevious,
-	handleSubmit,
+	handleAddHotel,
 }) => {
+	const [isLoading, setIsLoading] = useState<Boolean>(true);
+	const [error, setError] = useState<Error | undefined>();
+
 	const [formData, setFormData] = useState({
 		name: "",
 		location: "",
@@ -25,6 +39,27 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		accessibilityFeatures: ["feature1", "feature2"],
 		accessibilityInfo: "",
 	});
+
+	useEffect(() => {
+		setIsLoading(true);
+		getHotelById(hotelId)
+			.then((response) => {
+				setFormData({
+					name: response.data.name,
+					location: response.data.location || "",
+					contactEmail: response.data.contactEmail || "",
+					contactPhone: response.data.contactPhone || "",
+					amenities: ["amenity1", "amenity2"],
+					accessibilityFeatures: ["feature1", "feature2"],
+					accessibilityInfo: response.data.accessibilityInfo || "",
+				});
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				setError(error);
+				setIsLoading(false);
+			});
+	}, [hotelId]);
 
 	const [hotelFiles, setHotelFiles] = useState<FileList | null>(null);
 	const [roomFiles, setRoomFiles] = useState<FileList | null>(null);
@@ -50,145 +85,171 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		}
 	};
 
-	return (
-		<div className={styles.container_full}>
-			<Progress step={5} />
-			<h1 className={styles.title}>Overview</h1>
-			<p>Check all added info here and edit if needed.</p>
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		handleAddHotel(
+			formData.name,
+			formData.location,
+			formData.contactEmail,
+			formData.contactPhone,
+			formData.accessibilityInfo
+		);
+	};
 
-			<form method="post" className={styles.form} onSubmit={handleSubmit}>
-				<h2 className={styles.subtitle}>General info</h2>
-				<FormInput
-					label="Name hotel"
-					type="text"
-					id="name"
-					name="name"
-					value={formData.name}
-					placeholder="Brussels Plaza Hotel"
-					onChange={handleChange}
-					required={true}
-				/>
-				<FormInput
-					label="Address hotel"
-					type="text"
-					id="location"
-					name="location"
-					value={formData.location}
-					placeholder="Plaza 1, 1000 Brussels"
-					onChange={handleChange}
-					required={true}
-				/>
-				<FormInput
-					label="Email hotel"
-					type="email"
-					id="contactEmail"
-					name="contactEmail"
-					value={formData.contactEmail}
-					placeholder="example@hotel.com"
-					onChange={handleChange}
-					required={true}
-				/>
-				<FormInput
-					label="Phone number hotel"
-					type="tel"
-					id="contactPhone"
-					name="contactPhone"
-					value={formData.contactPhone}
-					placeholder="+32 000 00 00"
-					onChange={handleChange}
-					required={true}
-				/>
+	if (isLoading)
+		return (
+			<div className={styles.container_full}>
+				<Progress step={5} />
+				<Loading />
+			</div>
+		);
+	else if (error)
+		return (
+			<div className={styles.container_full}>
+				<Progress step={5} />
+				<Error message={error.message} />
+			</div>
+		);
+	else
+		return (
+			<div className={styles.container_full}>
+				<Progress step={5} />
+				<h1 className={styles.title}>Overview</h1>
+				<p>Check all added info here and edit if needed.</p>
 
-				<fieldset>
-					<legend>General amenities:</legend>
-					{formData.amenities.map((amenity, index) => {
-						return (
-							<FormCheckbox
-								key={`amenity_${index}`}
-								label={amenity}
-								id="amenities"
-								name="amenities"
-								value={amenity}
-								onChange={handleChange}
-							/>
-						);
-					})}
-				</fieldset>
+				<form method="post" className={styles.form} onSubmit={handleSubmit}>
+					<h2 className={styles.subtitle}>General info</h2>
+					<FormInput
+						label="Name hotel"
+						type="text"
+						id="name"
+						name="name"
+						value={formData.name}
+						placeholder="Brussels Plaza Hotel"
+						onChange={handleChange}
+						required={true}
+					/>
+					<FormInput
+						label="Address hotel"
+						type="text"
+						id="location"
+						name="location"
+						value={formData.location}
+						placeholder="Plaza 1, 1000 Brussels"
+						onChange={handleChange}
+						required={true}
+					/>
+					<FormInput
+						label="Email hotel"
+						type="email"
+						id="contactEmail"
+						name="contactEmail"
+						value={formData.contactEmail}
+						placeholder="example@hotel.com"
+						onChange={handleChange}
+						required={true}
+					/>
+					<FormInput
+						label="Phone number hotel"
+						type="tel"
+						id="contactPhone"
+						name="contactPhone"
+						value={formData.contactPhone}
+						placeholder="+32 000 00 00"
+						onChange={handleChange}
+						required={true}
+					/>
 
-				<h2 className={styles.subtitle}>Accessibility info</h2>
-				<fieldset>
-					<legend>Accessibility features:</legend>
-					{formData.accessibilityFeatures.map((feature, index) => {
-						return (
-							<FormCheckbox
-								key={`feature_${index}`}
-								label={feature}
-								id="accessibilityFeatures"
-								name="accessibilityFeatures"
-								value={feature}
-								onChange={handleChange}
-							/>
-						);
-					})}
-				</fieldset>
+					<fieldset>
+						<legend>General amenities:</legend>
+						{formData.amenities.map((amenity, index) => {
+							return (
+								<FormCheckbox
+									key={`amenity_${index}`}
+									label={amenity}
+									id="amenities"
+									name="amenities"
+									value={amenity}
+									onChange={handleChange}
+								/>
+							);
+						})}
+					</fieldset>
 
-				<FormTextarea
-					label="Accessibility info"
-					id="accessibilityInfo"
-					name="accessibilityInfo"
-					value={formData.accessibilityInfo}
-					placeholder="Add accessibility information of the room here. Give a general impression of the accessibility and add measurements if possible. Add any extra accessibility features here as well."
-					onChange={handleChange}
-					required={true}
-				/>
+					<h2 className={styles.subtitle}>Accessibility info</h2>
+					<fieldset>
+						<legend>Accessibility features:</legend>
+						{formData.accessibilityFeatures.map((feature, index) => {
+							return (
+								<FormCheckbox
+									key={`feature_${index}`}
+									label={feature}
+									id="accessibilityFeatures"
+									name="accessibilityFeatures"
+									value={feature}
+									onChange={handleChange}
+								/>
+							);
+						})}
+					</fieldset>
 
-				<h2 className={styles.subtitle}>Rooms</h2>
-				<p>Please only add accessible rooms.</p>
+					<FormTextarea
+						label="Accessibility info"
+						id="accessibilityInfo"
+						name="accessibilityInfo"
+						value={formData.accessibilityInfo}
+						placeholder="Add accessibility information of the room here. Give a general impression of the accessibility and add measurements if possible. Add any extra accessibility features here as well."
+						onChange={handleChange}
+						required={true}
+					/>
 
-				<AddRoom />
-				<button>Add another room</button>
+					<h2 className={styles.subtitle}>Rooms</h2>
+					<p>Please only add accessible rooms.</p>
 
-				<h2 className={styles.subtitle}>Photos</h2>
-				<FormFileInput
-					label="General"
-					id="hotelImages"
-					name="hotelImages"
-					onChange={handleHotelFileChange}
-				/>
-				{hotelFiles && (
-					<div>
-						<p>Selected Files:</p>
-						<ul>
-							{Array.from(hotelFiles).map((file, index) => (
-								<li key={index}>{file.name}</li>
-							))}
-						</ul>
+					<AddRoom />
+					<button>Add another room</button>
+
+					<h2 className={styles.subtitle}>Photos</h2>
+					<FormFileInput
+						label="General"
+						id="hotelImages"
+						name="hotelImages"
+						onChange={handleHotelFileChange}
+					/>
+					{hotelFiles && (
+						<div>
+							<p>Selected Files:</p>
+							<ul>
+								{Array.from(hotelFiles).map((file, index) => (
+									<li key={index}>{file.name}</li>
+								))}
+							</ul>
+						</div>
+					)}
+					<FormFileInput
+						label="Room name"
+						id="roomImages"
+						name="roomImages"
+						onChange={handleRoomFileChange}
+					/>
+					{roomFiles && (
+						<div>
+							<p>Selected Files:</p>
+							<ul>
+								{Array.from(roomFiles).map((file, index) => (
+									<li key={index}>{file.name}</li>
+								))}
+							</ul>
+						</div>
+					)}
+
+					<div className={styles.buttons}>
+						<button onClick={goToPrevious}>Previous</button>
+						<button type="submit">Submit</button>
 					</div>
-				)}
-				<FormFileInput
-					label="Room name"
-					id="roomImages"
-					name="roomImages"
-					onChange={handleRoomFileChange}
-				/>
-				{roomFiles && (
-					<div>
-						<p>Selected Files:</p>
-						<ul>
-							{Array.from(roomFiles).map((file, index) => (
-								<li key={index}>{file.name}</li>
-							))}
-						</ul>
-					</div>
-				)}
-
-				<div className={styles.buttons}>
-					<button onClick={goToPrevious}>Previous</button>
-					<button type="submit">Submit</button>
-				</div>
-			</form>
-		</div>
-	);
+				</form>
+			</div>
+		);
 };
 
 export default AddHotelOverview;
