@@ -79,7 +79,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const user = await User.findOneAndUpdate({ _id: id }, req.body, {
 				new: true,
 				runValidators: true,
@@ -121,7 +121,7 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const user = await User.findOneAndDelete({
 				_id: id,
 			});

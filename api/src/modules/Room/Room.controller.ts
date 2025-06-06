@@ -59,7 +59,7 @@ const updateRoom = async (req: Request, res: Response, next: NextFunction) => {
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			if (req.body.hotelId) {
 				const hotel = await Hotel.findOne({
 					_id: req.body.hotelId,
@@ -115,7 +115,7 @@ const deleteRoom = async (req: Request, res: Response, next: NextFunction) => {
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const room = await Room.findOneAndDelete({
 				_id: id,
 			});

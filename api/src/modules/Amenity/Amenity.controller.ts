@@ -42,7 +42,7 @@ const createAmenity = async (
 	try {
 		const { user } = req as AuthRequest;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const amenity = new Amenity({ ...req.body });
 			const result = await amenity.save();
 			res.status(200).json(result);
@@ -63,7 +63,7 @@ const updateAmenity = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const amenity = await Amenity.findOneAndUpdate({ _id: id }, req.body, {
 				new: true,
 				runValidators: true,
@@ -89,7 +89,7 @@ const deleteAmenity = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const amenity = await Amenity.findOneAndDelete({ _id: id });
 			if (!amenity) {
 				throw new NotFoundError("Amenity not found");

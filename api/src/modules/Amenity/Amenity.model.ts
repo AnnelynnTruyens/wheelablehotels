@@ -8,9 +8,9 @@ const amenitySchema = new mongoose.Schema<Amenity>(
 			type: String,
 			required: true,
 		},
-		iconUrl: {
+		icon: {
 			type: String,
-			required: true,
+			required: false,
 		},
 	},
 	{

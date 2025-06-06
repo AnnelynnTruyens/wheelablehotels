@@ -44,7 +44,7 @@ const createAccessibilityFeature = async (
 	try {
 		const { user } = req as AuthRequest;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const accessibilityFeature = new AccessibilityFeature({ ...req.body });
 			const result = await accessibilityFeature.save();
 			res.status(200).json(result);
@@ -65,7 +65,7 @@ const updateAccessibilityFeature = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const accessibilityFeature = await AccessibilityFeature.findOneAndUpdate(
 				{ _id: id },
 				req.body,
@@ -95,7 +95,7 @@ const deleteAccessibilityFeature = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const accessibilityFeature = await AccessibilityFeature.findOneAndDelete({
 				_id: id,
 			});

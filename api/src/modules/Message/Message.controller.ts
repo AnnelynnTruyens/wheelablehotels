@@ -10,7 +10,7 @@ const getMessages = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { user } = req as AuthRequest;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const messages = await Message.find({});
 			res.json(messages);
 		} else {
@@ -30,7 +30,7 @@ const getMessageById = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const message = await Message.findOne({
 				_id: id,
 			});
@@ -69,7 +69,7 @@ const updateMessage = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const message = await Message.findOneAndUpdate({ _id: id }, req.body, {
 				new: true,
 				runValidators: true,
@@ -95,7 +95,7 @@ const deleteMessage = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const message = await Message.findOneAndDelete({ _id: id });
 			if (!message) {
 				throw new NotFoundError("Message not found");

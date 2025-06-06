@@ -76,7 +76,7 @@ const updateImage = async (req: Request, res: Response, next: NextFunction) => {
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			if (req.body.hotelId || req.body.roomId) {
 				const hotel = await Hotel.findOne({
 					_id: req.body.hotelId,
@@ -141,7 +141,7 @@ const deleteImage = async (req: Request, res: Response, next: NextFunction) => {
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const image = await Image.findOneAndDelete({
 				_id: id,
 			});

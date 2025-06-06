@@ -8,9 +8,9 @@ const accessibilityFeatureSchema = new mongoose.Schema<AccessibilityFeature>(
 			type: String,
 			required: true,
 		},
-		iconUrl: {
+		icon: {
 			type: String,
-			required: true,
+			required: false,
 		},
 	},
 	{

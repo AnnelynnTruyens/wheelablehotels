@@ -93,7 +93,7 @@ const updateReview = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const review = await Review.findOneAndUpdate({ _id: id }, req.body, {
 				new: true,
 				runValidators: true,
@@ -130,7 +130,7 @@ const deleteReview = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "Admin") {
+		if (user.role === "admin") {
 			const review = await Review.findOneAndDelete({ _id: id });
 			if (!review) {
 				throw new NotFoundError("Review not found");
