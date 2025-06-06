@@ -10,6 +10,10 @@ import { getHotelById } from "../../../services/HotelService";
 import Loading from "../../Loading/Loading";
 import Error from "../../Error/Error";
 import { Amenity, getAmenities } from "../../../services/AmenityService";
+import {
+	AccessibilityFeature,
+	getAccessibilityFeatures,
+} from "../../../services/AccessibilityFeatureService";
 
 interface AddHotelOverviewProps {
 	hotelId: string;
@@ -20,7 +24,8 @@ interface AddHotelOverviewProps {
 		contactEmail: string,
 		contactPhone: string,
 		accessibilityInfo: string,
-		amenities: string[]
+		amenities: string[],
+		accessibilityFeatures: string[]
 	) => void; // Callback to handle submitting the form
 }
 
@@ -42,25 +47,31 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		contactEmail: "",
 		contactPhone: "",
 		amenities: [] as string[],
-		accessibilityFeatures: ["feature1", "feature2"],
+		accessibilityFeatures: [] as string[],
 		accessibilityInfo: "",
 	});
 
 	const [amenities, setAmenities] = useState<Amenity[]>([]);
+	const [accessibilityFeatures, setAccessibilityFeatures] = useState<
+		AccessibilityFeature[]
+	>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				// Fetch hotel details
 				const hotelResponse = await getHotelById(hotelId);
-				console.log("Fetched hotel details:", hotelResponse.data);
 
 				// Extract amenities _id values
 				const hotelAmenities = (
 					hotelResponse.data.amenities as unknown as Amenity[]
 				).map((amenity) => amenity._id);
 
-				console.log(hotelAmenities);
+				// Extract accessibilityFeatures _id values
+				const hotelAccessibilityFeatures = (
+					hotelResponse.data
+						.accessibilityFeatures as unknown as AccessibilityFeature[]
+				).map((feature) => feature._id);
 
 				setFormData({
 					name: hotelResponse.data.name,
@@ -68,14 +79,17 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					contactEmail: hotelResponse.data.contactEmail || "",
 					contactPhone: hotelResponse.data.contactPhone || "",
 					amenities: hotelAmenities,
-					accessibilityFeatures: ["feature1", "feature2"],
+					accessibilityFeatures: hotelAccessibilityFeatures,
 					accessibilityInfo: hotelResponse.data.accessibilityInfo || "",
 				});
 
 				// Fetch all amenities
 				const amenitiesResponse = await getAmenities();
-				console.log("Fetched amenities:", amenitiesResponse.data);
 				setAmenities(amenitiesResponse.data);
+
+				// Fetch all accessibilityFeatures
+				const accessibilityFeaturesResponse = await getAccessibilityFeatures();
+				setAccessibilityFeatures(accessibilityFeaturesResponse.data);
 
 				setIsLoading(false);
 			} catch (error) {
@@ -136,6 +150,25 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		}
 	};
 
+	const handleAccessibilityFeatureChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const { value, checked } = e.target;
+		if (checked) {
+			setFormData({
+				...formData,
+				accessibilityFeatures: [...formData.accessibilityFeatures, value],
+			});
+		} else {
+			setFormData({
+				...formData,
+				accessibilityFeatures: formData.accessibilityFeatures.filter(
+					(feature) => feature != value
+				),
+			});
+		}
+	};
+
 	const handleHotelFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
 			setHotelFiles(e.target.files);
@@ -156,7 +189,8 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 			formData.contactEmail,
 			formData.contactPhone,
 			formData.accessibilityInfo,
-			formData.amenities
+			formData.amenities,
+			formData.accessibilityFeatures
 		);
 		// Collect data from all AddRoom components
 		console.log("Submitting rooms:", roomDataList);
@@ -244,15 +278,16 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					<h2 className={styles.subtitle}>Accessibility info</h2>
 					<fieldset>
 						<legend>Accessibility features:</legend>
-						{formData.accessibilityFeatures.map((feature, index) => {
+						{accessibilityFeatures.map((feature) => {
 							return (
 								<FormCheckbox
-									key={`feature_${index}`}
-									label={feature}
-									id="accessibilityFeatures"
+									key={feature._id}
+									label={feature.name}
+									id={feature._id}
 									name="accessibilityFeatures"
-									value={feature}
-									onChange={handleChange}
+									value={feature._id}
+									checked={formData.accessibilityFeatures.includes(feature._id)}
+									onChange={handleAccessibilityFeatureChange}
 								/>
 							);
 						})}

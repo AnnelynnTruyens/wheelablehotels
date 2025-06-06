@@ -5,6 +5,10 @@ import Progress from "./Partials/Progress";
 import FormTextarea from "../Partials/FormTextarea";
 import FormCheckbox from "../Partials/FormCheckbox";
 import { Amenity, getAmenities } from "../../../services/AmenityService";
+import {
+	AccessibilityFeature,
+	getAccessibilityFeatures,
+} from "../../../services/AccessibilityFeatureService";
 
 interface AddHotelInfoProps {
 	goToNext: (
@@ -12,7 +16,8 @@ interface AddHotelInfoProps {
 		contactEmail: string,
 		contactPhone: string,
 		accessibilityInfo: string,
-		amenities: string[]
+		amenities: string[],
+		accessibilityFeatures: string[]
 	) => void; // Callback to handle going to next step
 	goToPrevious: () => void; // Callback to handle going to previous step
 }
@@ -26,16 +31,22 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		contactEmail: "",
 		contactPhone: "",
 		amenities: [] as string[],
-		accessibilityFeatures: ["feature1", "feature2"],
+		accessibilityFeatures: [] as string[],
 		accessibilityInfo: "",
 	});
 
 	const [amenities, setAmenities] = useState<Amenity[]>([]);
+	const [accessibilityFeatures, setAccessibilityFeatures] = useState<
+		AccessibilityFeature[]
+	>([]);
 
 	useEffect(() => {
-		// Fetch amenities from the API
+		// Fetch amenities & accessibilityFeatures from the API
 		getAmenities().then((response) => {
 			setAmenities(response.data);
+		});
+		getAccessibilityFeatures().then((response) => {
+			setAccessibilityFeatures(response.data);
 		});
 	}, []);
 
@@ -63,6 +74,25 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		}
 	};
 
+	const handleAccessibilityFeatureChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const { value, checked } = e.target;
+		if (checked) {
+			setFormData({
+				...formData,
+				accessibilityFeatures: [...formData.accessibilityFeatures, value],
+			});
+		} else {
+			setFormData({
+				...formData,
+				accessibilityFeatures: formData.accessibilityFeatures.filter(
+					(feature) => feature != value
+				),
+			});
+		}
+	};
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		goToNext(
@@ -70,7 +100,8 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 			formData.contactEmail,
 			formData.contactPhone,
 			formData.accessibilityInfo,
-			formData.amenities
+			formData.amenities,
+			formData.accessibilityFeatures
 		);
 	};
 
@@ -135,15 +166,15 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 						Accessibility features:
 					</legend>
 					<div className={styles.checkboxes}>
-						{formData.accessibilityFeatures.map((feature, index) => {
+						{accessibilityFeatures.map((feature) => {
 							return (
 								<FormCheckbox
-									key={`feature_${index}`}
-									label={feature}
-									id="accessibilityFeatures"
+									key={feature._id}
+									label={feature.name}
+									id={feature._id}
 									name="accessibilityFeatures"
-									value={feature}
-									onChange={handleChange}
+									value={feature._id}
+									onChange={handleAccessibilityFeatureChange}
 								/>
 							);
 						})}
