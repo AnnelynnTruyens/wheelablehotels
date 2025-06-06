@@ -6,6 +6,7 @@ interface FormCheckboxProps {
 	name: string;
 	value: string;
 	placeholder?: string;
+	checked?: boolean;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -15,6 +16,7 @@ const FormCheckbox: React.FC<FormCheckboxProps> = ({
 	name,
 	value,
 	placeholder,
+	checked,
 	onChange,
 }) => {
 	return (
@@ -26,6 +28,7 @@ const FormCheckbox: React.FC<FormCheckboxProps> = ({
 				name={name}
 				value={value}
 				placeholder={placeholder}
+				checked={checked}
 				onChange={onChange}
 			/>
 			<label className={styles.checkbox_label} htmlFor={id}>

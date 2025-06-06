@@ -67,6 +67,7 @@ const AddHotel = () => {
 		const hotelBody = {
 			name: submittedHotelName,
 			status: "new",
+			amenities: [],
 		};
 
 		API.interceptors.request.use((config) => {
@@ -103,7 +104,8 @@ const AddHotel = () => {
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
-		accessibilityInfo: string
+		accessibilityInfo: string,
+		amenities: string[]
 	) => {
 		//Type hotelBody to send with API call
 		const hotelBody = {
@@ -113,6 +115,7 @@ const AddHotel = () => {
 			contactPhone: contactPhone,
 			accessibilityInfo: accessibilityInfo,
 			status: "new",
+			amenities: amenities,
 		};
 
 		API.interceptors.request.use((config) => {
@@ -149,7 +152,8 @@ const AddHotel = () => {
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
-		accessibilityInfo: string
+		accessibilityInfo: string,
+		amenities: string[]
 	) => {
 		//Type hotelBody to send with API call
 		const hotelBody = {
@@ -159,6 +163,7 @@ const AddHotel = () => {
 			contactPhone: contactPhone,
 			accessibilityInfo: accessibilityInfo,
 			status: "new",
+			amenities: amenities,
 		};
 
 		API.interceptors.request.use((config) => {

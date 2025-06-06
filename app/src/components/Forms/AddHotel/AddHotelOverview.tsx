@@ -9,16 +9,18 @@ import FormFileInput from "../Partials/FormFileInput";
 import { getHotelById } from "../../../services/HotelService";
 import Loading from "../../Loading/Loading";
 import Error from "../../Error/Error";
+import { Amenity, getAmenities } from "../../../services/AmenityService";
 
 interface AddHotelOverviewProps {
 	hotelId: string;
-	goToPrevious: () => void; // Callback to handle goint to previous step
+	goToPrevious: () => void; // Callback to handle going to previous step
 	handleAddHotel: (
 		name: string,
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
-		accessibilityInfo: string
+		accessibilityInfo: string,
+		amenities: string[]
 	) => void; // Callback to handle submitting the form
 }
 
@@ -39,30 +41,50 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		location: "",
 		contactEmail: "",
 		contactPhone: "",
-		amenities: ["amenity1", "amenity2"],
+		amenities: [] as string[],
 		accessibilityFeatures: ["feature1", "feature2"],
 		accessibilityInfo: "",
 	});
 
+	const [amenities, setAmenities] = useState<Amenity[]>([]);
+
 	useEffect(() => {
-		setIsLoading(true);
-		getHotelById(hotelId)
-			.then((response) => {
+		const fetchData = async () => {
+			try {
+				// Fetch hotel details
+				const hotelResponse = await getHotelById(hotelId);
+				console.log("Fetched hotel details:", hotelResponse.data);
+
+				// Extract amenities _id values
+				const hotelAmenities = (
+					hotelResponse.data.amenities as unknown as Amenity[]
+				).map((amenity) => amenity._id);
+
+				console.log(hotelAmenities);
+
 				setFormData({
-					name: response.data.name,
-					location: response.data.location || "",
-					contactEmail: response.data.contactEmail || "",
-					contactPhone: response.data.contactPhone || "",
-					amenities: ["amenity1", "amenity2"],
+					name: hotelResponse.data.name,
+					location: hotelResponse.data.location || "",
+					contactEmail: hotelResponse.data.contactEmail || "",
+					contactPhone: hotelResponse.data.contactPhone || "",
+					amenities: hotelAmenities,
 					accessibilityFeatures: ["feature1", "feature2"],
-					accessibilityInfo: response.data.accessibilityInfo || "",
+					accessibilityInfo: hotelResponse.data.accessibilityInfo || "",
 				});
+
+				// Fetch all amenities
+				const amenitiesResponse = await getAmenities();
+				console.log("Fetched amenities:", amenitiesResponse.data);
+				setAmenities(amenitiesResponse.data);
+
 				setIsLoading(false);
-			})
-			.catch((error) => {
-				setError(error);
+			} catch (error) {
+				setError(error as Error);
 				setIsLoading(false);
-			});
+			}
+		};
+
+		fetchData();
 	}, [hotelId]);
 
 	// Function to add another room
@@ -99,6 +121,21 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	const handleAmenityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value, checked } = e.target;
+		if (checked) {
+			setFormData({
+				...formData,
+				amenities: [...formData.amenities, value],
+			});
+		} else {
+			setFormData({
+				...formData,
+				amenities: formData.amenities.filter((amenity) => amenity != value),
+			});
+		}
+	};
+
 	const handleHotelFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
 			setHotelFiles(e.target.files);
@@ -118,7 +155,8 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 			formData.location,
 			formData.contactEmail,
 			formData.contactPhone,
-			formData.accessibilityInfo
+			formData.accessibilityInfo,
+			formData.amenities
 		);
 		// Collect data from all AddRoom components
 		console.log("Submitting rooms:", roomDataList);
@@ -190,18 +228,17 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 
 					<fieldset>
 						<legend>General amenities:</legend>
-						{formData.amenities.map((amenity, index) => {
-							return (
-								<FormCheckbox
-									key={`amenity_${index}`}
-									label={amenity}
-									id="amenities"
-									name="amenities"
-									value={amenity}
-									onChange={handleChange}
-								/>
-							);
-						})}
+						{amenities.map((amenity) => (
+							<FormCheckbox
+								key={amenity._id}
+								label={amenity.name}
+								id={amenity._id}
+								name="amenities"
+								value={amenity._id}
+								checked={formData.amenities.includes(amenity._id)}
+								onChange={handleAmenityChange}
+							/>
+						))}
 					</fieldset>
 
 					<h2 className={styles.subtitle}>Accessibility info</h2>

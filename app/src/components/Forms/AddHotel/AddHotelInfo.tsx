@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../Forms.module.css";
 import FormInput from "../Partials/FormInput";
 import Progress from "./Partials/Progress";
 import FormTextarea from "../Partials/FormTextarea";
 import FormCheckbox from "../Partials/FormCheckbox";
+import { Amenity, getAmenities } from "../../../services/AmenityService";
 
 interface AddHotelInfoProps {
 	goToNext: (
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
-		accessibilityInfo: string
+		accessibilityInfo: string,
+		amenities: string[]
 	) => void; // Callback to handle going to next step
 	goToPrevious: () => void; // Callback to handle going to previous step
 }
@@ -23,10 +25,19 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		location: "",
 		contactEmail: "",
 		contactPhone: "",
-		amenities: ["amenity1", "amenity2"],
+		amenities: [] as string[],
 		accessibilityFeatures: ["feature1", "feature2"],
 		accessibilityInfo: "",
 	});
+
+	const [amenities, setAmenities] = useState<Amenity[]>([]);
+
+	useEffect(() => {
+		// Fetch amenities from the API
+		getAmenities().then((response) => {
+			setAmenities(response.data);
+		});
+	}, []);
 
 	// Function to handle change in form
 	const handleChange = (
@@ -37,13 +48,29 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	const handleAmenityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value, checked } = e.target;
+		if (checked) {
+			setFormData({
+				...formData,
+				amenities: [...formData.amenities, value],
+			});
+		} else {
+			setFormData({
+				...formData,
+				amenities: formData.amenities.filter((amenity) => amenity != value),
+			});
+		}
+	};
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		goToNext(
 			formData.location,
 			formData.contactEmail,
 			formData.contactPhone,
-			formData.accessibilityInfo
+			formData.accessibilityInfo,
+			formData.amenities
 		);
 	};
 
@@ -87,15 +114,15 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 				<fieldset className={styles.fieldset}>
 					<legend className={styles.fieldset_legend}>General amenities:</legend>
 					<div className={styles.checkboxes}>
-						{formData.amenities.map((amenity, index) => {
+						{amenities.map((amenity) => {
 							return (
 								<FormCheckbox
-									key={`amenity_${index}`}
-									label={amenity}
-									id="amenities"
+									key={amenity._id}
+									label={amenity.name}
+									id={amenity._id}
 									name="amenities"
-									value={amenity}
-									onChange={handleChange}
+									value={amenity._id}
+									onChange={handleAmenityChange}
 								/>
 							);
 						})}

@@ -9,6 +9,7 @@ export type Hotel = {
 	accessibilityInfo?: string;
 	rating?: number;
 	status: string;
+	amenities: string[];
 };
 
 export type HotelBody = Omit<Hotel, "_id">;
