@@ -166,7 +166,7 @@ const AddHotel = () => {
 			contactEmail: contactEmail,
 			contactPhone: contactPhone,
 			accessibilityInfo: accessibilityInfo,
-			status: "new",
+			status: "completed",
 			amenities: amenities,
 			accessibilityFeatures: accessibilityFeatures,
 		};
