@@ -14,6 +14,12 @@ import {
 	AccessibilityFeature,
 	getAccessibilityFeatures,
 } from "../../../services/AccessibilityFeatureService";
+import {
+	createRoom,
+	deleteRoom,
+	getRoomsByHotel,
+	updateRoom,
+} from "../../../services/RoomService";
 
 interface AddHotelOverviewProps {
 	hotelId: string;
@@ -38,8 +44,18 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 	const [error, setError] = useState<Error | undefined>();
 
 	// State to manage the list of rooms
-	const [roomIds, setRoomIds] = useState<number[]>([0]); // Start with one room
-	const [roomDataList, setRoomDataList] = useState<any[]>([]); // State to store room data
+	type RoomData = {
+		_id?: string;
+		tempId?: string;
+		name: string;
+		description: string;
+		accessibilityInfo: string;
+		hotelId: string;
+		accessibilityFeatures: string[];
+		isNew?: boolean;
+	};
+
+	const [roomDataList, setRoomDataList] = useState<RoomData[]>([]);
 
 	const [formData, setFormData] = useState({
 		name: "",
@@ -83,6 +99,10 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					accessibilityInfo: hotelResponse.data.accessibilityInfo || "",
 				});
 
+				const roomsResponse = await getRoomsByHotel({ hotelId });
+				const rooms = roomsResponse.data;
+				setRoomDataList(rooms);
+
 				// Fetch all amenities
 				const amenitiesResponse = await getAmenities();
 				setAmenities(amenitiesResponse.data);
@@ -103,24 +123,51 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 
 	// Function to add another room
 	const addRoom = () => {
-		setRoomIds((prevRoomIds) => [...prevRoomIds, prevRoomIds.length]); // Add a new room ID
+		setRoomDataList((prevRooms) => [
+			...prevRooms,
+			{
+				tempId: crypto.randomUUID(),
+				name: "",
+				description: "",
+				accessibilityInfo: "",
+				hotelId,
+				accessibilityFeatures: [],
+				isNew: true,
+			},
+		]);
 	};
 
 	// Function to remove a specific room
-	const removeRoom = (roomId: number) => {
-		setRoomIds((prevRoomIds) => prevRoomIds.filter((id) => id !== roomId)); // Remove the room ID
-		setRoomDataList((prevDataList) =>
-			prevDataList.filter((_, index) => index !== roomId)
-		); // Remove the room data
+	const removeRoom = async (roomId?: string) => {
+		// Remove it from state regardless of whether it has an ID
+		setRoomDataList((prev) =>
+			prev.filter((room) => {
+				if (room._id) return room._id !== roomId;
+				// For new rooms, use reference matching instead of ID
+				return roomId !== undefined;
+			})
+		);
+
+		try {
+			const room = roomDataList.find((r) => r._id === roomId);
+			if (room && !room.isNew && room._id) {
+				await deleteRoom(room._id);
+			}
+		} catch (err) {
+			console.error("Failed to delete room:", err);
+		}
 	};
 
 	// Function to handle room data change
-	const handleRoomDataChange = (roomId: number, data: any) => {
-		setRoomDataList((prevDataList) => {
-			const newDataList = [...prevDataList];
-			newDataList[roomId] = data;
-			return newDataList;
-		});
+	const handleRoomDataChange = (roomKey: string, data: any) => {
+		setRoomDataList((prevDataList) =>
+			prevDataList.map((room) => {
+				if (room._id === roomKey || room.tempId === roomKey) {
+					return { ...room, ...data };
+				}
+				return room;
+			})
+		);
 	};
 
 	const [hotelFiles, setHotelFiles] = useState<FileList | null>(null);
@@ -181,19 +228,40 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		}
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		handleAddHotel(
-			formData.name,
-			formData.location,
-			formData.contactEmail,
-			formData.contactPhone,
-			formData.accessibilityInfo,
-			formData.amenities,
-			formData.accessibilityFeatures
-		);
-		// Collect data from all AddRoom components
-		console.log("Submitting rooms:", roomDataList);
+
+		try {
+			await Promise.all(
+				roomDataList.map((room) => {
+					const roomBody = {
+						name: room.name,
+						description: room.description,
+						accessibilityInfo: room.accessibilityInfo,
+						accessibilityFeatures: room.accessibilityFeatures,
+						hotelId,
+					};
+
+					if (room.isNew) {
+						return createRoom(roomBody);
+					} else {
+						return updateRoom(room._id!, roomBody);
+					}
+				})
+			);
+
+			handleAddHotel(
+				formData.name,
+				formData.location,
+				formData.contactEmail,
+				formData.contactPhone,
+				formData.accessibilityInfo,
+				formData.amenities,
+				formData.accessibilityFeatures
+			);
+		} catch (err) {
+			console.error("Error submitting hotel and rooms:", err);
+		}
 	};
 
 	if (isLoading)
@@ -307,15 +375,19 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					<p>Please only add accessible rooms.</p>
 
 					{/* Render multiple AddRoom components */}
-					{roomIds.map((roomId) => (
-						<div key={roomId} className={styles.roomContainer}>
+					{roomDataList.map((room, index) => (
+						<div key={room._id || index} className={styles.roomContainer}>
 							<AddRoom
-								onDataChange={(data) => handleRoomDataChange(roomId, data)}
+								initialData={room}
+								roomId={room._id || room.tempId!}
+								onDataChange={(data) =>
+									handleRoomDataChange(room._id || room.tempId!, data)
+								}
 							/>
 							<button
 								type="button"
 								className={styles.deleteButton}
-								onClick={() => removeRoom(roomId)}
+								onClick={() => removeRoom(room._id)}
 							>
 								Delete
 							</button>

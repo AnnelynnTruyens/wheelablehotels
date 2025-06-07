@@ -88,7 +88,6 @@ const AddHotel = () => {
 		);
 
 		setIsLoading(true);
-		console.log(hotelBody);
 		createHotel(hotelBody)
 			.then((response) => {
 				setHotelId(response.data._id);
@@ -138,7 +137,6 @@ const AddHotel = () => {
 		);
 
 		setIsLoading(true);
-		console.log(hotelBody);
 		updateHotel(hotelId, hotelBody)
 			.then(() => {
 				setIsLoading(false);
@@ -188,7 +186,6 @@ const AddHotel = () => {
 		);
 
 		setIsLoading(true);
-		console.log(hotelBody);
 		updateHotel(hotelId, hotelBody)
 			.then(() => {
 				setIsLoading(false);
@@ -235,7 +232,11 @@ const AddHotel = () => {
 			<main id="main">
 				<title>Add hotel | Wheelable Hotels</title>
 
-				<AddRooms goToNext={goToNext} goToPrevious={goToPrevious} />
+				<AddRooms
+					goToNext={goToNext}
+					goToPrevious={goToPrevious}
+					hotelId={hotelId}
+				/>
 			</main>
 		);
 	else if (step === 4)

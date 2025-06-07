@@ -138,38 +138,4 @@ const deleteRoom = async (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
-const addAccessibilityFeaturesToRoom = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	try {
-		const { id } = req.params;
-		const { accessibilityFeatures } = req.body; // Array of accessibility feature IDs
-
-		const room = await Room.findById(id);
-		if (!room) {
-			throw new NotFoundError("Room not found");
-		}
-		if (!room.accessibilityFeatures) {
-			throw new NotFoundError("AccessibilityFeatures not found");
-		}
-
-		// Add accessibility features to the room
-		room.accessibilityFeatures.push(...accessibilityFeatures);
-		await room.save();
-
-		res.status(200).json(room);
-	} catch (err) {
-		next(err);
-	}
-};
-
-export {
-	getRooms,
-	getRoomByHotel,
-	createRoom,
-	updateRoom,
-	deleteRoom,
-	addAccessibilityFeaturesToRoom,
-};
+export { getRooms, getRoomByHotel, createRoom, updateRoom, deleteRoom };

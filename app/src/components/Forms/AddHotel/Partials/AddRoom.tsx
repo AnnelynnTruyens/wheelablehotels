@@ -3,34 +3,66 @@ import styles from "../../Forms.module.css";
 import FormInput from "../../Partials/FormInput";
 import FormTextarea from "../../Partials/FormTextarea";
 import FormCheckbox from "../../Partials/FormCheckbox";
+import {
+	AccessibilityFeature,
+	getAccessibilityFeatures,
+} from "../../../../services/AccessibilityFeatureService";
 
 interface AddRoomProps {
-	onDataChange?: (data: any) => void; // Define the onDataChange prop
+	roomId: string | number;
+	onDataChange: (data: any) => void;
+	initialData?: {
+		name?: string;
+		description?: string;
+		accessibilityInfo?: string;
+		accessibilityFeatures?: string[];
+	};
 }
 
-const AddRoom: React.FC<AddRoomProps> = ({ onDataChange }) => {
+const AddRoom: React.FC<AddRoomProps> = ({
+	onDataChange,
+	roomId,
+	initialData,
+}) => {
 	const [formData, setFormData] = useState({
-		name: "",
-		description: "",
-		accessibilityFeatures: ["feature1", "feature2"],
-		accessibilityInfo: "",
+		name: initialData?.name || "",
+		description: initialData?.description || "",
+		accessibilityInfo: initialData?.accessibilityInfo || "",
+		accessibilityFeatures:
+			initialData?.accessibilityFeatures || ([] as string[]),
 	});
+	const [availableFeatures, setAvailableFeatures] = useState<
+		AccessibilityFeature[]
+	>([]);
 
-	// Function to handle change in form
+	// Fetch accessibility features from API
+	useEffect(() => {
+		getAccessibilityFeatures().then((response) => {
+			setAvailableFeatures(response.data);
+		});
+	}, []);
+
 	const handleChange = (
 		e:
 			| React.ChangeEvent<HTMLInputElement>
 			| React.ChangeEvent<HTMLTextAreaElement>
 	) => {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
+		const updated = { ...formData, [e.target.name]: e.target.value };
+		setFormData(updated);
+		onDataChange(updated);
 	};
 
-	// Notify the parent component of the data change whenever formData changes
-	useEffect(() => {
-		if (onDataChange) {
-			onDataChange(formData);
-		}
-	}, [formData]);
+	const handleAccessibilityFeatureChange = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const { value, checked } = e.target;
+		const updatedFeatures = checked
+			? [...formData.accessibilityFeatures, value]
+			: formData.accessibilityFeatures.filter((f) => f !== value);
+		const updated = { ...formData, accessibilityFeatures: updatedFeatures };
+		setFormData(updated);
+		onDataChange(updated);
+	};
 
 	return (
 		<div className={styles.room_container}>
@@ -42,7 +74,7 @@ const AddRoom: React.FC<AddRoomProps> = ({ onDataChange }) => {
 				value={formData.name}
 				placeholder="Accessible room"
 				onChange={handleChange}
-				required={true}
+				required
 			/>
 			<FormTextarea
 				label="Description"
@@ -57,18 +89,17 @@ const AddRoom: React.FC<AddRoomProps> = ({ onDataChange }) => {
 					Accessibility features:
 				</legend>
 				<div className={styles.checkboxes}>
-					{formData.accessibilityFeatures.map((feature, index) => {
-						return (
-							<FormCheckbox
-								key={`feature_${index}`}
-								label={feature}
-								id="accessibilityFeatures"
-								name="accessibilityFeatures"
-								value={feature}
-								onChange={handleChange}
-							/>
-						);
-					})}
+					{availableFeatures.map((feature) => (
+						<FormCheckbox
+							key={feature._id}
+							label={feature.name}
+							id={`room-${roomId}-feature-${feature._id}`}
+							name="accessibilityFeatures"
+							value={feature._id}
+							checked={formData.accessibilityFeatures.includes(feature._id)}
+							onChange={handleAccessibilityFeatureChange}
+						/>
+					))}
 				</div>
 			</fieldset>
 			<FormTextarea

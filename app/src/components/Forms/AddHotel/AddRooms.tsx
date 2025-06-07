@@ -1,49 +1,58 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "../Forms.module.css";
-import AddRoom from "./Partials/AddRoom";
+import { createRoom } from "../../../services/RoomService";
 import Progress from "./Partials/Progress";
+import AddRoom from "./Partials/AddRoom";
 
 interface AddRoomsProps {
-	goToNext: () => void; // Callback to handle going to next step
-	goToPrevious: () => void; // Callback to handle going to previous step
+	goToNext: () => void;
+	goToPrevious: () => void;
+	hotelId: string;
 }
 
-const AddRooms: React.FC<AddRoomsProps> = ({ goToNext, goToPrevious }) => {
-	// State to manage the list of rooms
-	const [roomIds, setRoomIds] = useState<number[]>([0]); // Start with one room
-	const [roomDataList, setRoomDataList] = useState<any[]>([]); // State to store room data
+const AddRooms: React.FC<AddRoomsProps> = ({
+	goToNext,
+	goToPrevious,
+	hotelId,
+}) => {
+	const [roomIds, setRoomIds] = useState<number[]>([0]);
+	const [roomDataList, setRoomDataList] = useState<any[]>([]);
+	const [error, setError] = useState<Error | null>(null);
 
-	// Function to add another room
 	const addRoom = () => {
-		setRoomIds((prevRoomIds) => [...prevRoomIds, prevRoomIds.length]); // Add a new room ID
+		setRoomIds((prev) => [...prev, prev.length]);
 	};
 
-	// Function to remove a specific room
 	const removeRoom = (roomId: number) => {
-		setRoomIds((prevRoomIds) => prevRoomIds.filter((id) => id !== roomId)); // Remove the room ID
-		setRoomDataList((prevDataList) =>
-			prevDataList.filter((_, index) => index !== roomId)
-		); // Remove the room data
+		setRoomIds((prev) => prev.filter((id) => id !== roomId));
+		setRoomDataList((prev) => prev.filter((_, index) => index !== roomId));
 	};
 
-	// Function to handle room data change
 	const handleRoomDataChange = (roomId: number, data: any) => {
-		setRoomDataList((prevDataList) => {
-			const newDataList = [...prevDataList];
-			newDataList[roomId] = data;
-			return newDataList;
+		setRoomDataList((prev) => {
+			const updated = [...prev];
+			updated[roomId] = data;
+			return updated;
 		});
 	};
 
-	// Function to handle form submission
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setError(null);
 
-		// Collect data from all AddRoom components
-		console.log("Submitting rooms:", roomDataList);
-
-		// Proceed to the next step
-		goToNext();
+		try {
+			for (const roomData of roomDataList) {
+				const roomBody = {
+					...roomData,
+					hotelId,
+				};
+				await createRoom(roomBody);
+			}
+			goToNext();
+		} catch (err: any) {
+			console.error("Error creating rooms:", err);
+			setError(err);
+		}
 	};
 
 	return (
@@ -53,26 +62,23 @@ const AddRooms: React.FC<AddRoomsProps> = ({ goToNext, goToPrevious }) => {
 			<p>Please only add accessible rooms.</p>
 
 			<form method="post" className={styles.form} onSubmit={handleSubmit}>
-				{/* Render multiple AddRoom components */}
 				{roomIds.map((roomId) => (
 					<div key={roomId} className={styles.roomContainer}>
 						<AddRoom
 							onDataChange={(data) => handleRoomDataChange(roomId, data)}
+							roomId={roomId}
 						/>
-						<button
-							type="button"
-							className={styles.deleteButton}
-							onClick={() => removeRoom(roomId)}
-						>
+						<button type="button" onClick={() => removeRoom(roomId)}>
 							Delete
 						</button>
 					</div>
 				))}
 
-				{/* Button to add another room */}
 				<button type="button" onClick={addRoom}>
 					Add another room
 				</button>
+
+				{error && <p className={styles.error}>Error: {error.message}</p>}
 
 				<div className={styles.buttons}>
 					<button type="button" onClick={goToPrevious}>
