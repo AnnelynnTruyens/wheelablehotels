@@ -244,7 +244,11 @@ const AddHotel = () => {
 			<main id="main">
 				<title>Add hotel | Wheelable Hotels</title>
 
-				<AddPhotos goToNext={goToNext} goToPrevious={goToPrevious} />
+				<AddPhotos
+					goToNext={goToNext}
+					goToPrevious={goToPrevious}
+					hotelId={hotelId}
+				/>
 			</main>
 		);
 	else if (step === 5)

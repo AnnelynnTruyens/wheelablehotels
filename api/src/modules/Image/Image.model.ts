@@ -18,9 +18,13 @@ const imageSchema = new mongoose.Schema<Image>(
 		},
 		hotelId: {
 			type: mongoose.Schema.Types.ObjectId,
-			required: true,
+			required: false,
 		},
 		roomId: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: false,
+		},
+		userId: {
 			type: mongoose.Schema.Types.ObjectId,
 			required: true,
 		},

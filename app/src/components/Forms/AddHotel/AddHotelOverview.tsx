@@ -20,6 +20,12 @@ import {
 	getRoomsByHotel,
 	updateRoom,
 } from "../../../services/RoomService";
+import {
+	createImage,
+	deleteImage,
+	getImagesByHotel,
+	Image,
+} from "../../../services/ImageService";
 
 interface AddHotelOverviewProps {
 	hotelId: string;
@@ -72,6 +78,10 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		AccessibilityFeature[]
 	>([]);
 
+	const [existingHotelImages, setExistingHotelImages] = useState<Image[]>([]);
+
+	const [hotelFiles, setHotelFiles] = useState<FileList | null>(null);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -117,8 +127,17 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 				setIsLoading(false);
 			}
 		};
+		const fetchImages = async () => {
+			try {
+				const hotelImagesResponse = await getImagesByHotel({ hotelId });
+				setExistingHotelImages(hotelImagesResponse.data);
+			} catch (error) {
+				console.error("Error fetching images:", error);
+			}
+		};
 
 		fetchData();
+		fetchImages();
 	}, [hotelId]);
 
 	// Function to add another room
@@ -170,9 +189,6 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		);
 	};
 
-	const [hotelFiles, setHotelFiles] = useState<FileList | null>(null);
-	const [roomFiles, setRoomFiles] = useState<FileList | null>(null);
-
 	// Function to handle change in form
 	const handleChange = (
 		e:
@@ -222,9 +238,15 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		}
 	};
 
-	const handleRoomFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files) {
-			setRoomFiles(e.target.files);
+	const handleDeleteImage = async (imageId: string) => {
+		try {
+			await deleteImage(imageId);
+			// Update state to remove the deleted image
+			setExistingHotelImages((prev) =>
+				prev.filter((img) => img._id !== imageId)
+			);
+		} catch (error) {
+			console.error("Error deleting image:", error);
 		}
 	};
 
@@ -250,6 +272,28 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 				})
 			);
 
+			const uploadImages = async (
+				files: FileList,
+				meta: { hotelId: string }
+			) => {
+				if (!files || files.length === 0) {
+					console.warn("No files to upload");
+					return;
+				}
+				for (const file of Array.from(files)) {
+					const formData = new FormData();
+					formData.append("file", file);
+					formData.append("name", file.name);
+					formData.append("alt", file.name);
+					formData.append("hotelId", meta.hotelId);
+					await createImage(formData);
+				}
+			};
+
+			if (hotelFiles) {
+				await uploadImages(hotelFiles, { hotelId });
+			}
+
 			handleAddHotel(
 				formData.name,
 				formData.location,
@@ -260,7 +304,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 				formData.accessibilityFeatures
 			);
 		} catch (err) {
-			console.error("Error submitting hotel and rooms:", err);
+			console.error("Error submitting hotel, rooms or images:", err);
 		}
 	};
 
@@ -375,8 +419,8 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					<p>Please only add accessible rooms.</p>
 
 					{/* Render multiple AddRoom components */}
-					{roomDataList.map((room, index) => (
-						<div key={room._id || index} className={styles.roomContainer}>
+					{roomDataList.map((room) => (
+						<div key={room._id || room.tempId} className={styles.roomContainer}>
 							<AddRoom
 								initialData={room}
 								roomId={room._id || room.tempId!}
@@ -406,32 +450,22 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 						name="hotelImages"
 						onChange={handleHotelFileChange}
 					/>
-					{hotelFiles && (
-						<div>
-							<p>Selected Files:</p>
-							<ul>
-								{Array.from(hotelFiles).map((file, index) => (
-									<li key={index}>{file.name}</li>
-								))}
-							</ul>
+					<div>
+						<p>Added photos:</p>
+						<div className={styles.imageGrid}>
+							{existingHotelImages.map((image) => (
+								<div key={image._id} className={styles.imageItem}>
+									<img src={image.imageUrl} alt={image.alt} />
+									<button
+										type="button"
+										onClick={() => handleDeleteImage(image._id)}
+									>
+										Delete
+									</button>
+								</div>
+							))}
 						</div>
-					)}
-					<FormFileInput
-						label="Room name"
-						id="roomImages"
-						name="roomImages"
-						onChange={handleRoomFileChange}
-					/>
-					{roomFiles && (
-						<div>
-							<p>Selected Files:</p>
-							<ul>
-								{Array.from(roomFiles).map((file, index) => (
-									<li key={index}>{file.name}</li>
-								))}
-							</ul>
-						</div>
-					)}
+					</div>
 
 					<div className={styles.buttons}>
 						<button onClick={goToPrevious}>Previous</button>

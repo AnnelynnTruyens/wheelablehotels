@@ -7,5 +7,5 @@ export type Image = Document & {
 	alt: string;
 	hotelId?: ObjectId;
 	roomId?: ObjectId;
-	userId?: ObjectId;
+	userId: ObjectId;
 };

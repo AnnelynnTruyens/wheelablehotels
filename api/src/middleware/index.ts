@@ -2,6 +2,7 @@ import compression from "compression";
 import express, { Express } from "express";
 import helmet from "helmet";
 import cors from "cors";
+import path from "path";
 
 const registerMiddleware = (app: Express) => {
 	// cors
@@ -17,6 +18,12 @@ const registerMiddleware = (app: Express) => {
 
 	// compression
 	app.use(compression());
+
+	// Serve static images
+	app.use(
+		"/uploads",
+		express.static(path.join(__dirname, "../public/uploads"))
+	);
 };
 
 export { registerMiddleware };
