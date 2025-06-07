@@ -96,6 +96,7 @@ const updateRoom = async (req: Request, res: Response, next: NextFunction) => {
 			const room = await Room.findOneAndUpdate(
 				{
 					_id: id,
+					userId: user._id,
 				},
 				req.body,
 				{ new: true, runValidators: true }
