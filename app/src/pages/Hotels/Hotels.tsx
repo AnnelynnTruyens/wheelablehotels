@@ -12,6 +12,8 @@ const Hotels = () => {
 	const [hotels, setHotels] = useState<Hotel[]>([]);
 	const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
 
+	const [searchValue, setSearchValue] = useState("");
+
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
 
@@ -36,11 +38,33 @@ const Hotels = () => {
 		}
 	}, [hotels]);
 
+	const handleSearchSubmit = () => {
+		const query = searchValue.trim().toLowerCase();
+
+		const results = hotels.filter((hotel) => {
+			const name = hotel.name?.toLowerCase() || "";
+			const location = hotel.location?.toLowerCase() || "";
+			return (
+				hotel.status === "completed" &&
+				(name.includes(query) || location.includes(query))
+			);
+		});
+
+		setFilteredHotels(results);
+	};
+
 	if (isLoading)
 		return (
 			<main id="main" className={styles.main}>
 				<title>Hotels | Wheelable Hotels</title>
-				<SearchForm />
+				<SearchForm
+					searchValue={searchValue}
+					onSearchChange={setSearchValue}
+					onSearchSubmit={(e) => {
+						e.preventDefault();
+						handleSearchSubmit();
+					}}
+				/>
 				<h1>Search hotels</h1>
 				<div className={styles.content_flex}>
 					<FilterForm />
@@ -52,7 +76,14 @@ const Hotels = () => {
 		return (
 			<main id="main" className={styles.main}>
 				<title>Hotels | Wheelable Hotels</title>
-				<SearchForm />
+				<SearchForm
+					searchValue={searchValue}
+					onSearchChange={setSearchValue}
+					onSearchSubmit={(e) => {
+						e.preventDefault();
+						handleSearchSubmit();
+					}}
+				/>
 				<h1>Search hotels</h1>
 				<div className={styles.content_flex}>
 					<FilterForm />
@@ -64,7 +95,14 @@ const Hotels = () => {
 		return (
 			<main id="main" className={styles.main}>
 				<title>Hotels | Wheelable Hotels</title>
-				<SearchForm />
+				<SearchForm
+					searchValue={searchValue}
+					onSearchChange={setSearchValue}
+					onSearchSubmit={(e) => {
+						e.preventDefault();
+						handleSearchSubmit();
+					}}
+				/>
 				<h1>Search hotels</h1>
 				<div className={styles.content_flex}>
 					<FilterForm />
