@@ -7,8 +7,11 @@ import { useEffect, useState } from "react";
 import { getHotels, Hotel } from "../../services/HotelService";
 import Loading from "../../components/Loading/Loading";
 import Error from "../../components/Error/Error";
+import { useLocation } from "react-router";
 
 const Hotels = () => {
+	const location = useLocation();
+
 	const [hotels, setHotels] = useState<Hotel[]>([]);
 	const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
 
@@ -20,6 +23,15 @@ const Hotels = () => {
 
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
+
+	// Get initial search term from URL
+	useEffect(() => {
+		const params = new URLSearchParams(location.search);
+		const search = params.get("search");
+		if (search) {
+			setSearchValue(search);
+		}
+	}, [location.search]);
 
 	useEffect(() => {
 		getHotels()

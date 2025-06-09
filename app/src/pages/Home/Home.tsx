@@ -1,9 +1,10 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import styles from "./Home.module.css";
 import ROUTES from "../../consts/Routes";
 import RegisterForm from "../../components/Forms/RegisterForm";
 import HotelHighlight from "../../components/Cards/Hotels/HotelHighlight";
 import SearchForm from "../../components/Forms/SearchForm";
+import { useState } from "react";
 
 // Type home component
 interface HomeProps {
@@ -11,11 +12,27 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ onLogin }) => {
+	const [searchValue, setSearchValue] = useState("");
+	const navigate = useNavigate();
+
+	const handleSearchSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		if (searchValue.trim()) {
+			navigate(`/search?search=${encodeURIComponent(searchValue.trim())}`);
+		} else {
+			navigate("/search");
+		}
+	};
+
 	return (
 		<main id="main" className={styles.main}>
 			<title>Wheelable Hotels</title>
 			<div className={styles.hero}>
-				<SearchForm />
+				<SearchForm
+					searchValue={searchValue}
+					onSearchChange={setSearchValue}
+					onSearchSubmit={handleSearchSubmit}
+				/>
 			</div>
 			<div className={styles.content}>
 				<section className={`${styles.section} ${styles.intro}`}>
