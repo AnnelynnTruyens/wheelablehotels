@@ -1,0 +1,10 @@
+.main {
+	margin: 3rem;
+}
+
+.content_flex {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: 5rem;
+}

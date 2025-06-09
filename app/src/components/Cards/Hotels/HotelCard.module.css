@@ -1,0 +1,43 @@
+.hotel_card {
+	width: 70%;
+	height: fit-content;
+
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+
+	border: 1px solid var(--primary);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+}
+
+.card_img {
+	width: 12rem;
+}
+
+.card_info {
+	width: 100%;
+	padding: 1rem;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.card_title {
+	margin: 0;
+	font-size: 1.5em;
+	color: var(--primary-dark);
+}
+
+.card_features {
+	margin-bottom: 0;
+}
+
+.rating_filled {
+	color: var(--primary-dark);
+}
+
+.rating_empty {
+	color: var(--primary-light);
+}

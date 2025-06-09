@@ -99,14 +99,18 @@
 
 .fieldset {
 	border: none;
-	width: 50%;
+	margin-top: 1rem;
+	/* width: 50%; */
 }
 
-.checkboxes {
+/* .checkboxes {
 	display: flex;
 	flex-direction: row;
-	flex-wrap: wrap;
 	column-gap: 5rem;
+} */
+
+.checkbox_label {
+	margin-left: 0.5rem;
 }
 
 .buttons {
@@ -124,4 +128,29 @@
 	padding: 1rem;
 	margin: 1rem 0;
 	border-radius: var(--border-radius);
+}
+
+.filter_form {
+	width: 30%;
+	padding: 1.5rem;
+	background-color: var(--secondary-light);
+	border-radius: var(--border-radius);
+}
+
+.search_form {
+	display: flex;
+	flex-direction: row;
+}
+
+.search_form label {
+	display: none;
+}
+
+.search_form .form_input {
+	margin: 0;
+	width: 100%;
+}
+
+.search_btn {
+	transform: translateX(-100%);
 }
