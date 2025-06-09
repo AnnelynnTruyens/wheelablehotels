@@ -7,12 +7,21 @@ import {
 import FormCheckbox from "./Partials/FormCheckbox";
 import { Amenity, getAmenities } from "../../services/AmenityService";
 
-const FilterForm = () => {
-	const [formData, setFormData] = useState({
-		amenities: [] as string[],
-		accessibilityFeatures: [] as string[],
-	});
+interface FilterFormProps {
+	formData: {
+		amenities: string[];
+		accessibilityFeatures: string[];
+	};
+	onFilterChange: (formData: {
+		amenities: string[];
+		accessibilityFeatures: string[];
+	}) => void;
+}
 
+const FilterForm: React.FC<FilterFormProps> = ({
+	formData,
+	onFilterChange,
+}) => {
 	const [amenities, setAmenities] = useState<Amenity[]>([]);
 	const [accessibilityFeatures, setAccessibilityFeatures] = useState<
 		AccessibilityFeature[]
@@ -30,36 +39,28 @@ const FilterForm = () => {
 
 	const handleAmenityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value, checked } = e.target;
-		if (checked) {
-			setFormData({
-				...formData,
-				amenities: [...formData.amenities, value],
-			});
-		} else {
-			setFormData({
-				...formData,
-				amenities: formData.amenities.filter((amenity) => amenity != value),
-			});
-		}
+		const updatedAmenities = checked
+			? [...formData.amenities, value]
+			: formData.amenities.filter((amenity) => amenity !== value);
+
+		onFilterChange({
+			...formData,
+			amenities: updatedAmenities,
+		});
 	};
 
 	const handleAccessibilityFeatureChange = (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
 		const { value, checked } = e.target;
-		if (checked) {
-			setFormData({
-				...formData,
-				accessibilityFeatures: [...formData.accessibilityFeatures, value],
-			});
-		} else {
-			setFormData({
-				...formData,
-				accessibilityFeatures: formData.accessibilityFeatures.filter(
-					(feature) => feature != value
-				),
-			});
-		}
+		const updatedFeatures = checked
+			? [...formData.accessibilityFeatures, value]
+			: formData.accessibilityFeatures.filter((feature) => feature !== value);
+
+		onFilterChange({
+			...formData,
+			accessibilityFeatures: updatedFeatures,
+		});
 	};
 
 	return (

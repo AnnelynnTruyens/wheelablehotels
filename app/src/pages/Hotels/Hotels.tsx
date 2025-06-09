@@ -13,6 +13,10 @@ const Hotels = () => {
 	const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
 
 	const [searchValue, setSearchValue] = useState("");
+	const [formData, setFormData] = useState({
+		amenities: [] as string[],
+		accessibilityFeatures: [] as string[],
+	});
 
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
@@ -38,16 +42,38 @@ const Hotels = () => {
 		}
 	}, [hotels]);
 
-	const handleSearchSubmit = () => {
+	useEffect(() => {
+		applyFiltersAndSearch();
+	}, [formData, searchValue, hotels]);
+
+	const applyFiltersAndSearch = () => {
 		const query = searchValue.trim().toLowerCase();
 
 		const results = hotels.filter((hotel) => {
-			const name = hotel.name?.toLowerCase() || "";
-			const location = hotel.location?.toLowerCase() || "";
-			return (
-				hotel.status === "completed" &&
-				(name.includes(query) || location.includes(query))
+			if (hotel.status !== "completed") return false;
+
+			// Search match
+			const nameMatch = hotel.name?.toLowerCase().includes(query);
+			const locationMatch = hotel.location?.toLowerCase().includes(query);
+			const matchesSearch = query === "" || nameMatch || locationMatch;
+
+			// Amenities match
+			const hotelAmenityIds =
+				hotel.amenities?.map((a) => (typeof a === "string" ? a : a._id)) || [];
+			const matchesAmenities = formData.amenities.every((amenityId) =>
+				hotelAmenityIds.includes(amenityId)
 			);
+
+			// Accessibility match
+			const hotelFeatureIds =
+				hotel.accessibilityFeatures?.map((f) =>
+					typeof f === "string" ? f : f._id
+				) || [];
+			const matchesAccessibility = formData.accessibilityFeatures.every(
+				(featureId) => hotelFeatureIds.includes(featureId)
+			);
+
+			return matchesSearch && matchesAmenities && matchesAccessibility;
 		});
 
 		setFilteredHotels(results);
@@ -62,12 +88,12 @@ const Hotels = () => {
 					onSearchChange={setSearchValue}
 					onSearchSubmit={(e) => {
 						e.preventDefault();
-						handleSearchSubmit();
+						applyFiltersAndSearch();
 					}}
 				/>
 				<h1>Search hotels</h1>
 				<div className={styles.content_flex}>
-					<FilterForm />
+					<FilterForm formData={formData} onFilterChange={setFormData} />
 					<Loading />
 				</div>
 			</main>
@@ -81,12 +107,12 @@ const Hotels = () => {
 					onSearchChange={setSearchValue}
 					onSearchSubmit={(e) => {
 						e.preventDefault();
-						handleSearchSubmit();
+						applyFiltersAndSearch();
 					}}
 				/>
 				<h1>Search hotels</h1>
 				<div className={styles.content_flex}>
-					<FilterForm />
+					<FilterForm formData={formData} onFilterChange={setFormData} />
 					<Error message={error.message} />
 				</div>
 			</main>
@@ -100,12 +126,12 @@ const Hotels = () => {
 					onSearchChange={setSearchValue}
 					onSearchSubmit={(e) => {
 						e.preventDefault();
-						handleSearchSubmit();
+						applyFiltersAndSearch();
 					}}
 				/>
 				<h1>Search hotels</h1>
 				<div className={styles.content_flex}>
-					<FilterForm />
+					<FilterForm formData={formData} onFilterChange={setFormData} />
 					<div className={styles.hotels}>
 						{filteredHotels && filteredHotels.length > 0 ? (
 							filteredHotels.map((hotel) => {
