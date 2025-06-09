@@ -13,6 +13,8 @@ import { AxiosError, AxiosResponse } from "axios";
 import { createHotel, updateHotel } from "../../services/HotelService";
 import Loading from "../../components/Loading/Loading";
 import Error from "../../components/Error/Error";
+import { Amenity } from "../../services/AmenityService";
+import { AccessibilityFeature } from "../../services/AccessibilityFeatureService";
 
 const AddHotel = () => {
 	const navigate = useNavigate();
@@ -105,8 +107,8 @@ const AddHotel = () => {
 		contactEmail: string,
 		contactPhone: string,
 		accessibilityInfo: string,
-		amenities: string[],
-		accessibilityFeatures: string[]
+		amenities: Amenity[],
+		accessibilityFeatures: AccessibilityFeature[]
 	) => {
 		//Type hotelBody to send with API call
 		const hotelBody = {
@@ -154,8 +156,8 @@ const AddHotel = () => {
 		contactEmail: string,
 		contactPhone: string,
 		accessibilityInfo: string,
-		amenities: string[],
-		accessibilityFeatures: string[]
+		amenities: Amenity[],
+		accessibilityFeatures: AccessibilityFeature[]
 	) => {
 		//Type hotelBody to send with API call
 		const hotelBody = {

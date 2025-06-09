@@ -36,8 +36,8 @@ interface AddHotelOverviewProps {
 		contactEmail: string,
 		contactPhone: string,
 		accessibilityInfo: string,
-		amenities: string[],
-		accessibilityFeatures: string[]
+		amenities: Amenity[],
+		accessibilityFeatures: AccessibilityFeature[]
 	) => void; // Callback to handle submitting the form
 }
 
@@ -68,8 +68,8 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		location: "",
 		contactEmail: "",
 		contactPhone: "",
-		amenities: [] as string[],
-		accessibilityFeatures: [] as string[],
+		amenities: [] as Amenity[],
+		accessibilityFeatures: [] as AccessibilityFeature[],
 		accessibilityInfo: "",
 	});
 
@@ -89,15 +89,18 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 				const hotelResponse = await getHotelById(hotelId);
 
 				// Extract amenities _id values
-				const hotelAmenities = (
-					hotelResponse.data.amenities as unknown as Amenity[]
-				).map((amenity) => amenity._id);
+				const hotelAmenities = amenities.filter((a) =>
+					(hotelResponse.data.amenities as any[]).some(
+						(selected: any) => selected._id === a._id
+					)
+				);
 
 				// Extract accessibilityFeatures _id values
-				const hotelAccessibilityFeatures = (
-					hotelResponse.data
-						.accessibilityFeatures as unknown as AccessibilityFeature[]
-				).map((feature) => feature._id);
+				const hotelAccessibilityFeatures = accessibilityFeatures.filter((f) =>
+					(hotelResponse.data.accessibilityFeatures as any[]).some(
+						(selected: any) => selected._id === f._id
+					)
+				);
 
 				setFormData({
 					name: hotelResponse.data.name,
@@ -200,15 +203,18 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 
 	const handleAmenityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value, checked } = e.target;
+		const selectedAmenity = amenities.find((a) => a._id === value);
+		if (!selectedAmenity) return; // safety check
+
 		if (checked) {
 			setFormData({
 				...formData,
-				amenities: [...formData.amenities, value],
+				amenities: [...formData.amenities, selectedAmenity],
 			});
 		} else {
 			setFormData({
 				...formData,
-				amenities: formData.amenities.filter((amenity) => amenity != value),
+				amenities: formData.amenities.filter((a) => a._id !== value),
 			});
 		}
 	};
@@ -217,16 +223,22 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
 		const { value, checked } = e.target;
+		const selectedFeature = accessibilityFeatures.find((f) => f._id === value);
+		if (!selectedFeature) return;
+
 		if (checked) {
 			setFormData({
 				...formData,
-				accessibilityFeatures: [...formData.accessibilityFeatures, value],
+				accessibilityFeatures: [
+					...formData.accessibilityFeatures,
+					selectedFeature,
+				],
 			});
 		} else {
 			setFormData({
 				...formData,
 				accessibilityFeatures: formData.accessibilityFeatures.filter(
-					(feature) => feature != value
+					(f) => f._id !== value
 				),
 			});
 		}
@@ -381,7 +393,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 								id={amenity._id}
 								name="amenities"
 								value={amenity._id}
-								checked={formData.amenities.includes(amenity._id)}
+								checked={formData.amenities.some((a) => a._id === amenity._id)}
 								onChange={handleAmenityChange}
 							/>
 						))}
@@ -398,7 +410,9 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 									id={feature._id}
 									name="accessibilityFeatures"
 									value={feature._id}
-									checked={formData.accessibilityFeatures.includes(feature._id)}
+									checked={formData.accessibilityFeatures.some(
+										(f) => f._id === feature._id
+									)}
 									onChange={handleAccessibilityFeatureChange}
 								/>
 							);

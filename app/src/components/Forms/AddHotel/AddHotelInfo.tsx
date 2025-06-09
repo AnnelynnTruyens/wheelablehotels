@@ -16,8 +16,8 @@ interface AddHotelInfoProps {
 		contactEmail: string,
 		contactPhone: string,
 		accessibilityInfo: string,
-		amenities: string[],
-		accessibilityFeatures: string[]
+		amenities: Amenity[],
+		accessibilityFeatures: AccessibilityFeature[]
 	) => void; // Callback to handle going to next step
 	goToPrevious: () => void; // Callback to handle going to previous step
 }
@@ -30,8 +30,8 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		location: "",
 		contactEmail: "",
 		contactPhone: "",
-		amenities: [] as string[],
-		accessibilityFeatures: [] as string[],
+		amenities: [] as Amenity[],
+		accessibilityFeatures: [] as AccessibilityFeature[],
 		accessibilityInfo: "",
 	});
 
@@ -61,15 +61,18 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 
 	const handleAmenityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value, checked } = e.target;
+		const selectedAmenity = amenities.find((a) => a._id === value);
+		if (!selectedAmenity) return; // safety check
+
 		if (checked) {
 			setFormData({
 				...formData,
-				amenities: [...formData.amenities, value],
+				amenities: [...formData.amenities, selectedAmenity],
 			});
 		} else {
 			setFormData({
 				...formData,
-				amenities: formData.amenities.filter((amenity) => amenity != value),
+				amenities: formData.amenities.filter((a) => a._id !== value),
 			});
 		}
 	};
@@ -78,16 +81,22 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
 		const { value, checked } = e.target;
+		const selectedFeature = accessibilityFeatures.find((f) => f._id === value);
+		if (!selectedFeature) return;
+
 		if (checked) {
 			setFormData({
 				...formData,
-				accessibilityFeatures: [...formData.accessibilityFeatures, value],
+				accessibilityFeatures: [
+					...formData.accessibilityFeatures,
+					selectedFeature,
+				],
 			});
 		} else {
 			setFormData({
 				...formData,
 				accessibilityFeatures: formData.accessibilityFeatures.filter(
-					(feature) => feature != value
+					(f) => f._id !== value
 				),
 			});
 		}
