@@ -16,6 +16,8 @@ const Hotels = () => {
 	const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
 
 	const [searchValue, setSearchValue] = useState("");
+	const [appliedSearchValue, setAppliedSearchValue] = useState("");
+
 	const [formData, setFormData] = useState({
 		amenities: [] as string[],
 		accessibilityFeatures: [] as string[],
@@ -24,12 +26,13 @@ const Hotels = () => {
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
 
-	// Get initial search term from URL
+	// Initialize search from URL only for the controlled input
 	useEffect(() => {
 		const params = new URLSearchParams(location.search);
 		const search = params.get("search");
 		if (search) {
 			setSearchValue(search);
+			setAppliedSearchValue(search); // Also apply initial search
 		}
 	}, [location.search]);
 
@@ -56,27 +59,26 @@ const Hotels = () => {
 
 	useEffect(() => {
 		applyFiltersAndSearch();
-	}, [formData, searchValue, hotels]);
+	}, [formData, appliedSearchValue, hotels]);
 
 	const applyFiltersAndSearch = () => {
-		const query = searchValue.trim().toLowerCase();
+		const query = appliedSearchValue.trim().toLowerCase();
 
 		const results = hotels.filter((hotel) => {
 			if (hotel.status !== "completed") return false;
 
-			// Search match
+			// Search match using appliedSearchValue
 			const nameMatch = hotel.name?.toLowerCase().includes(query);
 			const locationMatch = hotel.location?.toLowerCase().includes(query);
 			const matchesSearch = query === "" || nameMatch || locationMatch;
 
-			// Amenities match
+			// Amenities and accessibility match (same as before)
 			const hotelAmenityIds =
 				hotel.amenities?.map((a) => (typeof a === "string" ? a : a._id)) || [];
 			const matchesAmenities = formData.amenities.every((amenityId) =>
 				hotelAmenityIds.includes(amenityId)
 			);
 
-			// Accessibility match
 			const hotelFeatureIds =
 				hotel.accessibilityFeatures?.map((f) =>
 					typeof f === "string" ? f : f._id
@@ -100,7 +102,7 @@ const Hotels = () => {
 					onSearchChange={setSearchValue}
 					onSearchSubmit={(e) => {
 						e.preventDefault();
-						applyFiltersAndSearch();
+						setAppliedSearchValue(searchValue);
 					}}
 				/>
 				<h1>Search hotels</h1>
@@ -119,7 +121,7 @@ const Hotels = () => {
 					onSearchChange={setSearchValue}
 					onSearchSubmit={(e) => {
 						e.preventDefault();
-						applyFiltersAndSearch();
+						setAppliedSearchValue(searchValue);
 					}}
 				/>
 				<h1>Search hotels</h1>
@@ -138,7 +140,7 @@ const Hotels = () => {
 					onSearchChange={setSearchValue}
 					onSearchSubmit={(e) => {
 						e.preventDefault();
-						applyFiltersAndSearch();
+						setAppliedSearchValue(searchValue);
 					}}
 				/>
 				<h1>Search hotels</h1>
