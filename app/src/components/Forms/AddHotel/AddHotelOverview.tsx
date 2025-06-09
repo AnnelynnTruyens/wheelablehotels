@@ -455,7 +455,10 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 						<div className={styles.imageGrid}>
 							{existingHotelImages.map((image) => (
 								<div key={image._id} className={styles.imageItem}>
-									<img src={image.imageUrl} alt={image.alt} />
+									<img
+										src={`${process.env.VITE_SERVER_URL}${image.imageUrl}`}
+										alt={`${process.env.VITE_SERVER_URL}${image.alt}`}
+									/>
 									<button
 										type="button"
 										onClick={() => handleDeleteImage(image._id)}

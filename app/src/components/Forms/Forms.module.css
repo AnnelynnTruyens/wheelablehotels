@@ -132,9 +132,11 @@
 
 .filter_form {
 	width: 30%;
+	height: fit-content;
 	padding: 1.5rem;
 	background-color: var(--secondary-light);
 	border-radius: var(--border-radius);
+	box-shadow: var(--shadow-black);
 }
 
 .search_form {
