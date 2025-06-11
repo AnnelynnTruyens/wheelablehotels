@@ -65,7 +65,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 					type="email"
 					id="email"
 					name="email"
-					placeholder="JohnDoe"
+					placeholder="john.doe@example.com"
 					value={email}
 					onChange={handleChange}
 					required={true}

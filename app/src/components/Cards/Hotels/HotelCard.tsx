@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import styles from "./HotelCard.module.css";
 import Rating from "./Partials/Rating";
 import { getImagesByHotel, Image } from "../../../services/ImageService";
+import { Link } from "react-router";
+import ROUTES from "../../../consts/Routes";
 
 interface HotelCardProps {
 	hotelName: string;
@@ -44,7 +46,12 @@ const HotelCard: React.FC<HotelCardProps> = ({
 			/>
 			<div className={styles.card_info}>
 				<div className={styles.card_info_left}>
-					<h2 className={styles.card_title}>{hotelName}</h2>
+					<Link
+						to={`${ROUTES.hotelDetail.to}${hotelName}`}
+						className={styles.card_link}
+					>
+						<h2 className={styles.card_title}>{hotelName}</h2>
+					</Link>
 					<p className={styles.card_location}>{location}</p>
 					<ul className={styles.card_features}>
 						{accessibilityFeatures.map((feature, index) => {

@@ -12,6 +12,22 @@
 	overflow: hidden;
 
 	box-shadow: var(--shadow-primary);
+
+	position: relative;
+}
+
+.hotel_card a::before {
+	content: "";
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+}
+
+.hotel_card:hover {
+	transform: scale(1.025);
+	transition: 0.3s;
 }
 
 .card_img {
@@ -27,6 +43,19 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+}
+
+.card_link {
+	color: var(--primary-dark);
+	text-decoration: none;
+	transition: 0.3s;
+}
+
+.card_link:hover,
+.card_link:focus,
+.card_link:focus-visible {
+	text-decoration: underline var(--primary-dark);
+	transition: 0.3s;
 }
 
 .card_title {
