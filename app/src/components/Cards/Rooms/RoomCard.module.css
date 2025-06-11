@@ -1,0 +1,22 @@
+.room {
+	border: 1px solid var(--primary);
+	border-radius: var(--border-radius);
+	padding: 1rem;
+	margin-bottom: 1rem;
+}
+
+.title {
+	margin: 0;
+}
+
+.subtitle {
+	margin-bottom: 0;
+}
+
+.text {
+	margin: 0;
+}
+
+.list {
+	margin-top: 0;
+}

@@ -8,6 +8,7 @@ import { getHotels, Hotel } from "../../services/HotelService";
 import Loading from "../../components/Loading/Loading";
 import Error from "../../components/Error/Error";
 import { useLocation } from "react-router";
+import NoResults from "../../components/NoResults/NoResults";
 
 const Hotels = () => {
 	const location = useLocation();
@@ -160,7 +161,7 @@ const Hotels = () => {
 								);
 							})
 						) : (
-							<p>No hotels found</p>
+							<NoResults insert="hotels" />
 						)}
 					</div>
 				</div>

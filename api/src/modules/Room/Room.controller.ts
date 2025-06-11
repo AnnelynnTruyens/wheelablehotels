@@ -14,7 +14,8 @@ const getRooms = async (req: Request, res: Response, next: NextFunction) => {
 			...(hotelId ? { hotelId: hotelId } : {}),
 		})
 			.lean()
-			.populate("hotel", ["name", "id"]);
+			.populate("hotel", ["name", "id"])
+			.populate("accessibilityFeatures");
 		res.json(room);
 	} catch (e) {
 		next(e);

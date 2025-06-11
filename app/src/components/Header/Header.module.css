@@ -60,7 +60,7 @@
 	transition: 0.3s;
 }
 
-.nav_btn_home {
+.nav_btn {
 	border-radius: 5rem;
 	border: none;
 	padding: 0.4rem 1.5rem;
@@ -73,7 +73,7 @@
 	box-shadow: var(--shadow-black);
 	transition: 0.3s;
 }
-.nav_btn_home:hover {
+.nav_btn:hover {
 	background-color: var(--secondary-dark);
 	color: var(--black);
 	transition: 0.3s;
@@ -144,24 +144,6 @@
 
 .nav_link {
 	text-decoration: none;
-}
-
-.nav_btn {
-	border-radius: 5rem;
-	border: none;
-	padding: 0.4rem 1.5rem;
-	font-size: 1em;
-	font-weight: 400;
-	text-decoration: none;
-	background-color: var(--primary-dark);
-	color: var(--white);
-	cursor: pointer;
-	transition: 0.3s;
-}
-.nav_btn:hover {
-	background-color: var(--primary);
-	color: var(--white);
-	transition: 0.3s;
 }
 
 .nav_icon {

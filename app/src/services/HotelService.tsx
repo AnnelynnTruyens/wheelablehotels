@@ -1,6 +1,7 @@
 import { AccessibilityFeature } from "./AccessibilityFeatureService";
 import { Amenity } from "./AmenityService";
 import { API } from "./ApiService";
+import { User } from "./AuthService";
 
 export type Hotel = {
 	_id: string;
@@ -13,6 +14,7 @@ export type Hotel = {
 	status: string;
 	amenities: Amenity[];
 	accessibilityFeatures: AccessibilityFeature[];
+	userId: User;
 };
 
 export type HotelBody = Omit<Hotel, "_id">;

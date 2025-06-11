@@ -1,3 +1,4 @@
+import { AccessibilityFeature } from "./AccessibilityFeatureService";
 import { API } from "./ApiService";
 import qs from "query-string";
 
@@ -7,7 +8,7 @@ export type Room = {
 	description: string;
 	accessibilityInfo: string;
 	hotelId: string;
-	accessibilityFeatures: string[];
+	accessibilityFeatures: AccessibilityFeature[];
 };
 
 export type RoomBody = Omit<Room, "_id">;

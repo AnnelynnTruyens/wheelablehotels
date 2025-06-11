@@ -57,7 +57,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		description: string;
 		accessibilityInfo: string;
 		hotelId: string;
-		accessibilityFeatures: string[];
+		accessibilityFeatures: AccessibilityFeature[];
 		isNew?: boolean;
 	};
 

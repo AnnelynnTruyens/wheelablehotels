@@ -15,7 +15,7 @@ interface AddRoomProps {
 		name?: string;
 		description?: string;
 		accessibilityInfo?: string;
-		accessibilityFeatures?: string[];
+		accessibilityFeatures?: AccessibilityFeature[];
 	};
 }
 
@@ -29,7 +29,7 @@ const AddRoom: React.FC<AddRoomProps> = ({
 		description: initialData?.description || "",
 		accessibilityInfo: initialData?.accessibilityInfo || "",
 		accessibilityFeatures:
-			initialData?.accessibilityFeatures || ([] as string[]),
+			initialData?.accessibilityFeatures || ([] as AccessibilityFeature[]),
 	});
 	const [availableFeatures, setAvailableFeatures] = useState<
 		AccessibilityFeature[]
@@ -56,9 +56,20 @@ const AddRoom: React.FC<AddRoomProps> = ({
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
 		const { value, checked } = e.target;
-		const updatedFeatures = checked
-			? [...formData.accessibilityFeatures, value]
-			: formData.accessibilityFeatures.filter((f) => f !== value);
+		const featureObj = availableFeatures.find((f) => f._id === value);
+		if (!featureObj) return;
+
+		let updatedFeatures: AccessibilityFeature[];
+		if (checked) {
+			// Add feature if not already in the list
+			updatedFeatures = [...formData.accessibilityFeatures, featureObj];
+		} else {
+			// Remove feature by _id
+			updatedFeatures = formData.accessibilityFeatures.filter(
+				(f) => f._id !== value
+			);
+		}
+
 		const updated = { ...formData, accessibilityFeatures: updatedFeatures };
 		setFormData(updated);
 		onDataChange(updated);
@@ -96,7 +107,9 @@ const AddRoom: React.FC<AddRoomProps> = ({
 							id={`room-${roomId}-feature-${feature._id}`}
 							name="accessibilityFeatures"
 							value={feature._id}
-							checked={formData.accessibilityFeatures.includes(feature._id)}
+							checked={formData.accessibilityFeatures.some(
+								(f) => f._id === feature._id
+							)}
 							onChange={handleAccessibilityFeatureChange}
 						/>
 					))}

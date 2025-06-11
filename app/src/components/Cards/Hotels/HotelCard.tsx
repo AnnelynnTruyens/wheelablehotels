@@ -25,7 +25,6 @@ const HotelCard: React.FC<HotelCardProps> = ({
 			.then((response) => {
 				if (response.data && response.data.length > 0) {
 					setImage(response.data[0]); // Set the first image
-					console.log(response.data[0].imageUrl);
 				}
 			})
 			.catch((error) => {
@@ -48,6 +47,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
 				<div className={styles.card_info_left}>
 					<Link
 						to={`${ROUTES.hotelDetail.to}${hotelName}`}
+						state={{ hotelId }}
 						className={styles.card_link}
 					>
 						<h2 className={styles.card_title}>{hotelName}</h2>
