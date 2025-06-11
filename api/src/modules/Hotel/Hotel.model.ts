@@ -4,6 +4,7 @@ import { Hotel } from "./Hotel.types";
 
 import validateModel from "../../validation/validateModel";
 import RoomModel from "../Room/Room.model";
+import imageModel from "../Image/Image.model";
 
 const hotelSchema = new mongoose.Schema<Hotel>(
 	{
@@ -65,6 +66,7 @@ hotelSchema.pre("save", function (next) {
 hotelSchema.pre("deleteOne", { document: true, query: false }, function (next) {
 	// delete all rooms that belong to this hotel
 	RoomModel.deleteMany({ hotelId: this._id }).exec();
+	imageModel.deleteMany({ hotelId: this._id }).exec();
 	next();
 });
 
@@ -72,6 +74,7 @@ hotelSchema.pre(["findOneAndDelete", "deleteMany"], function (next) {
 	// delete all rooms that belong to this hotel
 	const id = this.getFilter()["_id"];
 	RoomModel.deleteMany({ hotelId: id }).exec();
+	imageModel.deleteMany({ hotelId: id }).exec();
 	next();
 });
 
