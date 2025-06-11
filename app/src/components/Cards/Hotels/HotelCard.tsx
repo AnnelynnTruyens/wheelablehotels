@@ -23,6 +23,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
 			.then((response) => {
 				if (response.data && response.data.length > 0) {
 					setImage(response.data[0]); // Set the first image
+					console.log(response.data[0].imageUrl);
 				}
 			})
 			.catch((error) => {
