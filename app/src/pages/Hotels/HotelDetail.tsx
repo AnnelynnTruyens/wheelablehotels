@@ -102,7 +102,7 @@ const HotelDetail = () => {
 						<h1 className={styles.title}>{hotel?.name}</h1>
 						<p className={styles.username}>
 							Added by{" "}
-							<Link to={`${ROUTES.userProfile.to}${hotel?.userId.username}`}>
+							<Link to={`${ROUTES.userProfile.to}${hotel?.user.username}`}>
 								username
 							</Link>
 						</p>

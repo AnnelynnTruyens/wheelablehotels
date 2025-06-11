@@ -63,6 +63,9 @@ const AddHotel = () => {
 	};
 
 	const handleFirstSubmit = (submittedHotelName: string) => {
+		if (!UiStore.currentUser) {
+			return;
+		}
 		setHotelName(submittedHotelName);
 
 		// Type hotelBody to send with API call
@@ -71,6 +74,7 @@ const AddHotel = () => {
 			status: "new",
 			amenities: [],
 			accessibilityFeatures: [],
+			user: UiStore.currentUser,
 		};
 
 		API.interceptors.request.use((config) => {
@@ -110,6 +114,9 @@ const AddHotel = () => {
 		amenities: Amenity[],
 		accessibilityFeatures: AccessibilityFeature[]
 	) => {
+		if (!UiStore.currentUser) {
+			return;
+		}
 		//Type hotelBody to send with API call
 		const hotelBody = {
 			name: hotelName,
@@ -120,6 +127,7 @@ const AddHotel = () => {
 			status: "new",
 			amenities: amenities,
 			accessibilityFeatures: accessibilityFeatures,
+			user: UiStore.currentUser,
 		};
 
 		API.interceptors.request.use((config) => {
@@ -159,6 +167,9 @@ const AddHotel = () => {
 		amenities: Amenity[],
 		accessibilityFeatures: AccessibilityFeature[]
 	) => {
+		if (!UiStore.currentUser) {
+			return;
+		}
 		//Type hotelBody to send with API call
 		const hotelBody = {
 			name: hotelName,
@@ -169,6 +180,7 @@ const AddHotel = () => {
 			status: "completed",
 			amenities: amenities,
 			accessibilityFeatures: accessibilityFeatures,
+			user: UiStore.currentUser,
 		};
 
 		API.interceptors.request.use((config) => {
