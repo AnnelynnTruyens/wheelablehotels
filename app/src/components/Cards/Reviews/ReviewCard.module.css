@@ -12,8 +12,10 @@
 	align-items: center;
 }
 
-.text {
+.name {
 	margin: 0;
+	font-weight: 700;
+	color: var(--primary-dark);
 }
 
 .review_text {

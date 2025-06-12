@@ -4,7 +4,10 @@ import ROUTES from "../../consts/Routes";
 import RegisterForm from "../../components/Forms/RegisterForm";
 import HotelHighlight from "../../components/Cards/Hotels/HotelHighlight";
 import SearchForm from "../../components/Forms/SearchForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getHotels, Hotel } from "../../services/HotelService";
+import Loading from "../../components/Loading/Loading";
+import Error from "../../components/Error/Error";
 
 // Type home component
 interface HomeProps {
@@ -12,8 +15,11 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ onLogin }) => {
-	const [searchValue, setSearchValue] = useState("");
 	const navigate = useNavigate();
+
+	const [searchValue, setSearchValue] = useState("");
+	const [hotels, setHotels] = useState<Hotel[]>([]);
+	const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
 
 	const handleSearchSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -23,6 +29,30 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 			navigate("/search");
 		}
 	};
+
+	const [isLoading, setIsLoading] = useState<Boolean>(true);
+	const [error, setError] = useState<Error | undefined>();
+
+	useEffect(() => {
+		getHotels()
+			.then((response) => {
+				setHotels(response.data);
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				setError(error);
+				setIsLoading(false);
+			});
+	}, []);
+
+	useEffect(() => {
+		if (hotels.length > 0) {
+			const completedHotels = hotels.filter(
+				(hotel) => hotel.status === "completed"
+			);
+			setFilteredHotels(completedHotels);
+		}
+	}, [hotels]);
 
 	return (
 		<main id="main" className={styles.main}>
@@ -84,7 +114,23 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 				</section>
 				<section className={`${styles.section} ${styles.hotels}`}>
 					<h1 className={styles.section_title}>Community favourites</h1>
-					<HotelHighlight />
+					<div className={styles.hotel_highlights}>
+						{isLoading ? (
+							<Loading />
+						) : error ? (
+							<Error message={error.message} />
+						) : filteredHotels && filteredHotels.length > 0 ? (
+							filteredHotels.map((hotel) => {
+								return (
+									<HotelHighlight
+										hotelName={hotel.name}
+										hotelId={hotel._id}
+										location={hotel.location}
+									/>
+								);
+							})
+						) : null}
+					</div>
 				</section>
 			</div>
 		</main>

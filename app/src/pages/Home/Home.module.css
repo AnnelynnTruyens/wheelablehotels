@@ -58,3 +58,10 @@
 	object-fit: cover;
 	object-position: 0 75%;
 }
+
+.hotel_highlights {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 2rem;
+}

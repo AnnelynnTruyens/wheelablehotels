@@ -360,7 +360,7 @@ const HotelDetail = () => {
 							<Rating rating={4} />
 							<p>(4/5)</p>
 						</div>
-						<button>Add review</button>
+						<button type="button">Add review</button>
 					</div>
 					<div className={styles.reviews}>
 						<ReviewCard
@@ -375,6 +375,13 @@ const HotelDetail = () => {
 						/>
 						<ReviewCard username="wheelchairuser483" rating={4} review="" />
 					</div>
+					<button type="button">Add review</button>
+				</section>
+				<section>
+					<h2 className={styles.subtitle}>Noticed a mistake?</h2>
+					<Link to={ROUTES.contact} className={styles.button}>
+						Report a mistake
+					</Link>
 				</section>
 			</main>
 		);
