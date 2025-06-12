@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./Hotels.module.css";
 import { getHotelById, Hotel } from "../../services/HotelService";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Loading from "../../components/Loading/Loading";
 import Error from "../../components/Error/Error";
 import ROUTES from "../../consts/Routes";
@@ -11,17 +11,40 @@ import { getImagesByHotel, Image } from "../../services/ImageService";
 import { getRoomsByHotel, Room } from "../../services/RoomService";
 import RoomCard from "../../components/Cards/Rooms/RoomCard";
 import ReviewCard from "../../components/Cards/Reviews/ReviewCard";
+import {
+	createFavourite,
+	deleteFavourite,
+	Favourite,
+	findFavouriteByHotel,
+} from "../../services/FavouriteService";
+import useStores from "../../hooks/useStores";
 
 const HotelDetail = () => {
 	const location = useLocation();
 	const hotelId = location.state?.hotelId;
 
+	const navigate = useNavigate();
+
 	const [hotel, setHotel] = useState<Hotel | undefined>();
 	const [images, setImages] = useState<Image[] | undefined>();
 	const [rooms, setRooms] = useState<Room[] | undefined>();
 
+	const [favouriteData, setFavouriteData] = useState<Favourite[] | null>(null);
+
+	const [favouriteId, setFavouriteId] = useState<string | null>(null);
+	const [isFavourite, setIsFavourite] = useState<Boolean>(false);
+	const [userId, setUserId] = useState<string>("");
+
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
+
+	const { UiStore } = useStores();
+
+	// Type hotel and user to send with API call
+	const hotelUser = {
+		userId: userId,
+		hotelId: hotelId,
+	};
 
 	useEffect(() => {
 		getHotelById(hotelId)
@@ -50,7 +73,81 @@ const HotelDetail = () => {
 			.catch((error) => {
 				console.error("Failed to fetch hotel rooms:", error);
 			});
+
+		findFavourite();
 	}, [hotelId]);
+
+	// Function to see if hotel is favourite of current user
+	const findFavourite = () => {
+		let filters = { hotelId: hotelId };
+		findFavouriteByHotel(filters)
+			.then(({ data }) => {
+				setFavouriteData(data);
+				const isFav = data.some(
+					(favourite: Favourite) => favourite.hotelId === hotelId
+				);
+				setIsFavourite(isFav);
+				if (isFav) {
+					const fav = data.find(
+						(favourite: Favourite) => favourite.hotelId === hotelId
+					);
+					setFavouriteId(fav?._id || null);
+				}
+			})
+			.catch(() => {
+				return;
+			});
+	};
+
+	// Function to add hotel to favourites of current user
+	const handleAddFavourite = () => {
+		if (!hotel || !hotel._id) {
+			return;
+		}
+
+		// If no current user, navigate to favourites page to see login page
+		if (!UiStore.currentUser) {
+			navigate(ROUTES.favourites);
+		} else {
+			setUserId(UiStore.currentUser._id);
+		}
+
+		// Add hotel to favourites
+		setIsLoading(true);
+		createFavourite(hotelUser)
+			.then(() => {
+				setIsFavourite(true);
+				findFavourite();
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				setError(error);
+				setIsLoading(false);
+			});
+	};
+
+	// Function to remove hotel from favourites of current user
+	const handleDeleteFavourite = () => {
+		if (!hotel || !hotel._id || !favouriteData || !favouriteId) {
+			return;
+		}
+
+		// If no current user, navigate to login page
+		if (!UiStore.currentUser) {
+			navigate(ROUTES.login);
+		} else {
+			setUserId(UiStore.currentUser._id);
+		}
+
+		// Remove hotel from favourites
+		deleteFavourite(favouriteId)
+			.then(() => {
+				setIsFavourite(false);
+			})
+			.catch((error) => {
+				setError(error);
+			});
+	};
 
 	if (isLoading)
 		return (
@@ -79,24 +176,51 @@ const HotelDetail = () => {
 				<title>Hotel detail | Wheelable Hotels</title>
 				<div className={styles.buttons}>
 					<Link to={ROUTES.hotelOverview}>Back to list</Link>
-					<button className={styles.favourite_btn}>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="20"
-							height="20"
-							viewBox="0 0 40 40"
-							fill="none"
-							className={styles.favourite_icon}
+					{isFavourite ? (
+						<button
+							type="button"
+							className={styles.favourite_btn}
+							onClick={handleDeleteFavourite}
 						>
-							<path
-								d="M34.7333 7.68333C33.8821 6.83167 32.8714 6.15608 31.7589 5.69514C30.6465 5.2342 29.4541 4.99696 28.25 4.99696C27.0459 4.99696 25.8535 5.2342 24.7411 5.69514C23.6286 6.15608 22.6179 6.83167 21.7667 7.68333L20 9.45L18.2333 7.68333C16.5138 5.96385 14.1817 4.99785 11.75 4.99785C9.31827 4.99785 6.98615 5.96385 5.26666 7.68333C3.54717 9.40282 2.58118 11.7349 2.58118 14.1667C2.58118 16.5984 3.54717 18.9305 5.26666 20.65L20 35.3833L34.7333 20.65C35.585 19.7987 36.2606 18.788 36.7215 17.6756C37.1825 16.5632 37.4197 15.3708 37.4197 14.1667C37.4197 12.9625 37.1825 11.7702 36.7215 10.6577C36.2606 9.54531 35.585 8.53459 34.7333 7.68333Z"
-								strokeWidth="3.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-						</svg>
-						Add to favourites
-					</button>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="20"
+								height="20"
+								viewBox="0 0 40 40"
+								className={styles.favourite_icon_filled}
+							>
+								<path
+									d="M34.7333 7.68333C33.8821 6.83167 32.8714 6.15608 31.7589 5.69514C30.6465 5.2342 29.4541 4.99696 28.25 4.99696C27.0459 4.99696 25.8535 5.2342 24.7411 5.69514C23.6286 6.15608 22.6179 6.83167 21.7667 7.68333L20 9.45L18.2333 7.68333C16.5138 5.96385 14.1817 4.99785 11.75 4.99785C9.31827 4.99785 6.98615 5.96385 5.26666 7.68333C3.54717 9.40282 2.58118 11.7349 2.58118 14.1667C2.58118 16.5984 3.54717 18.9305 5.26666 20.65L20 35.3833L34.7333 20.65C35.585 19.7987 36.2606 18.788 36.7215 17.6756C37.1825 16.5632 37.4197 15.3708 37.4197 14.1667C37.4197 12.9625 37.1825 11.7702 36.7215 10.6577C36.2606 9.54531 35.585 8.53459 34.7333 7.68333Z"
+									strokeWidth="3.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+							</svg>
+							Added to favourites
+						</button>
+					) : (
+						<button
+							type="button"
+							className={styles.favourite_btn}
+							onClick={handleAddFavourite}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="20"
+								height="20"
+								viewBox="0 0 40 40"
+								className={styles.favourite_icon_empty}
+							>
+								<path
+									d="M34.7333 7.68333C33.8821 6.83167 32.8714 6.15608 31.7589 5.69514C30.6465 5.2342 29.4541 4.99696 28.25 4.99696C27.0459 4.99696 25.8535 5.2342 24.7411 5.69514C23.6286 6.15608 22.6179 6.83167 21.7667 7.68333L20 9.45L18.2333 7.68333C16.5138 5.96385 14.1817 4.99785 11.75 4.99785C9.31827 4.99785 6.98615 5.96385 5.26666 7.68333C3.54717 9.40282 2.58118 11.7349 2.58118 14.1667C2.58118 16.5984 3.54717 18.9305 5.26666 20.65L20 35.3833L34.7333 20.65C35.585 19.7987 36.2606 18.788 36.7215 17.6756C37.1825 16.5632 37.4197 15.3708 37.4197 14.1667C37.4197 12.9625 37.1825 11.7702 36.7215 10.6577C36.2606 9.54531 35.585 8.53459 34.7333 7.68333Z"
+									strokeWidth="3.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+							</svg>
+							Add to favourites
+						</button>
+					)}
 				</div>
 				<section className={styles.top_section}>
 					<div className={styles.top_left}>

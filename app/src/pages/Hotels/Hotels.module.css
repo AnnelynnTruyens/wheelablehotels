@@ -29,8 +29,14 @@
 	gap: 0.5rem;
 }
 
-.favourite_icon {
+.favourite_icon_filled {
 	stroke: var(--white);
+	fill: var(--white);
+}
+
+.favourite_icon_empty {
+	stroke: var(--white);
+	fill: none;
 }
 
 .top_section {

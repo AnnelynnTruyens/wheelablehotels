@@ -1,0 +1,10 @@
+.main {
+	margin: 3rem;
+}
+
+.favourites {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 2rem;
+}
