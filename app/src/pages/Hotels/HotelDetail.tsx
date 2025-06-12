@@ -27,6 +27,7 @@ const HotelDetail = () => {
 		getHotelById(hotelId)
 			.then((response) => {
 				setHotel(response.data);
+				console.log(response.data);
 				setIsLoading(false);
 			})
 			.catch((error) => {
@@ -102,9 +103,13 @@ const HotelDetail = () => {
 						<h1 className={styles.title}>{hotel?.name}</h1>
 						<p className={styles.username}>
 							Added by{" "}
-							<Link to={`${ROUTES.userProfile.to}${hotel?.user.username}`}>
-								username
-							</Link>
+							{hotel.userId.username ? (
+								<Link to={`${ROUTES.userProfile.to}${hotel.userId.username}`}>
+									{hotel.userId.username}
+								</Link>
+							) : (
+								"unknown"
+							)}
 						</p>
 						<h2 className={styles.subtitle}>Accessibility</h2>
 						{hotel.accessibilityFeatures &&

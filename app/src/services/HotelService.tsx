@@ -14,7 +14,7 @@ export type Hotel = {
 	status: string;
 	amenities: Amenity[];
 	accessibilityFeatures: AccessibilityFeature[];
-	user: User;
+	userId: User;
 };
 
 export type HotelBody = Omit<Hotel, "_id">;

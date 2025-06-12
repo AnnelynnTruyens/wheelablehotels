@@ -74,7 +74,7 @@ const AddHotel = () => {
 			status: "new",
 			amenities: [],
 			accessibilityFeatures: [],
-			user: UiStore.currentUser,
+			userId: UiStore.currentUser,
 		};
 
 		API.interceptors.request.use((config) => {
@@ -127,7 +127,7 @@ const AddHotel = () => {
 			status: "new",
 			amenities: amenities,
 			accessibilityFeatures: accessibilityFeatures,
-			user: UiStore.currentUser,
+			userId: UiStore.currentUser,
 		};
 
 		API.interceptors.request.use((config) => {
@@ -180,7 +180,7 @@ const AddHotel = () => {
 			status: "completed",
 			amenities: amenities,
 			accessibilityFeatures: accessibilityFeatures,
-			user: UiStore.currentUser,
+			userId: UiStore.currentUser,
 		};
 
 		API.interceptors.request.use((config) => {

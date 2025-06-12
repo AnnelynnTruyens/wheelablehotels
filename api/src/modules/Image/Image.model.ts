@@ -53,6 +53,6 @@ imageSchema.pre("save", function (next) {
 	next();
 });
 
-const imageModel = mongoose.model<Image>("Image", imageSchema);
+const ImageModel = mongoose.model<Image>("Image", imageSchema);
 
-export default imageModel;
+export default ImageModel;

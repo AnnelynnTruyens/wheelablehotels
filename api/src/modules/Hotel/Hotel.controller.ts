@@ -28,7 +28,8 @@ const getHotelById = async (
 			_id: id,
 		})
 			.populate("amenities")
-			.populate("accessibilityFeatures");
+			.populate("accessibilityFeatures")
+			.populate("userId", "username");
 		if (!hotel) {
 			throw new NotFoundError("Hotel not found");
 		}
