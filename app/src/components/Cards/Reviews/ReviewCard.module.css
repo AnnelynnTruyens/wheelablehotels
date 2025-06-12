@@ -1,8 +1,11 @@
 .review {
-	border: 1px solid var(--primary);
+	border: 1px solid var(--secondary-light);
 	border-radius: var(--border-radius);
 	padding: 1rem;
 	margin-bottom: 1rem;
+
+	background-color: var(--secondary-verylight);
+	box-shadow: var(--shadow-black);
 }
 
 .review_top {

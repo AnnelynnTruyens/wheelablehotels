@@ -59,6 +59,13 @@
 	object-position: 0 75%;
 }
 
+.community {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	gap: 10rem;
+}
+
 .hotel_highlights {
 	display: flex;
 	flex-direction: row;

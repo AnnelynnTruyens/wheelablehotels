@@ -85,7 +85,6 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	align-items: center;
 	margin-top: 3rem;
 }
 
@@ -95,6 +94,10 @@
 	align-items: center;
 	gap: 0.5rem;
 	margin: 0.5rem 0;
+}
+
+.contact_item svg {
+	stroke: var(--black);
 }
 
 .contact_item p {
@@ -128,7 +131,8 @@
 	max-width: 6rem;
 	height: 6rem;
 	object-fit: cover;
-	border-radius: 15px;
+	border-radius: var(--border-radius-small);
+	box-shadow: var(--shadow-black);
 }
 
 .images img:first-of-type {

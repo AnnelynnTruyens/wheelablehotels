@@ -81,9 +81,8 @@
 }
 
 .hotel_highlight {
-	height: fit-content;
-	width: fit-content;
-	max-width: 25rem;
+	height: max-content;
+	width: 20rem;
 	margin-bottom: 1rem;
 
 	display: flex;
@@ -120,7 +119,6 @@
 }
 
 .highlight_info {
-	width: 100%;
 	padding: 1rem;
 }
 

@@ -110,6 +110,7 @@ const AddHotel = () => {
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
+		website: string,
 		accessibilityInfo: string,
 		amenities: Amenity[],
 		accessibilityFeatures: AccessibilityFeature[]
@@ -123,6 +124,7 @@ const AddHotel = () => {
 			location: location,
 			contactEmail: contactEmail,
 			contactPhone: contactPhone,
+			website: website,
 			accessibilityInfo: accessibilityInfo,
 			status: "new",
 			amenities: amenities,
@@ -163,6 +165,7 @@ const AddHotel = () => {
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
+		website: string,
 		accessibilityInfo: string,
 		amenities: Amenity[],
 		accessibilityFeatures: AccessibilityFeature[]
@@ -176,6 +179,7 @@ const AddHotel = () => {
 			location: location,
 			contactEmail: contactEmail,
 			contactPhone: contactPhone,
+			website: website,
 			accessibilityInfo: accessibilityInfo,
 			status: "completed",
 			amenities: amenities,

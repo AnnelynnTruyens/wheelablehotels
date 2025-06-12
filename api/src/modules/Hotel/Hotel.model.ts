@@ -24,6 +24,10 @@ const hotelSchema = new mongoose.Schema<Hotel>(
 			type: String,
 			required: false,
 		},
+		website: {
+			type: String,
+			required: false,
+		},
 		accessibilityInfo: {
 			type: String,
 			required: false,

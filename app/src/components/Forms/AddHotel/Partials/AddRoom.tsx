@@ -76,7 +76,7 @@ const AddRoom: React.FC<AddRoomProps> = ({
 	};
 
 	return (
-		<div className={styles.room_container}>
+		<div className={styles.room}>
 			<FormInput
 				label="Name room"
 				type="text"

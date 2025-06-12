@@ -1,8 +1,11 @@
 .room {
-	border: 1px solid var(--primary);
+	border: 1px solid var(--primary-light);
 	border-radius: var(--border-radius);
 	padding: 1rem;
 	margin-bottom: 1rem;
+
+	background-color: var(--primary-verylight);
+	box-shadow: var(--shadow-primary);
 }
 
 .title {

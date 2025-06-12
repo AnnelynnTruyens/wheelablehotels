@@ -15,6 +15,7 @@ interface AddHotelInfoProps {
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
+		website: string,
 		accessibilityInfo: string,
 		amenities: Amenity[],
 		accessibilityFeatures: AccessibilityFeature[]
@@ -30,6 +31,7 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 		location: "",
 		contactEmail: "",
 		contactPhone: "",
+		website: "",
 		amenities: [] as Amenity[],
 		accessibilityFeatures: [] as AccessibilityFeature[],
 		accessibilityInfo: "",
@@ -108,6 +110,7 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 			formData.location,
 			formData.contactEmail,
 			formData.contactPhone,
+			formData.website,
 			formData.accessibilityInfo,
 			formData.amenities,
 			formData.accessibilityFeatures
@@ -147,6 +150,16 @@ const AddHotelInfo: React.FC<AddHotelInfoProps> = ({
 					name="contactPhone"
 					value={formData.contactPhone}
 					placeholder="+32 000 00 00"
+					onChange={handleChange}
+					required={true}
+				/>
+				<FormInput
+					label="Website hotel"
+					type="text"
+					id="website"
+					name="website"
+					value={formData.website}
+					placeholder="www.hotel.com"
 					onChange={handleChange}
 					required={true}
 				/>

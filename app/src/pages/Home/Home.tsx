@@ -98,18 +98,20 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 					/>
 				</section>
 				<section className={`${styles.section} ${styles.community}`}>
-					<h1 className={styles.section_title}>Community-based</h1>
-					<p className={styles.section_text}>
-						Our platform is community-based. All of our hotels are added by
-						community member, based on their own experiences. As part of our
-						community, you can add your own favourite accessible hotels, as well
-						as rate and review hotels others added. You can also add the hotels
-						you want to explore to your favourites for later.
-					</p>
-					<p className={styles.section_text}>
-						Join us in creating a more accessible travel experience, one hotel
-						at a time.
-					</p>
+					<div className={styles.community_left}>
+						<h1 className={styles.section_title}>Community-based</h1>
+						<p className={styles.section_text}>
+							Our platform is community-based. All of our hotels are added by
+							community member, based on their own experiences. As part of our
+							community, you can add your own favourite accessible hotels, as
+							well as rate and review hotels others added. You can also add the
+							hotels you want to explore to your favourites for later.
+						</p>
+						<p className={styles.section_text}>
+							Join us in creating a more accessible travel experience, one hotel
+							at a time.
+						</p>
+					</div>
 					<RegisterForm onLogin={onLogin} />
 				</section>
 				<section className={`${styles.section} ${styles.hotels}`}>

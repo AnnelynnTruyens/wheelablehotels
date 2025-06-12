@@ -9,6 +9,7 @@ export type Hotel = {
 	location?: string;
 	contactEmail?: string;
 	contactPhone?: string;
+	website?: string;
 	accessibilityInfo?: string;
 	rating?: number;
 	status: string;

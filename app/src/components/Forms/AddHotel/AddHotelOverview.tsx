@@ -35,6 +35,7 @@ interface AddHotelOverviewProps {
 		location: string,
 		contactEmail: string,
 		contactPhone: string,
+		website: string,
 		accessibilityInfo: string,
 		amenities: Amenity[],
 		accessibilityFeatures: AccessibilityFeature[]
@@ -68,6 +69,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 		location: "",
 		contactEmail: "",
 		contactPhone: "",
+		website: "",
 		amenities: [] as Amenity[],
 		accessibilityFeatures: [] as AccessibilityFeature[],
 		accessibilityInfo: "",
@@ -85,18 +87,27 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				// Fetch hotel details
+				// Fetch all amenities and accessibilityFeatures first
+				const [amenitiesResponse, accessibilityFeaturesResponse] =
+					await Promise.all([getAmenities(), getAccessibilityFeatures()]);
+
+				const allAmenities = amenitiesResponse.data;
+				const allFeatures = accessibilityFeaturesResponse.data;
+
+				setAmenities(allAmenities);
+				setAccessibilityFeatures(allFeatures);
+
+				// Then fetch hotel data (now we can match against full lists)
 				const hotelResponse = await getHotelById(hotelId);
 
-				// Extract amenities _id values
-				const hotelAmenities = amenities.filter((a) =>
+				// Match amenities and accessibility features by _id
+				const hotelAmenities = allAmenities.filter((a) =>
 					(hotelResponse.data.amenities as any[]).some(
 						(selected: any) => selected._id === a._id
 					)
 				);
 
-				// Extract accessibilityFeatures _id values
-				const hotelAccessibilityFeatures = accessibilityFeatures.filter((f) =>
+				const hotelAccessibilityFeatures = allFeatures.filter((f) =>
 					(hotelResponse.data.accessibilityFeatures as any[]).some(
 						(selected: any) => selected._id === f._id
 					)
@@ -107,22 +118,14 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					location: hotelResponse.data.location || "",
 					contactEmail: hotelResponse.data.contactEmail || "",
 					contactPhone: hotelResponse.data.contactPhone || "",
+					website: hotelResponse.data.website || "",
 					amenities: hotelAmenities,
 					accessibilityFeatures: hotelAccessibilityFeatures,
 					accessibilityInfo: hotelResponse.data.accessibilityInfo || "",
 				});
 
 				const roomsResponse = await getRoomsByHotel({ hotelId });
-				const rooms = roomsResponse.data;
-				setRoomDataList(rooms);
-
-				// Fetch all amenities
-				const amenitiesResponse = await getAmenities();
-				setAmenities(amenitiesResponse.data);
-
-				// Fetch all accessibilityFeatures
-				const accessibilityFeaturesResponse = await getAccessibilityFeatures();
-				setAccessibilityFeatures(accessibilityFeaturesResponse.data);
+				setRoomDataList(roomsResponse.data);
 
 				setIsLoading(false);
 			} catch (error) {
@@ -130,6 +133,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 				setIsLoading(false);
 			}
 		};
+
 		const fetchImages = async () => {
 			try {
 				const hotelImagesResponse = await getImagesByHotel({ hotelId });
@@ -311,6 +315,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 				formData.location,
 				formData.contactEmail,
 				formData.contactPhone,
+				formData.website,
 				formData.accessibilityInfo,
 				formData.amenities,
 				formData.accessibilityFeatures
@@ -384,39 +389,49 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 						required={true}
 					/>
 
-					<fieldset>
-						<legend>General amenities:</legend>
-						{amenities.map((amenity) => (
-							<FormCheckbox
-								key={amenity._id}
-								label={amenity.name}
-								id={amenity._id}
-								name="amenities"
-								value={amenity._id}
-								checked={formData.amenities.some((a) => a._id === amenity._id)}
-								onChange={handleAmenityChange}
-							/>
-						))}
+					<fieldset className={styles.fieldset}>
+						<legend className={styles.fieldset_legend}>
+							General amenities:
+						</legend>
+						<div className={styles.checkboxes}>
+							{amenities.map((amenity) => (
+								<FormCheckbox
+									key={amenity._id}
+									label={amenity.name}
+									id={amenity._id}
+									name="amenities"
+									value={amenity._id}
+									checked={formData.amenities.some(
+										(a) => a._id === amenity._id
+									)}
+									onChange={handleAmenityChange}
+								/>
+							))}
+						</div>
 					</fieldset>
 
 					<h2 className={styles.subtitle}>Accessibility info</h2>
-					<fieldset>
-						<legend>Accessibility features:</legend>
-						{accessibilityFeatures.map((feature) => {
-							return (
-								<FormCheckbox
-									key={feature._id}
-									label={feature.name}
-									id={feature._id}
-									name="accessibilityFeatures"
-									value={feature._id}
-									checked={formData.accessibilityFeatures.some(
-										(f) => f._id === feature._id
-									)}
-									onChange={handleAccessibilityFeatureChange}
-								/>
-							);
-						})}
+					<fieldset className={styles.fieldset}>
+						<legend className={styles.fieldset_legend}>
+							Accessibility features:
+						</legend>
+						<div className={styles.checkboxes}>
+							{accessibilityFeatures.map((feature) => {
+								return (
+									<FormCheckbox
+										key={feature._id}
+										label={feature.name}
+										id={feature._id}
+										name="accessibilityFeatures"
+										value={feature._id}
+										checked={formData.accessibilityFeatures.some(
+											(f) => f._id === feature._id
+										)}
+										onChange={handleAccessibilityFeatureChange}
+									/>
+								);
+							})}
+						</div>
 					</fieldset>
 
 					<FormTextarea
@@ -434,7 +449,10 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 
 					{/* Render multiple AddRoom components */}
 					{roomDataList.map((room) => (
-						<div key={room._id || room.tempId} className={styles.roomContainer}>
+						<div
+							key={room._id || room.tempId}
+							className={styles.room_container}
+						>
 							<AddRoom
 								initialData={room}
 								roomId={room._id || room.tempId!}
@@ -444,10 +462,23 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 							/>
 							<button
 								type="button"
-								className={styles.deleteButton}
+								className={styles.delete_btn}
 								onClick={() => removeRoom(room._id)}
 							>
-								Delete
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+								>
+									<path
+										d="M3 6H5M5 6H21M5 6V20C5 20.5304 5.21071 21.0391 5.58579 21.4142C5.96086 21.7893 6.46957 22 7 22H17C17.5304 22 18.0391 21.7893 18.4142 21.4142C18.7893 21.0391 19 20.5304 19 20V6M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M10 11V17M14 11V17"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+								</svg>
 							</button>
 						</div>
 					))}
@@ -466,9 +497,9 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 					/>
 					<div>
 						<p>Added photos:</p>
-						<div className={styles.imageGrid}>
+						<div className={styles.image_grid}>
 							{existingHotelImages.map((image) => (
-								<div key={image._id} className={styles.imageItem}>
+								<div key={image._id} className={styles.image_item}>
 									<img
 										src={`${process.env.VITE_SERVER_URL}${image.imageUrl}`}
 										alt={`${process.env.VITE_SERVER_URL}${image.alt}`}
@@ -476,8 +507,22 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 									<button
 										type="button"
 										onClick={() => handleDeleteImage(image._id)}
+										className={styles.delete_btn}
 									>
-										Delete
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+										>
+											<path
+												d="M3 6H5M5 6H21M5 6V20C5 20.5304 5.21071 21.0391 5.58579 21.4142C5.96086 21.7893 6.46957 22 7 22H17C17.5304 22 18.0391 21.7893 18.4142 21.4142C18.7893 21.0391 19 20.5304 19 20V6M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M10 11V17M14 11V17"
+												strokeWidth="2"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
+										</svg>
 									</button>
 								</div>
 							))}

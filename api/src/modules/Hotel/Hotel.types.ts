@@ -6,6 +6,7 @@ export type Hotel = Document & {
 	location?: string;
 	contactEmail?: string;
 	contactPhone?: string;
+	website?: string;
 	accessibilityInfo?: string;
 	rating?: Number;
 	userId: ObjectId;
