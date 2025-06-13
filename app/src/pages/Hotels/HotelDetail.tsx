@@ -52,6 +52,7 @@ const HotelDetail = () => {
 		getHotelById(hotelId)
 			.then((response) => {
 				setHotel(response.data);
+				console.log(response.data);
 				setIsLoading(false);
 			})
 			.catch((error) => {
@@ -78,7 +79,6 @@ const HotelDetail = () => {
 		getReviewsByHotel({ hotelId })
 			.then((response) => {
 				setReviews(response.data);
-				console.log(response.data);
 			})
 			.catch((error) => {
 				console.error("Failed to fetch hotel reviews:", error);
@@ -347,10 +347,19 @@ const HotelDetail = () => {
 							</div>
 							<div className={styles.ratings}>
 								<div className={styles.rating}>
-									<Rating rating={4} />
-									<p>(4/5)</p>
+									{hotel.rating ? (
+										<>
+											<Rating rating={hotel.rating} />
+											<p>({hotel.rating}/5)</p>
+										</>
+									) : (
+										<>
+											<Rating rating={0} />
+											<p>(-/5)</p>
+										</>
+									)}
 								</div>
-								<a href="#reviews">3 reviews</a>
+								<a href="#reviews">{reviews?.length} reviews</a>
 							</div>
 						</div>
 						<div className={styles.images}>
@@ -393,8 +402,17 @@ const HotelDetail = () => {
 					<h2 className={styles.subtitle}>Reviews</h2>
 					<div className={styles.rating_top}>
 						<div className={styles.rating}>
-							<Rating rating={4} />
-							<p>(4/5)</p>
+							{hotel.rating ? (
+								<>
+									<Rating rating={hotel.rating} />
+									<p>({hotel.rating}/5)</p>
+								</>
+							) : (
+								<>
+									<Rating rating={0} />
+									<p>(-/5)</p>
+								</>
+							)}
 						</div>
 						<Link
 							className={styles.button}

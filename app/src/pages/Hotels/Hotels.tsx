@@ -157,6 +157,7 @@ const Hotels = () => {
 										hotelId={hotel._id}
 										location={hotel.location}
 										accessibilityFeatures={hotel.accessibilityFeatures}
+										rating={hotel.rating}
 									/>
 								);
 							})

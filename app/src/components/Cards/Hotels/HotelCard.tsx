@@ -10,6 +10,7 @@ interface HotelCardProps {
 	hotelId: string;
 	location: string | undefined;
 	accessibilityFeatures: { _id: string; name: string }[];
+	rating: number | undefined;
 }
 
 const HotelCard: React.FC<HotelCardProps> = ({
@@ -17,6 +18,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
 	hotelId,
 	location,
 	accessibilityFeatures,
+	rating,
 }) => {
 	const [image, setImage] = useState<Image | undefined>();
 
@@ -63,7 +65,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
 						})}
 					</ul>
 				</div>
-				<Rating rating={4} />
+				{rating ? <Rating rating={rating} /> : <Rating rating={0} />}
 			</div>
 		</div>
 	);

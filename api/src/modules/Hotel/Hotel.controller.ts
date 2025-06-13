@@ -3,15 +3,38 @@ import { NextFunction, Request, Response } from "express";
 import NotFoundError from "../../middleware/error/NotFoundError";
 
 import Hotel from "./Hotel.model";
+import Review from "../Review/Review.model";
 import { AuthRequest } from "../../middleware/auth/authMiddleware";
 import AuthError from "../../middleware/error/AuthError";
+
+const calculateAverageRating = async (
+	hotelId: string
+): Promise<number | null> => {
+	const reviews = await Review.find({ hotelId });
+	if (!reviews.length) return null;
+
+	const sum = reviews.reduce((acc, r) => acc + Number(r.rating ?? 0), 0);
+	return Number((sum / reviews.length).toFixed(1));
+};
 
 const getHotels = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const hotels = await Hotel.find({})
 			.populate("amenities")
 			.populate("accessibilityFeatures");
-		res.json(hotels);
+
+		// Add average ratings
+		const hotelsWithRatings = await Promise.all(
+			hotels.map(async (hotel) => {
+				const avgRating = await calculateAverageRating(hotel._id.toString());
+				return {
+					...hotel.toObject(),
+					rating: avgRating,
+				};
+			})
+		);
+
+		res.json(hotelsWithRatings);
 	} catch (err) {
 		next(err);
 	}
@@ -33,7 +56,12 @@ const getHotelById = async (
 		if (!hotel) {
 			throw new NotFoundError("Hotel not found");
 		}
-		res.json(hotel);
+		const avgRating = await calculateAverageRating(id);
+
+		res.json({
+			...hotel.toObject(),
+			rating: avgRating,
+		});
 	} catch (err) {
 		next(err);
 	}

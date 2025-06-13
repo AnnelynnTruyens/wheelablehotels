@@ -4,6 +4,7 @@ import NotFoundError from "../../middleware/error/NotFoundError";
 import { AuthRequest } from "../../middleware/auth/authMiddleware";
 
 import Review from "./Review.model";
+import HotelModel from "../Hotel/Hotel.model";
 
 const getReviews = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -73,6 +74,21 @@ const createReview = async (
 		const { user } = req as AuthRequest;
 		const review = new Review({ ...req.body, userId: user._id });
 		const result = await review.save();
+
+		// Recalculate hotel rating
+		const reviews = await Review.find({ hotelId: review.hotelId });
+		const averageRating = Number(
+			(
+				reviews.reduce((acc, r) => acc + Number(r.rating ?? 0), 0) /
+				reviews.length
+			).toFixed(1)
+		);
+
+		// Update the hotel with new average rating
+		await HotelModel.findByIdAndUpdate(review.hotelId, {
+			rating: averageRating,
+		});
+
 		res.status(200).json(result);
 	} catch (err) {
 		next(err);
@@ -125,22 +141,27 @@ const deleteReview = async (
 		const { user } = req as AuthRequest;
 		const { id } = req.params;
 
-		if (user.role === "admin") {
-			const review = await Review.findOneAndDelete({ _id: id });
-			if (!review) {
-				throw new NotFoundError("Review not found");
-			}
-			res.json({});
-		} else {
-			const review = await Review.findOneAndDelete({
-				_id: id,
-				userId: user._id,
-			});
-			if (!review) {
-				throw new NotFoundError("Review not found");
-			}
-			res.json({});
-		}
+		const review = await Review.findOneAndDelete(
+			user.role === "admin" ? { _id: id } : { _id: id, userId: user._id }
+		);
+		if (!review) throw new NotFoundError("Review not found");
+
+		// Recalculate hotel rating
+		const reviews = await Review.find({ hotelId: review.hotelId });
+		const averageRating = reviews.length
+			? Number(
+					(
+						reviews.reduce((acc, r) => acc + Number(r.rating ?? 0), 0) /
+						reviews.length
+					).toFixed(1)
+			  )
+			: null;
+
+		await HotelModel.findByIdAndUpdate(review.hotelId, {
+			rating: averageRating,
+		});
+
+		res.json({});
 	} catch (err) {
 		next(err);
 	}
