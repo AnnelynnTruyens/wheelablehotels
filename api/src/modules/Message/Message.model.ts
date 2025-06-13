@@ -18,6 +18,10 @@ const messageSchema = new mongoose.Schema<Message>(
 			type: String,
 			required: true,
 		},
+		hotelId: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: false,
+		},
 		status: {
 			type: String,
 			required: true,

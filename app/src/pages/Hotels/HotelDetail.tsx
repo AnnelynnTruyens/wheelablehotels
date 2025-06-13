@@ -405,7 +405,11 @@ const HotelDetail = () => {
 				</section>
 				<section>
 					<h2 className={styles.subtitle}>Noticed a mistake?</h2>
-					<Link to={ROUTES.contact} className={styles.button}>
+					<Link
+						to={ROUTES.contact}
+						className={styles.button}
+						state={{ hotelId: hotelId, hotelName: hotel.name }}
+					>
 						Report a mistake
 					</Link>
 				</section>
