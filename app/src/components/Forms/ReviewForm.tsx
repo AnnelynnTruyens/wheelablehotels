@@ -75,7 +75,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ hotelId }) => {
 		}
 
 		const reviewBody = {
-			userId: UiStore.currentUser._id,
+			userId: UiStore.currentUser,
 			rating: formData.rating,
 			message: formData.message,
 			status: "new",
