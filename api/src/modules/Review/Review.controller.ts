@@ -13,7 +13,10 @@ const getReviews = async (req: Request, res: Response, next: NextFunction) => {
 		const reviews = await Review.find({
 			...(userId ? { userId: userId } : {}),
 			...(hotelId ? { hotelId: hotelId } : {}),
-		});
+		})
+			.lean()
+			.populate("hotelId", ["name", "_id"])
+			.populate("userId", ["username", "_id"]);
 		res.json(reviews);
 	} catch (err) {
 		next(err);
@@ -25,14 +28,10 @@ const getReviewsByUser = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
-		const { user } = req as AuthRequest;
+	const { user } = req as AuthRequest;
 
-		req.query.userId = user._id;
-		return await getReviews(req, res, next);
-	} catch (err) {
-		next(err);
-	}
+	req.query.userId = user._id;
+	return await getReviews(req, res, next);
 };
 
 const getReviewsByHotel = async (
@@ -40,14 +39,10 @@ const getReviewsByHotel = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
-		const hotelId = req.params._id;
+	const hotelId = req.params._id;
 
-		req.query.hotelId = hotelId;
-		return await getReviews(req, res, next);
-	} catch (err) {
-		next(err);
-	}
+	req.query.hotelId = hotelId;
+	return await getReviews(req, res, next);
 };
 
 const getReviewById = async (

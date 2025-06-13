@@ -25,7 +25,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ hotelId }) => {
 	const [isSuccess, setIsSuccess] = useState<Boolean>(false);
 	const [error, setError] = useState<Error | undefined>();
 
-	// Function to handle change in register form
+	// Function to handle change in contact form
 	const handleChange = (
 		e:
 			| React.ChangeEvent<HTMLInputElement>
@@ -34,7 +34,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ hotelId }) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	// Function to handle register
+	// Function to handle send message
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 

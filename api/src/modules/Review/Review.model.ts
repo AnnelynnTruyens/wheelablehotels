@@ -6,10 +6,6 @@ import validateModel from "../../validation/validateModel";
 
 const reviewSchema = new mongoose.Schema<Review>(
 	{
-		title: {
-			type: String,
-			required: true,
-		},
 		message: {
 			type: String,
 			required: false,
@@ -24,10 +20,12 @@ const reviewSchema = new mongoose.Schema<Review>(
 		},
 		userId: {
 			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
 			required: true,
 		},
 		hotelId: {
 			type: mongoose.Schema.Types.ObjectId,
+			ref: "Hotel",
 			required: true,
 		},
 	},

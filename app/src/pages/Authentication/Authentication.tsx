@@ -16,6 +16,7 @@ import Accessibility from "../General/Accessibility/Accessibility";
 import Privacy from "../General/Privacy/Privacy";
 import NotFound from "../General/NotFound/NotFound";
 import { useAuth } from "../../contexts/AuthContext";
+import AddReview from "../Hotels/AddReview";
 
 const Authentication = () => {
 	const { onLogin } = useAuth(); // Access onLogin from context
@@ -24,6 +25,7 @@ const Authentication = () => {
 			<Route path={ROUTES.home} element={<Home onLogin={onLogin} />} />
 			<Route path={ROUTES.hotelOverview} element={<Hotels />} />
 			<Route path={ROUTES.hotelDetail.path} element={<HotelDetail />} />
+			<Route path={ROUTES.addReview.path} element={<AddReview />} />
 
 			<Route path={ROUTES.userDashboard} element={<UserDashboard />} />
 			<Route path={ROUTES.favourites} element={<Favourites />} />

@@ -155,3 +155,12 @@
 	align-items: center;
 	margin-bottom: 1rem;
 }
+
+/* Review */
+.review_title {
+	margin-bottom: 0;
+}
+.review_text {
+	margin-top: 0;
+	margin-bottom: 2rem;
+}

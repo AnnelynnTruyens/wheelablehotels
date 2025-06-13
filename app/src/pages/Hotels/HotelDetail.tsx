@@ -18,6 +18,7 @@ import {
 	findFavouriteByHotel,
 } from "../../services/FavouriteService";
 import useStores from "../../hooks/useStores";
+import { getReviewsByHotel, Review } from "../../services/ReviewService";
 
 const HotelDetail = () => {
 	const location = useLocation();
@@ -28,6 +29,7 @@ const HotelDetail = () => {
 	const [hotel, setHotel] = useState<Hotel | undefined>();
 	const [images, setImages] = useState<Image[] | undefined>();
 	const [rooms, setRooms] = useState<Room[] | undefined>();
+	const [reviews, setReviews] = useState<Review[] | undefined>();
 
 	const [favouriteData, setFavouriteData] = useState<Favourite[] | null>(null);
 
@@ -50,7 +52,6 @@ const HotelDetail = () => {
 		getHotelById(hotelId)
 			.then((response) => {
 				setHotel(response.data);
-				console.log(response.data);
 				setIsLoading(false);
 			})
 			.catch((error) => {
@@ -72,6 +73,15 @@ const HotelDetail = () => {
 			})
 			.catch((error) => {
 				console.error("Failed to fetch hotel rooms:", error);
+			});
+
+		getReviewsByHotel({ hotelId })
+			.then((response) => {
+				setReviews(response.data);
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.error("Failed to fetch hotel reviews:", error);
 			});
 
 		findFavourite();
@@ -316,7 +326,7 @@ const HotelDetail = () => {
 										viewBox="0 0 24 24"
 										fill="none"
 									>
-										<g clip-path="url(#clip0_2235_2264)">
+										<g clipPath="url(#clip0_2235_2264)">
 											<path
 												d="M22 12C22 17.5228 17.5228 22 12 22M22 12C22 6.47715 17.5228 2 12 2M22 12H2M12 22C6.47715 22 2 17.5228 2 12M12 22C14.5013 19.2616 15.9228 15.708 16 12C15.9228 8.29203 14.5013 4.73835 12 2M12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2M2 12C2 6.47715 6.47715 2 12 2"
 												strokeWidth="2"
@@ -386,22 +396,37 @@ const HotelDetail = () => {
 							<Rating rating={4} />
 							<p>(4/5)</p>
 						</div>
-						<button type="button">Add review</button>
+						<Link
+							className={styles.button}
+							to={`${ROUTES.addReview.to}${hotel.name}`}
+							state={{ hotelId: hotelId, hotelName: hotel.name }}
+						>
+							Add review
+						</Link>
 					</div>
 					<div className={styles.reviews}>
-						<ReviewCard
-							username="JohnDoe"
-							rating={5}
-							review="Amazing hotel! Super accessible room. I loved it!"
-						/>
-						<ReviewCard
-							username="Janie"
-							rating={3}
-							review="Good hostel, nice rooms. The carpet in the hallways was really hard to navigate for me."
-						/>
-						<ReviewCard username="wheelchairuser483" rating={4} review="" />
+						{reviews && reviews.length > 0 ? (
+							reviews.map((review) => {
+								return (
+									<ReviewCard
+										key={`review_${review._id}`}
+										username={review.userId.username}
+										rating={review.rating}
+										review={review.message}
+									/>
+								);
+							})
+						) : (
+							<NoResults insert="reviews" />
+						)}
 					</div>
-					<button type="button">Add review</button>
+					<Link
+						className={styles.button}
+						to={`${ROUTES.addReview.to}${hotel.name}`}
+						state={{ hotelId: hotelId, hotelName: hotel.name }}
+					>
+						Add review
+					</Link>
 				</section>
 				<section>
 					<h2 className={styles.subtitle}>Noticed a mistake?</h2>

@@ -109,6 +109,11 @@ const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
 							/>
 
 							<Route
+								path={ROUTES.addReview.path}
+								element={<Login onLogin={onLogin} />}
+							/>
+
+							<Route
 								path={ROUTES.notFound}
 								element={<Login onLogin={onLogin} />}
 							/>

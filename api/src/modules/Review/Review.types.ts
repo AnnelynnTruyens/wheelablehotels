@@ -4,7 +4,6 @@ import { Hotel } from "../Hotel/Hotel.types";
 
 export type Review = Document & {
 	_id?: string;
-	title: string;
 	message?: string;
 	rating: Number;
 	status: string;

@@ -4,7 +4,7 @@ import styles from "./ReviewCard.module.css";
 interface ReviewCardProps {
 	username: string;
 	rating: number;
-	review: string;
+	review?: string;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({

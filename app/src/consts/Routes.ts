@@ -2,6 +2,7 @@ const ROUTES = {
 	home: "/",
 	hotelOverview: "/search",
 	hotelDetail: { path: "/hotel/:hotelName", to: "/hotel/" },
+	addReview: { path: "/hotel/review/:hotelName/", to: "/hotel/review/" },
 
 	login: "/login",
 	register: "/register",

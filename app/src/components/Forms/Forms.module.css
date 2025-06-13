@@ -206,3 +206,53 @@
 	object-fit: cover;
 	border-radius: var(--border-radius-small);
 }
+
+.rating_group {
+	display: flex;
+	column-gap: 0.5rem;
+}
+
+.rating_label {
+	cursor: pointer;
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.radio_input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.rating {
+	transition: 0.3s;
+}
+
+.rating:hover,
+.rating:focus {
+	transform: scale(1.1);
+	transition: 0.3s;
+}
+
+.rating_filled {
+	color: var(--primary-dark);
+	transition: 0.3s;
+}
+
+.rating_empty {
+	color: var(--primary-light);
+	transition: 0.3s;
+}
+
+.rating_label input:focus + .rating {
+	outline: 2px solid var(--primary-dark);
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+
+.selected_rating {
+	margin-top: 0.5rem;
+	color: var(--black);
+}
