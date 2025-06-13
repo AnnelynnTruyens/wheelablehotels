@@ -366,7 +366,7 @@ const HotelDetail = () => {
 								images.map((image) => {
 									return (
 										<img
-											src={`http://localhost:${process.env.VITE_SERVER_URL}${image.imageUrl}`}
+											src={`${process.env.VITE_SERVER_URL}${image.imageUrl}`}
 											alt={image.alt}
 											key={`image_${image._id}`}
 											className={styles.image}
