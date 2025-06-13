@@ -39,7 +39,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
 			<img
 				src={
 					image
-						? `http://localhost:${process.env.PORT}${image.imageUrl}`
+						? `http://localhost:${process.env.VITE_SERVER_URL}${image.imageUrl}`
 						: "/Icon_wheelchair_blue-white.png"
 				}
 				alt={image ? `${image.alt}` : "No hotel image found"}

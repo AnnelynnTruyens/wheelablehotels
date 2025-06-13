@@ -52,7 +52,6 @@ const HotelDetail = () => {
 		getHotelById(hotelId)
 			.then((response) => {
 				setHotel(response.data);
-				console.log(response.data);
 				setIsLoading(false);
 			})
 			.catch((error) => {
@@ -367,7 +366,7 @@ const HotelDetail = () => {
 								images.map((image) => {
 									return (
 										<img
-											src={`http://localhost:${process.env.PORT}${image.imageUrl}`}
+											src={`http://localhost:${process.env.VITE_SERVER_URL}${image.imageUrl}`}
 											alt={image.alt}
 											key={`image_${image._id}`}
 											className={styles.image}
