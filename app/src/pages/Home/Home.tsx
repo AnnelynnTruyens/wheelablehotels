@@ -125,9 +125,11 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 							filteredHotels.map((hotel) => {
 								return (
 									<HotelHighlight
+										key={`hotel_${hotel._id}`}
 										hotelName={hotel.name}
 										hotelId={hotel._id}
 										location={hotel.location}
+										rating={hotel.rating}
 									/>
 								);
 							})

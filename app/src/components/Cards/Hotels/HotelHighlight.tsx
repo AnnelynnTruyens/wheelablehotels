@@ -9,12 +9,14 @@ interface HotelHighlightProps {
 	hotelName: string | undefined;
 	hotelId: string;
 	location: string | undefined;
+	rating?: number | undefined;
 }
 
 const HotelHighlight: React.FC<HotelHighlightProps> = ({
 	hotelName,
 	hotelId,
 	location,
+	rating,
 }) => {
 	const [image, setImage] = useState<Image | undefined>();
 
@@ -54,7 +56,7 @@ const HotelHighlight: React.FC<HotelHighlightProps> = ({
 				<p className={styles.highlight_location}>
 					{location ? location : "location"}
 				</p>
-				<Rating rating={4} />
+				{rating ? <Rating rating={rating} /> : null}
 			</div>
 		</div>
 	);

@@ -65,7 +65,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
 						})}
 					</ul>
 				</div>
-				{rating ? <Rating rating={rating} /> : <Rating rating={0} />}
+				{rating ? <Rating rating={rating} /> : null}
 			</div>
 		</div>
 	);
