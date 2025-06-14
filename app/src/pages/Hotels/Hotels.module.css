@@ -3,29 +3,6 @@
 	margin: 3rem;
 }
 
-.button {
-	border-radius: 5rem;
-	border: none;
-	padding: 0.5rem 1.5rem;
-	font-size: 1em;
-	font-weight: 400;
-	background-color: var(--primary);
-	color: var(--white);
-	cursor: pointer;
-	text-decoration: none;
-}
-
-.button:hover {
-	background-color: var(--primary-dark);
-	color: var(--white);
-}
-
-.button:focus,
-.button:focus-visible {
-	outline: 4px auto -webkit-focus-ring-color;
-	background-color: var(--primary);
-}
-
 /* Overview */
 .content_flex {
 	display: flex;

@@ -414,7 +414,7 @@ const HotelDetail = () => {
 							)}
 						</div>
 						<Link
-							className={styles.button}
+							className="button"
 							to={`${ROUTES.addReview.to}${hotel.name}`}
 							state={{ hotelId: hotelId, hotelName: hotel.name }}
 						>
@@ -438,7 +438,7 @@ const HotelDetail = () => {
 						)}
 					</div>
 					<Link
-						className={styles.button}
+						className="button"
 						to={`${ROUTES.addReview.to}${hotel.name}`}
 						state={{ hotelId: hotelId, hotelName: hotel.name }}
 					>
@@ -449,7 +449,7 @@ const HotelDetail = () => {
 					<h2 className={styles.subtitle}>Noticed a mistake?</h2>
 					<Link
 						to={ROUTES.contact}
-						className={styles.button}
+						className="button"
 						state={{ hotelId: hotelId, hotelName: hotel.name }}
 					>
 						Report a mistake
