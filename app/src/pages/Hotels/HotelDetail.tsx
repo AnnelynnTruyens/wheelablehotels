@@ -365,7 +365,17 @@ const HotelDetail = () => {
 										</>
 									)}
 								</div>
-								<a href="#reviews">{reviews?.length} review(s)</a>
+								<a
+									href="#reviews"
+									onClick={(e) => {
+										e.preventDefault(); // Prevent default jump
+										document
+											.getElementById("reviews")
+											?.scrollIntoView({ behavior: "smooth" });
+									}}
+								>
+									{reviews?.length} review(s)
+								</a>
 							</div>
 						</div>
 						<div className={styles.images}>
