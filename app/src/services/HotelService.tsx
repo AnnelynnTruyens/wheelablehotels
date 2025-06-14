@@ -2,6 +2,7 @@ import { AccessibilityFeature } from "./AccessibilityFeatureService";
 import { Amenity } from "./AmenityService";
 import { API } from "./ApiService";
 import { User } from "./AuthService";
+import qs from "query-string";
 
 export type Hotel = {
 	_id: string;
@@ -20,12 +21,20 @@ export type Hotel = {
 
 export type HotelBody = Omit<Hotel, "_id">;
 
+type UserQuery = {
+	userId?: string;
+};
+
 const getHotels = () => {
 	return API.get<Hotel[]>(`/hotels`);
 };
 
 const getHotelById = (id: string) => {
 	return API.get<Hotel>(`/hotels/${id}`);
+};
+
+const getHotelsByUser = (query: UserQuery = {}) => {
+	return API.get<Hotel[]>(`/hotels?${qs.stringify(query)}`);
 };
 
 const createHotel = (hotel: HotelBody) => {
@@ -40,4 +49,11 @@ const deleteHotel = (id: string) => {
 	return API.delete<Hotel>(`/hotels/${id}`);
 };
 
-export { getHotels, getHotelById, createHotel, updateHotel, deleteHotel };
+export {
+	getHotels,
+	getHotelById,
+	getHotelsByUser,
+	createHotel,
+	updateHotel,
+	deleteHotel,
+};

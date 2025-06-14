@@ -1,16 +1,24 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import styles from "./UserDashboard.module.css";
 import useStores from "../../../hooks/useStores";
 import { useEffect, useState } from "react";
 import ROUTES from "../../../consts/Routes";
 import Loading from "../../../components/Loading/Loading";
 import { useAuth } from "../../../contexts/AuthContext";
+import { getHotelsByUser, Hotel } from "../../../services/HotelService";
+import NoResults from "../../../components/NoResults/NoResults";
+import HotelHighlight from "../../../components/Cards/Hotels/HotelHighlight";
+import Error from "../../../components/Error/Error";
 
 const UserDashboard = () => {
 	const navigate = useNavigate();
 
-	const [isLoading, setIsLoading] = useState<Boolean>(true);
+	const [hotels, setHotels] = useState<Hotel[]>([]);
 
-	const { logout } = useAuth();
+	const [isLoading, setIsLoading] = useState<Boolean>(true);
+	const [error, setError] = useState<Error | undefined>();
+
+	const { token, logout } = useAuth();
 	const { UiStore } = useStores();
 
 	// Wait for currentUser to be set
@@ -36,6 +44,22 @@ const UserDashboard = () => {
 		waitForUser();
 	}, [UiStore, navigate]);
 
+	useEffect(() => {
+		if (!token) {
+			return;
+		}
+		const userId = UiStore.currentUser?._id;
+		getHotelsByUser({ userId })
+			.then((response) => {
+				setHotels(response.data);
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				setError(error);
+				setIsLoading(false);
+			});
+	}, [token, logout]);
+
 	// Logout function
 	const handleLogout = () => {
 		logout();
@@ -49,12 +73,43 @@ const UserDashboard = () => {
 				<Loading />
 			</main>
 		);
+	else if (error)
+		return (
+			<main id="main" className="main">
+				<title>Dashboard | Wheelable Hotels</title>
+
+				<Error message={error.message} />
+			</main>
+		);
 	else
 		return (
 			<main id="main" className="main">
 				<title>Dashboard | Wheelable Hotels</title>
-				<h1>Welcome {UiStore.currentUser?.username}!</h1>
-				<button onClick={handleLogout}>Log out</button>
+				<div className={styles.top}>
+					<h1>Welcome {UiStore.currentUser?.username}!</h1>
+					<button onClick={handleLogout}>Log out</button>
+				</div>
+				<h2>My added hotels</h2>
+				<div className={styles.hotels}>
+					{hotels && hotels.length > 0 ? (
+						hotels.map((hotel: Hotel) => {
+							return (
+								<HotelHighlight
+									key={`hotel_${hotel._id}`}
+									hotelName={hotel.name}
+									hotelId={hotel._id}
+									location={hotel.location}
+									rating={hotel.rating}
+								/>
+							);
+						})
+					) : (
+						<NoResults insert="hotels" />
+					)}
+				</div>
+				<Link to={ROUTES.addHotel} className="button">
+					Add a new hotel
+				</Link>
 			</main>
 		);
 };

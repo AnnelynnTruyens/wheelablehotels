@@ -18,6 +18,7 @@ import Accessibility from "../pages/General/Accessibility/Accessibility";
 import Privacy from "../pages/General/Privacy/Privacy";
 import Footer from "../components/Footer/Footer";
 import { useAuth } from "../contexts/AuthContext"; // Import useAuth
+import Profile from "../pages/User/Profile/Profile";
 
 // Define key for saving token in localStorage
 const key = "AUTH_TOKEN";
@@ -93,6 +94,7 @@ const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
 							<Route path={ROUTES.contact} element={<Contact />} />
 							<Route path={ROUTES.accessibility} element={<Accessibility />} />
 							<Route path={ROUTES.privacy} element={<Privacy />} />
+							<Route path={ROUTES.userProfile.path} element={<Profile />} />
 
 							<Route
 								path={ROUTES.login}

@@ -19,6 +19,7 @@ import {
 } from "../../services/FavouriteService";
 import useStores from "../../hooks/useStores";
 import { getReviewsByHotel, Review } from "../../services/ReviewService";
+import GoBack from "../../components/Buttons/GoBack";
 
 const HotelDetail = () => {
 	const location = useLocation();
@@ -184,7 +185,7 @@ const HotelDetail = () => {
 			<main id="main" className="main">
 				<title>Hotel detail | Wheelable Hotels</title>
 				<div className={styles.buttons}>
-					<Link to={ROUTES.hotelOverview}>Back to list</Link>
+					<GoBack text="Back to list" />
 					{isFavourite ? (
 						<button
 							type="button"
@@ -237,7 +238,13 @@ const HotelDetail = () => {
 						<p className={styles.username}>
 							Added by{" "}
 							{hotel.userId.username ? (
-								<Link to={`${ROUTES.userProfile.to}${hotel.userId.username}`}>
+								<Link
+									to={`${ROUTES.userProfile.to}${hotel.userId.username}`}
+									state={{
+										hotelId: hotel.userId._id,
+										username: hotel.userId.username,
+									}}
+								>
 									{hotel.userId.username}
 								</Link>
 							) : (

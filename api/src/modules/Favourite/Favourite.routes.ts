@@ -1,6 +1,5 @@
 import express from "express";
 import {
-	getFavourites,
 	getFavouritesByUser,
 	getFavouriteById,
 	createFavourite,
@@ -10,7 +9,6 @@ import {
 
 const router = express.Router();
 
-router.get("/favourites/all", getFavourites);
 router.get("/favourites", getFavouritesByUser);
 router.get("/favourites/:id", getFavouriteById);
 router.post("/favourites", createFavourite);

@@ -123,6 +123,7 @@ const Favourites = () => {
 								hotelName={favourite.hotel?.name}
 								hotelId={favourite.hotelId}
 								location={favourite.hotel?.location}
+								rating={favourite.hotel?.rating}
 							/>
 						);
 					})

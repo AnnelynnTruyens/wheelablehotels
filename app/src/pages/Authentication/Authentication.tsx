@@ -4,7 +4,7 @@ import ROUTES from "../../consts/Routes";
 import Home from "../Home/Home";
 import Hotels from "../Hotels/Hotels";
 import HotelDetail from "../Hotels/HotelDetail";
-import Profile from "../User/Profile.tsx/Profile";
+import Profile from "../User/Profile/Profile";
 import Favourites from "../User/Favourites/Favourites";
 import UserDashboard from "../User/UserDashboard/UserDashboard";
 import AddHotel from "../Hotels/AddHotel";

@@ -19,7 +19,11 @@ const calculateAverageRating = async (
 
 const getHotels = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const hotels = await Hotel.find({})
+		const { userId } = req.query;
+
+		const hotels = await Hotel.find({
+			...(userId ? { userId: userId } : {}),
+		})
 			.populate("amenities")
 			.populate("accessibilityFeatures");
 
@@ -65,6 +69,16 @@ const getHotelById = async (
 	} catch (err) {
 		next(err);
 	}
+};
+
+const getHotelsByUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const userId = req.params.id;
+	req.query.userId = userId;
+	return await getHotels(req, res, next);
 };
 
 const createHotel = async (req: Request, res: Response, next: NextFunction) => {
