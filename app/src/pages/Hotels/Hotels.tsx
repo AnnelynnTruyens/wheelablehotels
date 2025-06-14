@@ -96,7 +96,7 @@ const Hotels = () => {
 
 	if (isLoading)
 		return (
-			<main id="main" className={styles.main}>
+			<main id="main" className="main">
 				<title>Hotels | Wheelable Hotels</title>
 				<SearchForm
 					searchValue={searchValue}
@@ -115,7 +115,7 @@ const Hotels = () => {
 		);
 	else if (error)
 		return (
-			<main id="main" className={styles.main}>
+			<main id="main" className="main">
 				<title>Hotels | Wheelable Hotels</title>
 				<SearchForm
 					searchValue={searchValue}
@@ -134,7 +134,7 @@ const Hotels = () => {
 		);
 	else
 		return (
-			<main id="main" className={styles.main}>
+			<main id="main" className="main">
 				<title>Hotels | Wheelable Hotels</title>
 				<SearchForm
 					searchValue={searchValue}

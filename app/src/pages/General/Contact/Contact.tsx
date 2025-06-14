@@ -8,7 +8,7 @@ const Contact = () => {
 	const hotelName = location.state?.hotelName;
 
 	return (
-		<main id="main" className={styles.main}>
+		<main id="main" className="main">
 			<title>Contact | Wheelable Hotels</title>
 			<h1 className={styles.contact_title}>Contact</h1>
 			{hotelName ? (

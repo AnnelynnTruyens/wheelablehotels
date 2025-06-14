@@ -46,6 +46,10 @@ body {
 	margin: 0;
 }
 
+.main {
+	margin: 3rem;
+}
+
 h1 {
 	font-size: 3.2em;
 	line-height: 1.1;

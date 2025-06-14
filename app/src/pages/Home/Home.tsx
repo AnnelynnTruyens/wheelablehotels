@@ -55,7 +55,7 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 	}, [hotels]);
 
 	return (
-		<main id="main" className={styles.main}>
+		<main id="main" className={styles.main_home}>
 			<title>Wheelable Hotels</title>
 			<div className={styles.hero}>
 				<SearchForm

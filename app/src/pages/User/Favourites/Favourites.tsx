@@ -111,7 +111,7 @@ const Favourites = () => {
 			</main>
 		);
 	return (
-		<main id="main" className={styles.main}>
+		<main id="main" className="main">
 			<title>Favourites | Wheelable Hotels</title>
 			<h1>Favourites</h1>
 			<div className={styles.favourites}>

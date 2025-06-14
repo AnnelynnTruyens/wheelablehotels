@@ -7,7 +7,7 @@ const AddReview = () => {
 	const hotelId = location.state?.hotelId;
 	const hotelName = location.state?.hotelName;
 	return (
-		<main id="main" className={styles.main}>
+		<main id="main" className="main">
 			<h1 className={styles.review_title}>Add review</h1>
 			<p className={styles.review_text}>Hotel: {hotelName}</p>
 			<ReviewForm hotelId={hotelId} />

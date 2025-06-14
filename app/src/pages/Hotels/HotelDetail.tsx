@@ -160,28 +160,28 @@ const HotelDetail = () => {
 
 	if (isLoading)
 		return (
-			<main id="main" className={styles.main}>
+			<main id="main" className="main">
 				<title>Hotel detail | Wheelable Hotels</title>
 				<Loading />
 			</main>
 		);
 	else if (error)
 		return (
-			<main id="main" className={styles.main}>
+			<main id="main" className="main">
 				<title>Hotel detail | Wheelable Hotels</title>
 				<Error message={error.message} />
 			</main>
 		);
 	else if (!hotel)
 		return (
-			<main id="main" className={styles.main}>
+			<main id="main" className="main">
 				<title>Hotel detail | Wheelable Hotels</title>
 				<NoResults insert="hotel" />
 			</main>
 		);
 	else
 		return (
-			<main id="main" className={styles.main}>
+			<main id="main" className="main">
 				<title>Hotel detail | Wheelable Hotels</title>
 				<div className={styles.buttons}>
 					<Link to={ROUTES.hotelOverview}>Back to list</Link>

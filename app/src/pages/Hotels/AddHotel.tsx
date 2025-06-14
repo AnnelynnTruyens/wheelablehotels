@@ -15,6 +15,7 @@ import Loading from "../../components/Loading/Loading";
 import Error from "../../components/Error/Error";
 import { Amenity } from "../../services/AmenityService";
 import { AccessibilityFeature } from "../../services/AccessibilityFeatureService";
+import SuccessMessage from "../../components/Forms/Partials/SuccessMessage";
 
 const AddHotel = () => {
 	const navigate = useNavigate();
@@ -25,6 +26,7 @@ const AddHotel = () => {
 
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
+	const [isSuccess, setIsSucces] = useState<Boolean>(false);
 
 	const { token, logout } = useAuth();
 	const { UiStore } = useStores();
@@ -206,8 +208,8 @@ const AddHotel = () => {
 		setIsLoading(true);
 		updateHotel(hotelId, hotelBody)
 			.then(() => {
+				setIsSucces(true);
 				setIsLoading(false);
-				navigate(ROUTES.home);
 			})
 			.catch((error) => {
 				setError(error);
@@ -215,21 +217,31 @@ const AddHotel = () => {
 			});
 	};
 
-	if (isLoading) {
-		<main id="main">
-			<title>Add hotel | Wheelable Hotels</title>
+	if (isLoading)
+		return (
+			<main id="main" className="main">
+				<title>Add hotel | Wheelable Hotels</title>
 
-			<Loading />
-		</main>;
-	} else if (error) {
-		<main id="main">
-			<title>Add hotel | Wheelable Hotels</title>
+				<Loading />
+			</main>
+		);
+	else if (isSuccess)
+		return (
+			<main id="main" className="main">
+				<title>Add hotel | Wheelable Hotels</title>
 
-			<Error message={error.message} />
-		</main>;
-	}
+				<SuccessMessage message="Hotel added successfully. Thank you for helping us make travelling more accessible!" />
+			</main>
+		);
+	else if (error)
+		return (
+			<main id="main" className="main">
+				<title>Add hotel | Wheelable Hotels</title>
 
-	if (step === 1)
+				<Error message={error.message} />
+			</main>
+		);
+	else if (step === 1)
 		return (
 			<main id="main">
 				<title>Add hotel | Wheelable Hotels</title>
