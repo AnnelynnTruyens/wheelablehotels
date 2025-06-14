@@ -47,10 +47,17 @@ const Home: React.FC<HomeProps> = ({ onLogin }) => {
 
 	useEffect(() => {
 		if (hotels.length > 0) {
-			const completedHotels = hotels.filter(
-				(hotel) => hotel.status === "completed"
-			);
-			setFilteredHotels(completedHotels);
+			const ratedCompletedHotels = hotels
+				.filter(
+					(hotel) =>
+						hotel.status === "completed" &&
+						hotel.rating !== null &&
+						hotel.rating !== undefined
+				)
+				.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+				.slice(0, 5); // Top 5
+
+			setFilteredHotels(ratedCompletedHotels);
 		}
 	}, [hotels]);
 

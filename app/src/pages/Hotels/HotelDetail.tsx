@@ -365,7 +365,7 @@ const HotelDetail = () => {
 										</>
 									)}
 								</div>
-								<a href="#reviews">{reviews?.length} reviews</a>
+								<a href="#reviews">{reviews?.length} review(s)</a>
 							</div>
 						</div>
 						<div className={styles.images}>
