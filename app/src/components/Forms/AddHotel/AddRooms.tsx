@@ -63,7 +63,7 @@ const AddRooms: React.FC<AddRoomsProps> = ({
 
 			<form method="post" className={styles.form} onSubmit={handleSubmit}>
 				{roomIds.map((roomId) => (
-					<div key={roomId} className={styles.roomContainer}>
+					<div key={roomId} className={styles.room_container}>
 						<AddRoom
 							onDataChange={(data) => handleRoomDataChange(roomId, data)}
 							roomId={roomId}

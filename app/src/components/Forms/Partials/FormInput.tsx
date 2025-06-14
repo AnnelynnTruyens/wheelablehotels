@@ -26,7 +26,7 @@ const FormInput: React.FC<FormInputProps> = ({
 	return (
 		<div className={styles.form_input}>
 			<label className={styles.label} htmlFor={id}>
-				{label}
+				{label} {required ? "*" : null}
 			</label>
 			<input
 				className={styles.input}

@@ -24,7 +24,7 @@ const FormTextarea: React.FC<FormTextareaProps> = ({
 	return (
 		<div className={styles.form_input}>
 			<label className={styles.label} htmlFor={id}>
-				{label}
+				{label} {required ? "*" : null}
 			</label>
 			<textarea
 				className={styles.input_textarea}
