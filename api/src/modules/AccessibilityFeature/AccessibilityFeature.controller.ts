@@ -49,7 +49,7 @@ const createAccessibilityFeature = async (
 			const result = await accessibilityFeature.save();
 			res.status(200).json(result);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -79,7 +79,7 @@ const updateAccessibilityFeature = async (
 			}
 			res.json(accessibilityFeature);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -104,7 +104,7 @@ const deleteAccessibilityFeature = async (
 			}
 			res.json({});
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);

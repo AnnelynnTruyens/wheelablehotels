@@ -14,7 +14,7 @@ const getMessages = async (req: Request, res: Response, next: NextFunction) => {
 			const messages = await Message.find({});
 			res.json(messages);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -39,7 +39,7 @@ const getMessageById = async (
 			}
 			res.json(message);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -79,7 +79,7 @@ const updateMessage = async (
 			}
 			res.json(message);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -102,7 +102,7 @@ const deleteMessage = async (
 			}
 			res.json({});
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);

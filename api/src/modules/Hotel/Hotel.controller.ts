@@ -87,7 +87,16 @@ const createHotel = async (req: Request, res: Response, next: NextFunction) => {
 		const hotel = new Hotel({ ...req.body, userId: user._id });
 		const result = await hotel.save();
 		res.status(200).json(result);
-	} catch (err) {
+	} catch (err: any) {
+		// MongoDB duplicate key error
+		if (err.code === 11000) {
+			return next(
+				new AuthError(
+					`It seems like someone already added this hotel. If you're sure that's not the case, try adding something extra to the hotel name (like the city).`,
+					409 // Conflict status code
+				)
+			);
+		}
 		next(err);
 	}
 };
@@ -138,11 +147,18 @@ const deleteHotel = async (req: Request, res: Response, next: NextFunction) => {
 			}
 			res.json({});
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
 	}
 };
 
-export { getHotels, getHotelById, createHotel, updateHotel, deleteHotel };
+export {
+	getHotels,
+	getHotelsByUser,
+	getHotelById,
+	createHotel,
+	updateHotel,
+	deleteHotel,
+};

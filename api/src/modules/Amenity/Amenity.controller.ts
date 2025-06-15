@@ -47,7 +47,7 @@ const createAmenity = async (
 			const result = await amenity.save();
 			res.status(200).json(result);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -73,7 +73,7 @@ const updateAmenity = async (
 			}
 			res.json(amenity);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -96,7 +96,7 @@ const deleteAmenity = async (
 			}
 			res.json({});
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);

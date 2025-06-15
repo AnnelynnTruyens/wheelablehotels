@@ -1,4 +1,3 @@
-import { Document } from "mongodb";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -32,50 +31,28 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", function (next) {
-	const user: Document = this;
+	const user = this as any;
 
-	if (!user.isModified("password")) {
-		return next();
-	}
+	if (!user.isModified("password")) return next();
 
-	try {
-		bcrypt.hash(
-			user.password,
-			10,
-			function (err: Error | null, hash: string | undefined) {
-				if (err) {
-					throw err;
-				}
-				if (!hash) {
-					throw new Error("Hash is undefined");
-				}
-
-				user.password = hash;
-				return next();
-			}
-		);
-	} catch (err: any) {
-		return next(err);
-	}
+	bcrypt.hash(user.password, 10, (err, hash) => {
+		if (err) return next(err);
+		user.password = hash;
+		next();
+	});
 });
 
 userSchema.methods = {
-	comparePassword: function (password: string) {
+	comparePassword: function (candidatePassword: string) {
 		const user = this;
 		return new Promise((resolve, reject) => {
-			bcrypt.compare(
-				password,
-				user.password,
-				(err: Error | null, isMatch: boolean | undefined) => {
-					if (isMatch) {
-						resolve(true);
-					} else if (err) {
-						reject(err);
-					} else {
-						reject(new Error("isMatch is undefined"));
-					}
+			bcrypt.compare(candidatePassword, user.password, (err, isMatch) => {
+				if (err) return reject(err);
+				if (typeof isMatch === "undefined") {
+					return reject(new Error("isMatch is undefined"));
 				}
-			);
+				resolve(isMatch);
+			});
 		});
 	},
 	generateToken: function () {
@@ -86,12 +63,12 @@ userSchema.methods = {
 	},
 };
 
+// Remove password from output
 userSchema.set("toJSON", {
 	transform: function (doc, ret) {
 		delete ret.password;
 	},
 });
-
 userSchema.set("toObject", {
 	transform: function (doc, ret) {
 		delete ret.password;

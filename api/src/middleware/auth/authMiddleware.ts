@@ -24,7 +24,7 @@ const passportHandler = (strategy: string) => {
 					return next(err);
 				}
 				if (!user) {
-					return next(new AuthError());
+					return next(new AuthError("Authentication error", 401));
 				} else {
 					req.user = user;
 					return next();

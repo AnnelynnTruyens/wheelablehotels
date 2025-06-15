@@ -11,7 +11,17 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 		const user = new User({ ...req.body });
 		const result = await user.save();
 		res.status(200).json(result);
-	} catch (err) {
+	} catch (err: any) {
+		// MongoDB duplicate key error
+		if (err.code === 11000) {
+			const duplicatedField = Object.keys(err.keyPattern)[0];
+			return next(
+				new AuthError(
+					`A user with that ${duplicatedField} already exists.`,
+					409 // Conflict status code
+				)
+			);
+		}
 		next(err);
 	}
 };
@@ -89,7 +99,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 			}
 			res.json(user);
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);
@@ -130,7 +140,7 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 			}
 			res.json({});
 		} else {
-			throw new AuthError();
+			throw new AuthError("Authentication error", 401);
 		}
 	} catch (err) {
 		next(err);

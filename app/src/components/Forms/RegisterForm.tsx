@@ -5,7 +5,6 @@ import FormInput from "./Partials/FormInput";
 import { useState } from "react";
 import { login, register } from "../../services/AuthService";
 import Loading from "../Loading/Loading";
-import Error from "../Error/Error";
 
 // Type register component
 interface RegisterFormProps {
@@ -22,7 +21,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 		role: "user",
 	});
 	const [isLoading, setIsLoading] = useState<Boolean>(false);
-	const [error, setError] = useState<Error | undefined>();
+	const [error, setError] = useState<string | undefined>();
 
 	const { username, email, password, role } = formData;
 
@@ -41,24 +40,27 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 				login({ email, password })
 					.then(({ data }) => {
 						onLogin(data.token);
-						navigate(ROUTES.home);
+						navigate(ROUTES.userDashboard);
 						setIsLoading(false);
 					})
 					.catch((error) => {
-						setError(error);
+						const message =
+							error.response?.data?.message ||
+							"Login failed. Please try again.";
+						setError(message);
 						navigate(ROUTES.login);
 						setIsLoading(false);
 					});
 			})
 			.catch((error) => {
-				setError(error);
-				navigate(ROUTES.register);
+				const message =
+					error.response?.data?.message || "Register failed. Please try again.";
+				setError(message);
 				setIsLoading(false);
 			});
 	};
 
 	if (isLoading) return <Loading />;
-	else if (error) return <Error message={error.message} />;
 	else
 		return (
 			<div className={styles.container_center}>
@@ -96,6 +98,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 						required={true}
 						autocomplete="new-password"
 					/>
+					{error && <p className={styles.error}>{error}</p>}
 					<div className={styles.buttons}>
 						<button type="submit">Register</button>
 						<Link to={ROUTES.login}>I already have an account</Link>

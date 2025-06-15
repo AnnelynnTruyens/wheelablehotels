@@ -7,9 +7,10 @@ import React, { useState } from "react";
 
 interface AddStartProps {
 	goToNext: (name: string) => void; // Callback to handle going to next step
+	errorMessage?: string;
 }
 
-const AddStart: React.FC<AddStartProps> = ({ goToNext }) => {
+const AddStart: React.FC<AddStartProps> = ({ goToNext, errorMessage }) => {
 	const [formData, setFormData] = useState({
 		hotelName: "",
 	});
@@ -39,6 +40,7 @@ const AddStart: React.FC<AddStartProps> = ({ goToNext }) => {
 					onChange={handleChange}
 					required={true}
 				/>
+				{errorMessage && <p className={styles.error}>{errorMessage}</p>}
 				<div className={styles.buttons}>
 					<Link to={ROUTES.home}>Cancel</Link>
 					<button type="submit">Next</button>

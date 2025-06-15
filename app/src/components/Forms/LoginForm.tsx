@@ -40,7 +40,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 					setIsLoading(false);
 				})
 				.catch((error) => {
-					setError(error.message || "Login failed. Please try again.");
+					const message =
+						error.response?.data?.message || "Login failed. Please try again.";
+					setError(message);
 					setIsLoading(false);
 				});
 		} else {

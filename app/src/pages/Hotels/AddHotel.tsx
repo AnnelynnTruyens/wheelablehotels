@@ -27,6 +27,9 @@ const AddHotel = () => {
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const [error, setError] = useState<Error | undefined>();
 	const [isSuccess, setIsSucces] = useState<Boolean>(false);
+	const [startErrorMessage, setStartErrorMessage] = useState<string | null>(
+		null
+	);
 
 	const { token, logout } = useAuth();
 	const { UiStore } = useStores();
@@ -103,7 +106,22 @@ const AddHotel = () => {
 				goToNext();
 			})
 			.catch((error) => {
-				setError(error);
+				const message =
+					error.response?.data?.message ||
+					"An error occurred while adding the hotel.";
+
+				// Check for duplicate key error (MongoDB example)
+				if (
+					error.response?.status === 409 ||
+					message.toLowerCase().includes("duplicate")
+				) {
+					setStartErrorMessage(
+						"It seems like someone already added this hotel. If you're sure that's not the case, try adding something extra to the hotel name (like the city)."
+					);
+				} else {
+					setStartErrorMessage(message);
+				}
+
 				setIsLoading(false);
 			});
 	};
@@ -246,7 +264,10 @@ const AddHotel = () => {
 			<main id="main">
 				<title>Add hotel | Wheelable Hotels</title>
 
-				<AddStart goToNext={handleFirstSubmit} />
+				<AddStart
+					goToNext={handleFirstSubmit}
+					errorMessage={startErrorMessage || undefined}
+				/>
 			</main>
 		);
 	else if (step === 2)
