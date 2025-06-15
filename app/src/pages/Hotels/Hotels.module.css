@@ -128,6 +128,68 @@
 	margin-bottom: 1rem;
 }
 
+.imageModal {
+	border: none;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.85);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	/* Hide the dialog when not open */
+	opacity: 0;
+	pointer-events: none;
+}
+
+.imageModal[open] {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.modalContent {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.modalImage {
+	max-width: 90vw;
+	max-height: 90vh;
+	border-radius: 0.5rem;
+}
+
+.navButton,
+.closeButton {
+	position: absolute;
+	background: rgba(255, 255, 255, 0.2);
+	border: none;
+	color: white;
+	font-size: 2rem;
+	cursor: pointer;
+	z-index: 10;
+}
+
+.closeButton {
+	top: 1rem;
+	right: 1rem;
+}
+
+.navButton {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.navButton:first-of-type {
+	left: 1rem;
+}
+
+.navButton:last-of-type {
+	right: 1rem;
+}
+
 /* Review */
 .review_title {
 	margin-bottom: 0;
