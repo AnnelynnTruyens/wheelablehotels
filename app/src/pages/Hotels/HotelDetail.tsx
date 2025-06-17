@@ -358,6 +358,7 @@ const HotelDetail = () => {
 											height="24"
 											viewBox="0 0 24 24"
 											fill="none"
+											aria-label="email icon"
 										>
 											<path
 												d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6M22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6M22 6L12 13L2 6"
@@ -377,6 +378,7 @@ const HotelDetail = () => {
 											height="24"
 											viewBox="0 0 24 24"
 											fill="none"
+											aria-label="phone icon"
 										>
 											<g clipPath="url(#clip0_2051_1975)">
 												<path
@@ -401,6 +403,7 @@ const HotelDetail = () => {
 											height="24"
 											viewBox="0 0 24 24"
 											fill="none"
+											aria-label="website icon"
 										>
 											<g clipPath="url(#clip0_2235_2264)">
 												<path
@@ -438,13 +441,16 @@ const HotelDetail = () => {
 									<a
 										href="#reviews"
 										onClick={(e) => {
-											e.preventDefault(); // Prevent default jump
-											document
-												.getElementById("reviews")
-												?.scrollIntoView({ behavior: "smooth" });
+											e.preventDefault(); // Prevent default anchor behavior
+											const el = document.getElementById("reviews");
+											if (el) {
+												el.setAttribute("tabIndex", "-1"); // Make it programmatically focusable
+												el.focus(); // Move focus for screen readers / accessibility
+												el.scrollIntoView({ behavior: "smooth" }); // Optional: scroll
+											}
 										}}
 									>
-										{reviews?.length} review(s)
+										{reviews?.length} reviews
 									</a>
 								</div>
 							</div>

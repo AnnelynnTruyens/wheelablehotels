@@ -7,10 +7,21 @@ const Header = () => {
 	const isHomePage = useMatch("/");
 	return (
 		<>
-			<a href="#main" className={styles.skip}>
+			<a
+				onClick={(e) => {
+					e.preventDefault();
+					const main = document.querySelector("main");
+					if (main) {
+						main.setAttribute("tabIndex", "-1"); // Ensure it's focusable
+						main.focus();
+						main.scrollIntoView({ behavior: "smooth" });
+					}
+				}}
+				className={styles.skip}
+				href="#main"
+			>
 				Skip to main content
 			</a>
-
 			<header className={isHomePage ? styles.header_home : styles.header}>
 				{isHomePage ? (
 					<Link to={ROUTES.home}>

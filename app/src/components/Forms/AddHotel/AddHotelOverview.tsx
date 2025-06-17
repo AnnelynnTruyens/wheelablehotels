@@ -502,7 +502,7 @@ const AddHotelOverview: React.FC<AddHotelOverviewProps> = ({
 								<div key={image._id} className={styles.image_item}>
 									<img
 										src={`${process.env.VITE_SERVER_URL}${image.imageUrl}`}
-										alt={`${process.env.VITE_SERVER_URL}${image.alt}`}
+										alt={image.alt}
 									/>
 									<button
 										type="button"
