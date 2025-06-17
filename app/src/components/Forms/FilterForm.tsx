@@ -66,42 +66,44 @@ const FilterForm: React.FC<FilterFormProps> = ({
 	return (
 		<div className={styles.filter_form}>
 			<h2 className={styles.title_small}>Filters</h2>
-			<fieldset className={styles.fieldset}>
-				<legend className={styles.fieldset_legend}>
-					Accessibility features:
-				</legend>
-				<div className={styles.checkboxes}>
-					{accessibilityFeatures.map((feature) => {
-						return (
-							<FormCheckbox
-								key={feature._id}
-								label={feature.name}
-								id={feature._id}
-								name="accessibilityFeatures"
-								value={feature._id}
-								onChange={handleAccessibilityFeatureChange}
-							/>
-						);
-					})}
-				</div>
-			</fieldset>
-			<fieldset className={styles.fieldset}>
-				<legend className={styles.fieldset_legend}>General amenities:</legend>
-				<div className={styles.checkboxes}>
-					{amenities.map((amenity) => {
-						return (
-							<FormCheckbox
-								key={amenity._id}
-								label={amenity.name}
-								id={amenity._id}
-								name="amenities"
-								value={amenity._id}
-								onChange={handleAmenityChange}
-							/>
-						);
-					})}
-				</div>
-			</fieldset>
+			<div className={styles.fieldset_flex}>
+				<fieldset className={styles.fieldset}>
+					<legend className={styles.fieldset_legend}>
+						Accessibility features:
+					</legend>
+					<div className={styles.checkboxes}>
+						{accessibilityFeatures.map((feature) => {
+							return (
+								<FormCheckbox
+									key={feature._id}
+									label={feature.name}
+									id={feature._id}
+									name="accessibilityFeatures"
+									value={feature._id}
+									onChange={handleAccessibilityFeatureChange}
+								/>
+							);
+						})}
+					</div>
+				</fieldset>
+				<fieldset className={styles.fieldset}>
+					<legend className={styles.fieldset_legend}>General amenities:</legend>
+					<div className={styles.checkboxes}>
+						{amenities.map((amenity) => {
+							return (
+								<FormCheckbox
+									key={amenity._id}
+									label={amenity.name}
+									id={amenity._id}
+									name="amenities"
+									value={amenity._id}
+									onChange={handleAmenityChange}
+								/>
+							);
+						})}
+					</div>
+				</fieldset>
+			</div>
 		</div>
 	);
 };

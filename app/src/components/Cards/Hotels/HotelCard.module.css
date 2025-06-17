@@ -5,7 +5,6 @@
 
 	display: flex;
 	flex-direction: row;
-	gap: 1rem;
 
 	border: 1px solid var(--primary);
 	border-radius: var(--border-radius);
@@ -32,7 +31,6 @@
 
 .card_img {
 	width: 20rem;
-	height: auto;
 	object-fit: cover;
 }
 
@@ -64,30 +62,34 @@
 	color: var(--primary-dark);
 }
 
+.card_location {
+	margin: 0.5rem 0;
+}
+
 .card_features {
-	margin-bottom: 0;
+	margin: 0;
 }
 
 .rating {
 	min-width: fit-content;
 }
 
-.rating_filled {
+.rating_filled,
+.rating_filled_detail {
 	color: var(--primary-dark);
 }
 
-.rating_empty {
+.rating_empty,
+.rating_empty_detail {
 	color: var(--primary-light);
 }
 
 .hotel_highlight {
-	height: max-content;
-	width: 20rem;
+	width: 12rem;
 	margin-bottom: 1rem;
 
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
 
 	border: 1px solid var(--primary);
 	border-radius: var(--border-radius);
@@ -114,7 +116,7 @@
 
 .highlight_img {
 	width: 100%;
-	height: 12rem;
+	height: 7rem;
 	object-fit: cover;
 }
 
@@ -137,22 +139,70 @@
 
 .highlight_title {
 	margin: 0;
-	font-size: 1.5em;
+	font-size: 1.2em;
 	color: var(--primary-dark);
+	line-height: 1;
 }
 
-.highlight_features {
-	margin-bottom: 0;
+.highlight_location {
+	font-size: 0.9em;
 }
 
-.rating {
-	min-width: fit-content;
+@media (prefers-color-scheme: dark) {
+	.hotel_card,
+	.hotel_highlight {
+		background-color: var(--primary-light);
+		color: var(--primary-dark);
+	}
+
+	.rating_filled {
+		color: var(--primary-dark);
+	}
+
+	.rating_empty {
+		color: var(--white);
+	}
+
+	.rating_filled_detail {
+		color: var(--primary-verylight);
+	}
+	.rating_empty_detail {
+		color: var(--primary-light);
+	}
 }
 
-.rating_filled {
-	color: var(--primary-dark);
+@media screen and (max-width: 1290px) {
+	.card_img {
+		width: 15rem;
+	}
 }
 
-.rating_empty {
-	color: var(--primary-light);
+@media screen and (max-width: 1000px) {
+	.card_img {
+		width: 10rem;
+	}
+}
+
+@media screen and (max-width: 650px) {
+	.card_location {
+		margin: 0.5rem 0 0.2rem;
+	}
+
+	.card_img {
+		width: 7rem;
+	}
+}
+
+@media screen and (max-width: 570px) {
+	.hotel_card p,
+	.hotel_card li {
+		font-size: 0.8em;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.card_info {
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
 }

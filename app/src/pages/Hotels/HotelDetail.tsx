@@ -253,7 +253,7 @@ const HotelDetail = () => {
 				<main id="main" className="main">
 					<title>Hotel detail | Wheelable Hotels</title>
 					<div className={styles.buttons}>
-						<GoBack text="Back to list" />
+						<GoBack text="Go back" />
 						{isFavourite ? (
 							<button
 								type="button"
@@ -425,12 +425,12 @@ const HotelDetail = () => {
 									<div className={styles.rating}>
 										{hotel.rating ? (
 											<>
-												<Rating rating={hotel.rating} />
+												<Rating rating={hotel.rating} hotelDetail />
 												<p>({hotel.rating}/5)</p>
 											</>
 										) : (
 											<>
-												<Rating rating={0} />
+												<Rating rating={0} hotelDetail />
 												<p>(-/5)</p>
 											</>
 										)}
@@ -496,12 +496,12 @@ const HotelDetail = () => {
 							<div className={styles.rating}>
 								{hotel.rating ? (
 									<>
-										<Rating rating={hotel.rating} />
+										<Rating rating={hotel.rating} hotelDetail />
 										<p>({hotel.rating}/5)</p>
 									</>
 								) : (
 									<>
-										<Rating rating={0} />
+										<Rating rating={0} hotelDetail />
 										<p>(-/5)</p>
 									</>
 								)}

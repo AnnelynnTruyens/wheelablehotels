@@ -42,3 +42,41 @@
 	color: var(--secondary-light);
 	transition: 0.3s;
 }
+
+@media screen and (max-width: 750px) {
+	.footer {
+		padding: 2rem 4rem;
+	}
+	.logo {
+		height: 2.5rem;
+	}
+	.nav {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 570px) {
+	.footer {
+		padding: 2rem 3rem;
+	}
+	.logo {
+		height: 2rem;
+	}
+	.nav {
+		font-size: 0.8em;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.footer {
+		flex-wrap: wrap;
+		justify-content: center;
+		column-gap: 2rem;
+	}
+	.nav {
+		width: fit-content;
+	}
+	.nav ul {
+		padding: 0;
+	}
+}

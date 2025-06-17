@@ -30,6 +30,7 @@
 	fill: none;
 	stroke: var(--black);
 	transition: 0.3s;
+	stroke-width: 3;
 }
 
 .nav_icon_home:hover {
@@ -43,6 +44,7 @@
 	border: 3px solid var(--black);
 	border-radius: 50px;
 	transition: 0.3s;
+	stroke-width: 3;
 }
 
 .icon_user_home:hover {
@@ -91,6 +93,7 @@
 }
 
 .nav_link {
+	color: var(--black);
 	text-decoration: none;
 }
 
@@ -123,6 +126,7 @@
 	fill: none;
 	stroke: var(--primary-dark);
 	transition: 0.3s;
+	stroke-width: 3;
 }
 
 .nav_icon:hover {
@@ -136,6 +140,7 @@
 	border: 3px solid var(--primary-dark);
 	border-radius: 50px;
 	transition: 0.3s;
+	stroke-width: 3;
 }
 
 .icon_user:hover {
@@ -143,4 +148,89 @@
 	border: 3px solid var(--primary);
 	stroke: var(--white);
 	transition: 0.3s;
+}
+
+@media (prefers-color-scheme: dark) {
+	.header {
+		background-color: var(--secondary-verylight);
+	}
+}
+
+@media screen and (max-width: 900px) {
+	.nav_list {
+		font-size: 1.1em;
+	}
+
+	.nav_icon,
+	.nav_icon_home {
+		stroke-width: 2.5;
+	}
+
+	.icon_user,
+	.icon_user_home {
+		stroke-width: 2.5;
+		border-width: 2.5px;
+	}
+}
+
+@media screen and (max-width: 750px) {
+	.header,
+	.header_home {
+		padding: 1rem;
+	}
+
+	.logo,
+	.logo_home {
+		height: 2rem;
+	}
+	.nav_list {
+		font-size: 1em;
+		gap: 1rem;
+	}
+
+	.nav_btn {
+		padding: 0.4rem 1rem;
+	}
+}
+
+@media screen and (max-width: 570px) {
+	.header,
+	.header_home {
+		padding: 0.5rem;
+		flex-wrap: wrap;
+	}
+	.nav_list {
+		font-size: 0.8em;
+		gap: 1rem;
+	}
+
+	.nav_btn {
+		padding: 0.3rem 0.8rem;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.header,
+	.header_home {
+		padding: 0.5rem;
+		justify-content: flex-start;
+	}
+
+	.logo,
+	.logo_home {
+		display: none;
+	}
+	.nav {
+		width: 100%;
+	}
+	.nav_list {
+		font-size: 0.8em;
+		padding: 0;
+		gap: 1rem;
+		justify-content: flex-end;
+	}
+
+	.nav_btn {
+		padding: 0.3rem 0.8rem;
+	}
 }

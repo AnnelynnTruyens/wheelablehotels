@@ -24,3 +24,15 @@
 .review_text {
 	margin-top: 1rem;
 }
+
+@media (prefers-color-scheme: dark) {
+	.review {
+		background-color: var(--primary-light);
+		border-color: var(--primary-verylight);
+		color: var(--black);
+	}
+
+	.name {
+		color: var(--black);
+	}
+}

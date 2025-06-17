@@ -23,6 +23,8 @@
 }
 
 .icon {
+	width: 48px;
+	height: 48px;
 	stroke: var(--primary);
 	stroke-width: 2;
 	stroke-linecap: round;
@@ -67,4 +69,110 @@
 	height: 4px;
 	background-color: var(--primary);
 	transform: translateY(-1.5rem);
+}
+
+@media (prefers-color-scheme: dark) {
+	.icon_border {
+		border: 2px solid var(--white);
+	}
+
+	.icon {
+		stroke: var(--white);
+	}
+
+	.step_text {
+		color: var(--white);
+	}
+
+	.step_active .icon_border {
+		border: 4px solid var(--secondary-light);
+		box-shadow: var(--glow-secondary);
+	}
+
+	.step_past .icon_border {
+		background-color: var(--white);
+	}
+
+	.step_past .icon {
+		stroke: var(--primary);
+	}
+
+	.line {
+		flex: 1; /* Stretch to fill the space between steps */
+		height: 2px;
+		background-color: var(--white);
+		transform: translateY(-1.5rem);
+	}
+
+	.line_bold {
+		flex: 1; /* Stretch to fill the space between steps */
+		height: 4px;
+		background-color: var(--white);
+		transform: translateY(-1.5rem);
+	}
+}
+
+@media screen and (max-width: 750px) {
+	.icon {
+		width: 32px;
+		height: 32px;
+	}
+
+	.icon_border {
+		width: 2rem;
+		height: 2rem;
+	}
+	.step_text {
+		font-size: 0.9em;
+	}
+
+	.line {
+		transform: translateY(-1.4rem);
+	}
+
+	.line_bold {
+		transform: translateY(-1.4rem);
+	}
+}
+
+@media screen and (max-width: 650px) {
+	.icon {
+		width: 24px;
+		height: 24px;
+	}
+
+	.icon_border {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.step_text {
+		font-size: 0.8em;
+	}
+
+	.line {
+		transform: translateY(-1.3rem);
+	}
+
+	.line_bold {
+		transform: translateY(-1.3rem);
+	}
+}
+
+@media screen and (max-width: 650px) {
+	.icon_border {
+		padding: 0.5rem;
+	}
+
+	.step_text {
+		font-size: 0.6em;
+	}
+
+	.line {
+		transform: translateY(-1rem);
+	}
+
+	.line_bold {
+		transform: translateY(-1rem);
+	}
 }

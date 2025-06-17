@@ -2,16 +2,23 @@ import styles from "../HotelCard.module.css";
 
 interface RatingProps {
 	rating: number;
+	hotelDetail?: boolean;
 }
 
-const Rating: React.FC<RatingProps> = ({ rating }) => {
+const Rating: React.FC<RatingProps> = ({ rating, hotelDetail }) => {
 	return (
 		<div className={styles.rating} aria-label={`rating: ${rating}`}>
 			{[...Array(5)].map((_, index) => (
 				<svg
 					key={index}
 					className={
-						index < rating ? styles.rating_filled : styles.rating_empty
+						hotelDetail
+							? index < rating
+								? styles.rating_filled_detail
+								: styles.rating_empty_detail
+							: index < rating
+							? styles.rating_filled
+							: styles.rating_empty
 					}
 					xmlns="http://www.w3.org/2000/svg"
 					width="20"

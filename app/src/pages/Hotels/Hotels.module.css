@@ -2,7 +2,7 @@
 .content_flex {
 	display: flex;
 	flex-direction: row;
-	gap: 5rem;
+	gap: 3rem;
 }
 
 .hotels {
@@ -39,10 +39,6 @@
 	flex-direction: row;
 	justify-content: space-between;
 	gap: 3rem;
-}
-
-.top_right {
-	max-width: 40vw;
 }
 
 .title {
@@ -177,7 +173,8 @@
 	right: 1rem;
 }
 
-.navButton {
+.navButton,
+.navButton:hover {
 	top: 50%;
 	transform: translateY(-50%);
 }
@@ -197,4 +194,118 @@
 .review_text {
 	margin-top: 0;
 	margin-bottom: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+	.favourite_icon_filled {
+		stroke: var(--black);
+		fill: var(--black);
+	}
+
+	.favourite_icon_empty {
+		stroke: var(--black);
+	}
+
+	.contact_item svg {
+		stroke: var(--white);
+	}
+
+	.rating p {
+		margin: 0;
+		color: var(--primary-verylight);
+	}
+
+	.navButton:hover,
+	.closeButton:hover,
+	.navButton:focus,
+	.closeButton:focus,
+	.navButton:focus-visible,
+	.closeButton:focus-visible {
+		color: var(--black);
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	.content_flex {
+		gap: 1rem;
+	}
+
+	.top_right {
+		width: 40vw;
+	}
+
+	.contact_reviews {
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.ratings {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	.content_flex {
+		flex-wrap: wrap;
+	}
+}
+
+@media screen and (max-width: 760px) {
+	.top_section {
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.top_right {
+		width: 100%;
+	}
+
+	.contact_reviews {
+		width: 100%;
+		margin-top: 0;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	}
+
+	.ratings {
+		display: block;
+	}
+
+	.rating {
+		justify-content: flex-end;
+	}
+}
+
+@media screen and (max-width: 540px) {
+	.content_flex {
+		gap: 1rem;
+	}
+
+	.contact_reviews {
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.ratings {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.contact_reviews {
+		font-size: 0.8em;
+	}
+
+	.ratings {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
 }

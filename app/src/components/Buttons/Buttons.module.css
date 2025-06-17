@@ -35,3 +35,21 @@
 .back_link:focus .back_link_arrow {
 	stroke: var(--primary);
 }
+
+@media (prefers-color-scheme: dark) {
+	.back_link {
+		color: var(--white);
+	}
+	.back_link:hover,
+	.back_link:focus {
+		color: var(--primary-light);
+	}
+	.back_link_arrow {
+		stroke: var(--white);
+	}
+
+	.back_link:hover .back_link_arrow,
+	.back_link:focus .back_link_arrow {
+		stroke: var(--primary-light);
+	}
+}
